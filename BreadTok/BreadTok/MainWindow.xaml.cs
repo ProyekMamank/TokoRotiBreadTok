@@ -24,5 +24,23 @@ namespace BreadTok
         {
             InitializeComponent();
         }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void PackIcon_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 }
