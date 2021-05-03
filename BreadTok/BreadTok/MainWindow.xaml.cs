@@ -35,7 +35,7 @@ namespace BreadTok
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
         }
 
         private void PackIcon_SizeChanged(object sender, SizeChangedEventArgs e)
