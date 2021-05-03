@@ -1,0 +1,55 @@
+﻿<Window x:Class="BreadTok.ConnectionForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BreadTok"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="NoResize" 
+        Title="ConnectionForm" Height="400" Width="400">
+    <Grid>
+        <materialDesign:ColorZone Mode="PrimaryDark"
+                                Padding="16"
+                                CornerRadius="0"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                Panel.ZIndex="1"
+                                ClipToBounds="False"
+                                MouseDown="Grid_MouseDown" Height="67">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock VerticalAlignment="Center"
+                           Text="Setup The Connection!" FontWeight="Bold" FontSize="20" />
+            </StackPanel>
+        </materialDesign:ColorZone>
+
+
+        <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy" Content="Data Source" HorizontalAlignment="Left" Margin="32,84,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
+        <TextBox x:Name="dtS" HorizontalAlignment="Left" Height="26" Margin="38,112,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans"/>
+
+        <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy1" Content="Username" HorizontalAlignment="Left" Margin="32,156,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
+        <TextBox x:Name="username" HorizontalAlignment="Left" Height="24" Margin="38,186,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans"/>
+
+        <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy2" Content="Password" HorizontalAlignment="Left" Margin="32,230,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
+        <TextBox x:Name="password" HorizontalAlignment="Left" Height="26" Margin="38,258,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans"/>
+
+        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="38,320,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="BtnSubmit">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="-45" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF00F260" Offset="0"/>
+                    <GradientStop Color="#FF0575E6" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+        <Image MouseDown="Exit" Cursor="Hand" x:Name="image2" HorizontalAlignment="Left" Height="30" Margin="359,10,0,0" Panel.ZIndex="2" VerticalAlignment="Top" Width="31" Source="pack://siteoforigin:,,,/Resources/Close_White.png" RenderTransformOrigin="0.613,0.733"/>
+    </Grid>
+</Window>

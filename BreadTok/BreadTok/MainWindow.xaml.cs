@@ -35,7 +35,10 @@ namespace BreadTok
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            if (MessageHandler.confirmYesNo("Are you sure you want to logout?"))
+            {
+                this.Close();
+            }
         }
 
         private void PackIcon_SizeChanged(object sender, SizeChangedEventArgs e)
