@@ -14,6 +14,16 @@ namespace BreadTok
             MessageBox.Show("Please Fill The Required Fields");
         }
 
+        public static void wrongUsernamePassword()
+        {
+            MessageBox.Show("The Username/Password You Entered is Invalid!");
+        }
+
+        public static void PWDoesntMatchConf()
+        {
+            MessageBox.Show("Password and Confirmation Password Must Match!");
+        }
+
         public static bool confirmYesNo(string msg)
         {
             MessageBoxResult res = MessageBox.Show(msg, "Confirm Message", MessageBoxButton.YesNo, MessageBoxImage.Question);

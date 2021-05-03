@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Oracle.DataAccess.Client;
 
 namespace BreadTok
 {
@@ -22,6 +23,7 @@ namespace BreadTok
         public LoginRegis()
         {
             InitializeComponent();
+            LoginMode();
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -30,24 +32,94 @@ namespace BreadTok
             e.Handled = true;
         }
 
-        private void Regis_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // ubah form jadi regis mode
 
-            MainWindow mw = new MainWindow();
-            this.Hide();
-            mw.ShowDialog();
-            this.ShowDialog();
+        private void BtnRegis_Click(object sender, RoutedEventArgs e)
+        {
+            // Regis Button from Login Form
+            RegisMode();
+        }
+        
+        private void BtnLogin2_Click(object sender, RoutedEventArgs e)
+        {
+            // Login Button from Regis Form
+            LoginMode();
+        }
+
+        private void RegisMode()
+        {
+            GridLogin.Visibility = Visibility.Hidden;
+            GridRegis.Visibility = Visibility.Visible;
+        }
+
+        private void LoginMode()
+        {
+            GridLogin.Visibility = Visibility.Visible;
+            GridRegis.Visibility = Visibility.Hidden;
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            // pengecekan username password
+            // Login Button from Login Form
+            if (tbUsername.Text != "" && tbPassword.Password != "")
+            {
+                if (tbUsername.Text == "admin" && tbPassword.Password == "admin")
+                {
+                    tbUsername.Text = "";
+                    tbPassword.Password = "";
 
-            MainWindow mw = new MainWindow();
-            this.Hide();
-            mw.ShowDialog();
-            this.ShowDialog();
+                    MainWindow mw = new MainWindow();
+                    this.Hide();
+                    mw.ShowDialog();
+                    this.ShowDialog();
+                }
+                else
+                {
+                    OracleCommand cmd = new OracleCommand("SELECT COUNT(*) FROM PELANGGAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                    cmd.Parameters.Add(":1", tbUsername.Text);
+                    cmd.Parameters.Add(":2", tbPassword.Password);
+                    int ada = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (ada != 0)
+                    {
+                        tbUsername.Text = "";
+                        tbPassword.Password = "";
+
+                        MainWindow mw = new MainWindow();
+                        this.Hide();
+                        mw.ShowDialog();
+                        this.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageHandler.wrongUsernamePassword();
+                    }
+                }
+            }
+            else
+            {
+                MessageHandler.requireField();
+            }
+        }
+
+        private void Regis_MouseDown2(object sender, RoutedEventArgs e)
+        {
+            // Regis Button from Regis Form
+            if (rTbUsername.Text != "" && rTbPassword.Password != "" && rTbConfirmPassword.Password != "" &&
+                rTbNama.Text != "" && (rRbLaki.IsChecked == true || rRbPerempuan.IsChecked == false) && 
+                rTbAlamat.Text != "" && rTbEmail.Text != "" && rTbNoTelp.Text != "" && rTglLahir.SelectedDate == null)
+            {
+                if (rTbPassword.Password == rTbConfirmPassword.Password)
+                {
+
+                }
+                else
+                {
+                    MessageHandler.PWDoesntMatchConf();
+                }
+            }
+            else
+            {
+                MessageHandler.requireField();
+            }
         }
 
         private void Exit(object sender, MouseButtonEventArgs e)
