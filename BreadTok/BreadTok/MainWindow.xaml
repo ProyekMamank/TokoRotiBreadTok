@@ -7,9 +7,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="BreadTok.MainWindow"
         mc:Ignorable="d"
         Title="Main" Height="599.7" Width="1024"
-    
+        WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid HorizontalAlignment="Right" Width="1018" Background="#FFF2F2F2">
+    <Grid HorizontalAlignment="Right" Width="1024" Background="#FFF2F2F2">
 
         <materialDesign:ColorZone
             Mode="PrimaryDark"
