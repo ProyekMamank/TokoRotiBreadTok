@@ -109,7 +109,7 @@ namespace BreadTok
             {
                 if (rTbPassword.Password == rTbConfirmPassword.Password)
                 {
-
+                    // TO DO : Radio Button & Date masih lolos pengecekan
                 }
                 else
                 {
