@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
 using Oracle.DataAccess.Client;
 
 namespace BreadTok
@@ -99,17 +100,84 @@ namespace BreadTok
                 MessageHandler.requireField();
             }
         }
+        
+        private string getIdPelanggan()
+        {
+            OracleCommand cmd = new OracleCommand()
+            {
+                CommandType = CommandType.StoredProcedure,
+                Connection = App.conn,
+                CommandText = "AUTOGEN_ID_PELANGGAN"
+            };
+
+            cmd.Parameters.Add(new OracleParameter()
+            {
+                Direction = ParameterDirection.ReturnValue,
+                ParameterName = "id_pelanggan",
+                OracleDbType = OracleDbType.Varchar2,
+                Size = 15
+            });
+
+            cmd.ExecuteNonQuery();
+            return cmd.Parameters["id_pelanggan"].Value.ToString();
+        }
 
         private void Regis_MouseDown2(object sender, RoutedEventArgs e)
         {
             // Regis Button from Regis Form
             if (rTbUsername.Text != "" && rTbPassword.Password != "" && rTbConfirmPassword.Password != "" &&
-                rTbNama.Text != "" && (rRbLaki.IsChecked == true || rRbPerempuan.IsChecked == false) && 
-                rTbAlamat.Text != "" && rTbEmail.Text != "" && rTbNoTelp.Text != "" && rTglLahir.SelectedDate == null)
+                rTbNama.Text != "" && (rRbLaki.IsChecked == true || rRbPerempuan.IsChecked == true) && 
+                rTbAlamat.Text != "" && rTbEmail.Text != "" && rTbNoTelp.Text != "" && rTglLahir.SelectedDate != null)
             {
                 if (rTbPassword.Password == rTbConfirmPassword.Password)
                 {
-                    // TO DO : Radio Button & Date masih lolos pengecekan
+                    if (rTbNoTelp.Text.All(char.IsDigit))
+                    {
+                        if (!rTbUsername.Text.Contains(" "))
+                        {
+                            if (!rTbEmail.Text.Contains(" "))
+                            {
+                                OracleCommand cmd = new OracleCommand("SELECT COUNT(*) FROM PELANGGAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                                cmd.Parameters.Add(":1", rTbUsername.Text);
+                                cmd.Parameters.Add(":2", rTbPassword.Password);
+                                int ada = Convert.ToInt32(cmd.ExecuteScalar());
+                                if (ada == 0)
+                                {
+                                    cmd = new OracleCommand("INSERT INTO PELANGGAN VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10)", App.conn);
+                                    cmd.Parameters.Add(":1", getIdPelanggan());
+                                    cmd.Parameters.Add(":2", rTbUsername.Text);
+                                    cmd.Parameters.Add(":3", rTbPassword.Password);
+                                    cmd.Parameters.Add(":4", rTbNama.Text);
+                                    cmd.Parameters.Add(":5", (rRbLaki.IsChecked == true) ? 'L' : 'P');
+                                    cmd.Parameters.Add(":6", rTbAlamat.Text);
+                                    cmd.Parameters.Add(":7", rTbEmail.Text);
+                                    cmd.Parameters.Add(":8", rTbNoTelp.Text);
+                                    cmd.Parameters.Add(":9", rTglLahir.SelectedDate);
+                                    cmd.Parameters.Add(":10", 1);
+                                    cmd.ExecuteNonQuery();
+
+                                    MessageHandler.insertSuccess("Account");
+                                    clearRegisForm();
+                                }
+                                else
+                                {
+                                    MessageHandler.usernameExists();
+                                }
+                            }
+                            else
+                            {
+                                MessageHandler.containSpaces("Email");
+                            }
+                        }
+                        else
+                        {
+                            MessageHandler.containSpaces("Username");
+                        }
+                    }
+                    else
+                    {
+                        MessageHandler.isNotNumber("Nomor Telpon");
+                    }
                 }
                 else
                 {
@@ -120,6 +188,20 @@ namespace BreadTok
             {
                 MessageHandler.requireField();
             }
+        }
+
+        private void clearRegisForm()
+        {
+            rTbUsername.Text = "";
+            rTbPassword.Password = "";
+            rTbConfirmPassword.Password = "";
+            rTbNama.Text = "";
+            rRbLaki.IsChecked = false;
+            rRbPerempuan.IsChecked = false;
+            rTbAlamat.Text = "";
+            rTbEmail.Text = "";
+            rTbNoTelp.Text = "";
+            rTglLahir.SelectedDate = null;
         }
 
         private void Exit(object sender, MouseButtonEventArgs e)

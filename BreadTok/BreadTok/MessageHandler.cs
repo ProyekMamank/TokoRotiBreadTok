@@ -23,6 +23,26 @@ namespace BreadTok
         {
             MessageBox.Show("Password and Confirmation Password Must Match!");
         }
+        
+        public static void isNotNumber(string msg)
+        {
+            MessageBox.Show("Field " +  msg + " must be number");
+        }
+
+        public static void containSpaces(string msg)
+        {
+            MessageBox.Show("Field " + msg + " cannot contain spaces");
+        }
+
+        public static void usernameExists()
+        {
+            MessageBox.Show("Username already exists ");
+        }
+
+        public static void insertSuccess(string msg)
+        {
+            MessageBox.Show("Insert " + msg + " Successful!");
+        }
 
         public static bool confirmYesNo(string msg)
         {
