@@ -103,6 +103,90 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Daftar Pesanan" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid x:Name="grid_DaftarPesanan">
+                    <Label Content="Daftar Pesanan" HorizontalAlignment="Center" Margin="0,15,0,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24"/>
+                    <DataGrid CanUserAddRows="False" x:Name="dtGridPesanan"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="All" Margin="0,52,0,265"
+                              IsReadOnly="True">
+                        <DataGrid.RowHeaderTemplate>
+                            <DataTemplate>
+                                <Expander Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">
+
+                                </Expander>
+                            </DataTemplate>
+                        </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nomor Nota" Binding="{Binding nomor_nota}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <materialDesign:DataGridTextColumn Header="Tanggal Transaksi" Binding="{Binding tanggal_trans}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </materialDesign:DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Total" Binding="{Binding total}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </DataGridTextColumn>
+
+                            <materialDesign:DataGridTextColumn Header="Karyawan" Binding="{Binding id_karyawan}"
+                                Width="120"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                                <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="{x:Type DataGridColumnHeader}"
+                                            BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                        <Setter Property="HorizontalContentAlignment"
+                                                Value="Right" />
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding}" TextAlignment="Right" />
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridTextColumn.HeaderStyle>
+
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}"
+                                           BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </materialDesign:DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Pelanggan" Binding="{Binding id_pelanggan}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Metode Pembayaran" Binding="{Binding metode_pembayaran}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Status" Binding="{Binding status}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="halo" Margin="10,5,0,0" />
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -91,6 +91,7 @@
     <Compile Include="ConnectionForm.xaml.cs">
       <DependentUpon>ConnectionForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HTrans.cs" />
     <Compile Include="LoginRegis.xaml.cs">
       <DependentUpon>LoginRegis.xaml</DependentUpon>
     </Compile>
