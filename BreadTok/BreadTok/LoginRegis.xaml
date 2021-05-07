@@ -28,9 +28,10 @@
 
             <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy1" Content="Password" HorizontalAlignment="Left" Margin="69,177.216,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
             <PasswordBox x:Name="tbPassword" HorizontalAlignment="Left" Height="25" Margin="75,206.559,0,0"   VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans" RenderTransformOrigin="0.502,0.711"/>
+
             <Image x:Name="image1" HorizontalAlignment="Left" Height="20" Margin="374,144.216,0,0" VerticalAlignment="Top" Width="24" Source="pack://siteoforigin:,,,/Resources/Username.png"/>
 
-            <Button x:Name="btnLogin" Content="Log In" HorizontalAlignment="Left" Margin="75,282,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="BtnLogin_Click">
+            <Button x:Name="btnLogin" Content="Log In" HorizontalAlignment="Left" Margin="75,305,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="BtnLogin_Click">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <LinearGradientBrush.RelativeTransform>
@@ -46,9 +47,20 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button x:Name="btnRegis" Content="Register" HorizontalAlignment="Left" Margin="75,323,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnRegis_Click" />
+            <Button x:Name="btnRegis" Content="Register" HorizontalAlignment="Left" Margin="75,346,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnRegis_Click" />
 
             <Image MouseDown="Exit" Cursor="Hand" x:Name="image2" HorizontalAlignment="Left" Height="30" Margin="422.5,10,0,0" VerticalAlignment="Top" Width="31" Source="pack://siteoforigin:,,,/Resources/Close.png"/>
+            <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy2" Content="Log in as" HorizontalAlignment="Left" Margin="69,237,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans" Width="62"/>
+            <RadioButton
+                IsChecked="True"
+                Content="Karyawan"
+                Margin="315,237,65.6,158.6" 
+                x:Name="rbKaryawan" />
+            <RadioButton
+                IsChecked="True"
+                Content="Pelanggan"
+                Margin="185,237,180.6,158.6" 
+                x:Name="rbPelanggan" />
         </Grid>
 
         <Grid Margin="270,0,0,0" x:Name="GridRegis" Visibility="Visible" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">

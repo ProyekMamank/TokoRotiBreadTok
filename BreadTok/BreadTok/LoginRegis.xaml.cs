@@ -68,30 +68,64 @@ namespace BreadTok
                     tbUsername.Text = "";
                     tbPassword.Password = "";
 
-                    MainWindow mw = new MainWindow();
+                    MainWindow mw = new MainWindow("0");
                     this.Hide();
                     mw.ShowDialog();
                     this.ShowDialog();
                 }
                 else
                 {
-                    OracleCommand cmd = new OracleCommand("SELECT COUNT(*) FROM PELANGGAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
-                    cmd.Parameters.Add(":1", tbUsername.Text);
-                    cmd.Parameters.Add(":2", tbPassword.Password);
-                    int ada = Convert.ToInt32(cmd.ExecuteScalar());
-                    if (ada != 0)
+                    if (rbKaryawan.IsChecked.Value)
                     {
-                        tbUsername.Text = "";
-                        tbPassword.Password = "";
+                        OracleCommand cmd = new OracleCommand("SELECT COUNT(*) FROM KARYAWAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                        cmd.Parameters.Add(":1", tbUsername.Text);
+                        cmd.Parameters.Add(":2", tbPassword.Password);
+                        int ada = Convert.ToInt32(cmd.ExecuteScalar());
+                        if (ada != 0)
+                        {
+                            OracleCommand cmdID = new OracleCommand("SELECT ID FROM KARYAWAN WHERE WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                            cmdID.Parameters.Add(":1", tbUsername.Text);
+                            cmdID.Parameters.Add(":2", tbPassword.Password);
+                            string idUser = cmdID.ExecuteScalar().ToString();
 
-                        MainWindow mw = new MainWindow();
-                        this.Hide();
-                        mw.ShowDialog();
-                        this.ShowDialog();
+                            tbUsername.Text = "";
+                            tbPassword.Password = "";
+
+                            MainWindow mw = new MainWindow(idUser);
+                            this.Hide();
+                            mw.ShowDialog();
+                            this.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageHandler.wrongUsernamePassword();
+                        }
                     }
                     else
                     {
-                        MessageHandler.wrongUsernamePassword();
+                        OracleCommand cmd = new OracleCommand("SELECT COUNT(*) FROM PELANGGAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                        cmd.Parameters.Add(":1", tbUsername.Text);
+                        cmd.Parameters.Add(":2", tbPassword.Password);
+                        int ada = Convert.ToInt32(cmd.ExecuteScalar());
+                        if (ada != 0)
+                        {
+                            OracleCommand cmdID = new OracleCommand("SELECT ID FROM PELANGGAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                            cmdID.Parameters.Add(":1", tbUsername.Text);
+                            cmdID.Parameters.Add(":2", tbPassword.Password);
+                            string idUser = cmdID.ExecuteScalar().ToString();
+
+                            tbUsername.Text = "";
+                            tbPassword.Password = "";
+
+                            WindowPelanggan wp = new WindowPelanggan(idUser);
+                            this.Hide();
+                            wp.ShowDialog();
+                            this.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageHandler.wrongUsernamePassword();
+                        }
                     }
                 }
             }
