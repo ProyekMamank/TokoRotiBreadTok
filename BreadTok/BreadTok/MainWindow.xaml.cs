@@ -117,10 +117,16 @@ namespace BreadTok
 
             WindowPesanan wp = new WindowPesanan(ID.ToString());
             overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
             wp.ShowDialog();
 
             loadDaftarPesanan();
             overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
         }
     }
 }

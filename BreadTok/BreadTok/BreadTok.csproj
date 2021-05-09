@@ -74,10 +74,12 @@
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="WindowPesanan.xaml.cs">
+		<DependentUpon>WindowPesanan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Cart.cs" />
     <Compile Include="Roti.cs" />
     <Compile Include="WindowPelanggan.xaml.cs">
-      <DependentUpon>WindowPesanan.xaml</DependentUpon>
+      <DependentUpon>WindowPelanggan.xaml</DependentUpon>
     </Compile>
     <Page Include="ConnectionForm.xaml">
       <SubType>Designer</SubType>

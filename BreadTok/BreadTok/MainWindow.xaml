@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BreadTok"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="BreadTok.MainWindow"
+        x:Name="windowPesanan"
         mc:Ignorable="d"
         Title="Main" Height="599.7" Width="1024"
         WindowStyle="None" AllowsTransparency="True"
