@@ -73,12 +73,8 @@ namespace BreadTok
             }
             reader.Close();
 
-            foreach (HTrans hTrans in htranses)
-            {
-                Console.WriteLine(hTrans.nomor_nota);
-            }
-
             dtGridPesanan.ItemsSource = htranses;
+
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
@@ -105,6 +101,14 @@ namespace BreadTok
                     break;
                 }
             }
+        }
+
+        private void BtnDetailHTrans_Click(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowPesanan wp = new WindowPesanan(ID.ToString());
+            wp.ShowDialog();
         }
     }
 }
