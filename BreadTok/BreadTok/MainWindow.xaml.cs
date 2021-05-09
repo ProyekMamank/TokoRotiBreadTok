@@ -20,9 +20,12 @@ namespace BreadTok
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bahan b;
         public MainWindow()
         {
             InitializeComponent();
+            b = new bahan();
+            loadData();
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -44,6 +47,27 @@ namespace BreadTok
         private void PackIcon_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 
+        }
+
+        private void loadData()
+        {
+            dgBahan.ItemsSource = null;
+            dgBahan.ItemsSource = b.loadData().DefaultView;
+        }
+
+        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterBahan.Visibility = Visibility.Hidden;
+            panelInsertBahan.Visibility = Visibility.Visible;
+            btnBack.Visibility = Visibility.Visible;
+        }
+
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterBahan.Visibility = Visibility.Visible;
+            panelInsertBahan.Visibility = Visibility.Hidden;
+            btnBack.Visibility = Visibility.Hidden;
         }
     }
 }

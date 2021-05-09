@@ -52,7 +52,7 @@
 
         <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
                     materialDesign:ColorZoneAssist.Mode="PrimaryMid" Margin="0,53,0,0" Width="1024">
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterBahan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
@@ -60,16 +60,22 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <ListBox>
-                        <ListBoxItem FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
-                        <ListBoxItem Content="Halo"/>
-                        <ListBoxItem Content="Ini"/>
-                        <ListBoxItem Content="Masih"/>
-                        <ListBoxItem Content="Kosong"/>
-                    </ListBox>
+                    <StackPanel x:Name="panelMasterBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="661">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
+                        <DataGrid x:Name="dgBahan" Height="444" Width="609" IsReadOnly="True" Margin="26,0,25.8,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="661" Visibility="Hidden">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Bahan"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="TextBox" Width="120"/>
+                    </StackPanel>
+                    
+                    <Button x:Name="btnInsert" Content="INSERT BAHAN" HorizontalAlignment="Left" Margin="712,85,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnInsert_Click"/>
+                    <Button x:Name="btnUpdate" Content="UPDATE BAHAN" HorizontalAlignment="Left" Margin="712,150,0,0" VerticalAlignment="Top" Width="147" Height="40"/>
+                    <Button x:Name="btnDelete" Content="DELETE BAHAN" HorizontalAlignment="Left" Margin="712,217,0,0" VerticalAlignment="Top" Width="147" Height="38"/>
+                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="712,486,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterRoti" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Heart" FontSize="15" Height="20" Width="auto"/>
@@ -86,7 +92,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterResep" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
