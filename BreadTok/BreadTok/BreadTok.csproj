@@ -72,6 +72,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cart.cs" />
+    <Compile Include="Roti.cs" />
     <Compile Include="WindowPelanggan.xaml.cs">
       <DependentUpon>WindowPelanggan.xaml</DependentUpon>
     </Compile>
