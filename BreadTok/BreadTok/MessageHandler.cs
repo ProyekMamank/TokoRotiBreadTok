@@ -39,9 +39,9 @@ namespace BreadTok
             MessageBox.Show("Username already exists ");
         }
 
-        public static void insertSuccess(string msg)
+        public static void messageSuccess(string msg)
         {
-            MessageBox.Show("Insert " + msg + " Successful!");
+            MessageBox.Show(msg + " Successful!");
         }
 
         public static bool confirmYesNo(string msg)
