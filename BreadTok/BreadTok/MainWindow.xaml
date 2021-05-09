@@ -7,13 +7,16 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="BreadTok.MainWindow"
         mc:Ignorable="d"
         Title="Main" Height="599.7" Width="1024"
-        WindowStyle="None"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid HorizontalAlignment="Right" Width="1024" Background="#FFF2F2F2">
-        <Grid.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90"
-                              RenderingBias="Quality" ShadowDepth="2"/>
-        </Grid.Effect>
+        WindowStyle="None" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         
         <materialDesign:ColorZone
             Mode="PrimaryDark"
@@ -22,13 +25,19 @@
             materialDesign:ShadowAssist.ShadowDepth="Depth3"
             Panel.ZIndex="1"
             ClipToBounds="False"
-            MouseDown="Grid_MouseDown">
-            <StackPanel Orientation="Horizontal">
+            Grid.Row="0" Grid.Column="0" MouseDown="Grid_MouseDown"
+            >
+            <Grid Height="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
                 <TextBlock VerticalAlignment="Center"
-                            Margin="16 0 0 0" Text="BreadTok" FontWeight="Bold" FontSize="16" />
-                <TextBlock VerticalAlignment="Center"
-                    Margin="55 0 0 0" Text="Selamat Datang, Lawrence Patrick!" Width="205" />
-                <Button Content="Logout" HorizontalAlignment="Left" Margin="550,0,0,0" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="Button_Click_2">
+                            Margin="5 0 0 0" Text="BreadTok" FontWeight="Bold" FontSize="16" Grid.Column="0"/>
+                <TextBlock x:Name="lbWelcome" VerticalAlignment="Center" HorizontalAlignment="Left"
+                    Margin="0 0 0 0" Text="Selamat Datang, Lawrence Patrick!" Width="205"  Grid.Column="1"/>
+                <Button x:Name="btLogout" Content="Logout" HorizontalAlignment="Right" Margin="23.6,0,23.4,-3.4" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Grid.Column="2" Height="21" Click="Button_Click_2">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Background" Value="#fe6584"/>
@@ -51,11 +60,12 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-            </StackPanel>
-        </materialDesign:ColorZone>
+            </Grid>
 
+        </materialDesign:ColorZone>
+       
         <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
-                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Margin="0,53,0,0" Width="1024">
+                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Row="1" Grid.Column="0">
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
