@@ -22,10 +22,12 @@ namespace BreadTok
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        string loggedUserID;
+        public MainWindow(string id)
         {
             InitializeComponent();
 
+            loggedUserID = id;
             loadDaftarPesanan();
         }
 

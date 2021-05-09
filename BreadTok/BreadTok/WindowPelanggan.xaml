@@ -1,0 +1,225 @@
+﻿<Window x:Class="BreadTok.WindowPelanggan"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BreadTok"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="WindowPelanggan" Height="569.934" Width="1028.469" WindowStyle="None"
+        WindowStartupLocation="CenterScreen" AllowsTransparency="True" ResizeMode="CanResizeWithGrip">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <materialDesign:ColorZone
+            Mode="PrimaryDark"
+            Padding="16"
+            CornerRadius="0"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Panel.ZIndex="1"
+            ClipToBounds="False"
+            Grid.Row="0" Grid.Column="0" MouseDown="ColorZone_MouseDown"
+            >
+            <Grid Height="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center"
+                            Margin="5 0 0 0" Text="BreadTok" FontWeight="Bold" FontSize="16" Grid.Column="0"/>
+                <TextBlock x:Name="lbWelcome" VerticalAlignment="Center" HorizontalAlignment="Left"
+                    Margin="0 0 0 0" Text="Selamat Datang, Lawrence Patrick!" Width="205"  Grid.Column="1"/>
+                <Button x:Name="btLogout" Content="Logout" HorizontalAlignment="Right" Margin="23.6,0,23.4,-3.4" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Grid.Column="2" Height="21" Click="btLogout_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#fe6584"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="75" Height="20"
+                                CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+        </materialDesign:ColorZone>
+
+        <TabControl
+            Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+            materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Row="1">
+            <TabItem
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Bread" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Pesan Roti" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock Margin="10">
+                    <Run FontSize="25">
+                        Daftar Roti
+                    </Run>
+                    <LineBreak/>
+                    <DataGrid CanUserAddRows="False" x:Name="dgRoti"
+                              CanUserReorderColumns="False" CanUserResizeColumns="False"
+                              CanUserDeleteRows="False" CanUserResizeRows="False"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="All" Margin="0, 10, 0, 0"
+                              IsReadOnly="True"
+                              ColumnWidth="*">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID Roti" Binding="{Binding id_roti}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" 
+                                Visibility="Hidden"/>
+                            
+                            <DataGridTextColumn Header="Nama Roti" Binding="{Binding nama_roti}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <materialDesign:DataGridTextColumn Header="Deskripsi Roti" Binding="{Binding deskripsi_roti}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </materialDesign:DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Harga" Binding="{Binding harga_roti}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Stok Tesrsedia" Binding="{Binding stok_roti}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                Width="auto">
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="btAddToCart" CommandParameter="{Binding Path=id_roti}" Click="btAddToCart_Click">+Add</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TextBlock>
+            </TabItem>
+            
+            <TabItem
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Cart" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Cart" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="25" Grid.Row="0">
+                        Cart
+                    </TextBlock>
+                    <DataGrid CanUserAddRows="False" x:Name="dgCart"
+                              CanUserReorderColumns="False" CanUserResizeColumns="False"
+                              CanUserDeleteRows="False" CanUserResizeRows="False"
+                              AutoGenerateColumns="True"
+                              HeadersVisibility="All" Margin="0, 10, 0, 0"
+                              IsReadOnly="True"
+                              ColumnWidth="*" AutoGeneratingColumn="dgCart_AutoGeneratingColumn"
+                              Grid.Row="1">
+                    </DataGrid>
+                    <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock VerticalAlignment="Center" Margin="0, 0, 10, 0">
+                            Kode Voucher : 
+                        </TextBlock>
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="Search"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                            Margin="0, 0, 50, 0"
+                            Width="200"
+                            IsEditable="True" x:Name="cbVoucher">
+                        </ComboBox>
+                    </StackPanel>
+                    <TextBlock HorizontalAlignment="Right" x:Name="lbTotal" Grid.Row="3" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
+                        Total : 
+                    </TextBlock>
+                    <StackPanel Grid.Row="4" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button
+                        Style="{StaticResource MaterialDesignRaisedLightButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                        HorizontalAlignment="Right"
+                        materialDesign:ButtonAssist.CornerRadius="15"
+                        Margin="0, 0, 15, 0"
+                        Content="Clear" Grid.Row="3"
+                        x:Name="btClear" Click="btClear_Click"/>
+                        
+                        <Button
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedButton"
+                        HorizontalAlignment="Right"
+                        materialDesign:ButtonAssist.CornerRadius="15"
+                        Margin="0, 0, 15, 0"
+                        Content="Order" Grid.Row="3"
+                        x:Name="btOrder"/>
+                    </StackPanel>
+                    
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Voucher" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="List Voucher" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="25" Grid.Row="0">
+                        List Voucher
+                    </TextBlock>
+                    <DataGrid CanUserAddRows="False" x:Name="dgVoucher"
+                              CanUserReorderColumns="False" CanUserResizeColumns="False"
+                              CanUserDeleteRows="False" CanUserResizeRows="False"
+                              AutoGenerateColumns="True"
+                              HeadersVisibility="All" Margin="0, 10, 0, 0"
+                              IsReadOnly="True"
+                              ColumnWidth="*" AutoGeneratingColumn="dgCart_AutoGeneratingColumn"
+                              Grid.Row="1">
+                    </DataGrid>
+
+                </Grid>
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

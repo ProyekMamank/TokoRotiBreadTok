@@ -74,6 +74,9 @@
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="WindowPesanan.xaml.cs">
+    <Compile Include="Cart.cs" />
+    <Compile Include="Roti.cs" />
+    <Compile Include="WindowPelanggan.xaml.cs">
       <DependentUpon>WindowPesanan.xaml</DependentUpon>
     </Compile>
     <Page Include="ConnectionForm.xaml">
@@ -105,6 +108,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowPesanan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowPelanggan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
