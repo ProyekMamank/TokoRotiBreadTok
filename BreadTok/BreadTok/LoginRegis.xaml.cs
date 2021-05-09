@@ -83,7 +83,7 @@ namespace BreadTok
                         int ada = Convert.ToInt32(cmd.ExecuteScalar());
                         if (ada != 0)
                         {
-                            OracleCommand cmdID = new OracleCommand("SELECT ID FROM KARYAWAN WHERE WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                            OracleCommand cmdID = new OracleCommand("SELECT ID FROM KARYAWAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
                             cmdID.Parameters.Add(":1", tbUsername.Text);
                             cmdID.Parameters.Add(":2", tbPassword.Password);
                             string idUser = cmdID.ExecuteScalar().ToString();
