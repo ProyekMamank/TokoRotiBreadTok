@@ -44,7 +44,7 @@
                     Margin="0 0 0 0" Text="Selamat Datang, Lawrence Patrick!" Width="205"  Grid.Column="1"/>
                 <Button x:Name="btLogout" Content="Logout" HorizontalAlignment="Right" Margin="23.6,0,23.4,-3.4" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Grid.Column="2" Height="21" Click="Button_Click_2">
                     <Button.Style>
-                        <Style TargetType="Button">
+                        <Style TargetType="{x:Type Button}">
                             <Setter Property="Background" Value="#fe6584"/>
                             <Setter Property="Cursor" Value="Hand"/>
                             <Style.Triggers>
@@ -56,7 +56,7 @@
                         </Style>
                     </Button.Style>
                     <Button.Template>
-                        <ControlTemplate TargetType="Button">
+                        <ControlTemplate TargetType="{x:Type Button}">
                             <Border Width="75" Height="20"
                                 CornerRadius="10" Background="{TemplateBinding Background}">
                                 <ContentPresenter VerticalAlignment="Center"
@@ -79,16 +79,38 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <ListBox>
-                        <ListBoxItem FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
-                        <ListBoxItem Content="Halo"/>
-                        <ListBoxItem Content="Ini"/>
-                        <ListBoxItem Content="Masih"/>
-                        <ListBoxItem Content="Kosong"/>
-                    </ListBox>
+                    <Canvas x:Name="panelMasterBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
+                        <DataGrid x:Name="dgBahan" Height="468" IsReadOnly="True" AutoGeneratingColumn="dgBahan_AutoGeneratingColumn" MouseUp="dgBahan_MouseUp" Canvas.Left="10" Canvas.Top="36" Width="709" ColumnWidth="*"/>
+                    </Canvas>
+                    <Canvas x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729" Visibility="Hidden">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Bahan"/>
+                        <TextBox Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
+                        <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="SUPPLIER :" Canvas.Left="39" Canvas.Top="305" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbQuantity" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56"/>
+                        <TextBox x:Name="tbMerk" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
+                        <ComboBox x:Name="cbJenisBahan" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
+                        <ComboBox x:Name="cbSupplier" Canvas.Left="145" Canvas.Top="305" Width="236" Height="29"/>
+                        <Button x:Name="btnSubmit" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmit_Click"/>
+                        <ComboBox x:Name="cbSatuan" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0">
+                            <System:String>GRAM</System:String>
+                            <System:String>mL</System:String>
+                            <System:String>BUTIR</System:String>
+                        </ComboBox>
+                        <Label Content="HARGA :" Canvas.Left="54" Canvas.Top="180" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbHarga" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236"/>
+                    </Canvas>
+
+                    <Button x:Name="btnInsert" Content="INSERT BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="115" Height="38" Click="btnInsert_Click" FontSize="12"/>
+                    <Button x:Name="btnDelete" Content="DELETE BAHAN" HorizontalAlignment="Left" Margin="744,152,0,0" VerticalAlignment="Top" Width="115" Height="38" FontSize="12"/>
+                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="712,486,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
+
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterRoti" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Heart" FontSize="15" Height="20" Width="auto"/>
@@ -105,7 +127,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterResep" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
