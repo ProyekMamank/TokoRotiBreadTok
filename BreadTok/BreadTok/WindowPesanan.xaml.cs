@@ -30,14 +30,21 @@ namespace BreadTok
             this.nomor_nota = nomor_nota;
             lblNomorNota.Content = this.nomor_nota;
 
+            loadHeaderTrans();
+        }
+
+        private void loadHeaderTrans()
+        {
             OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, K.NAMA, P.NAMA, H.METODE_PEMBAYARAN, " +
-                                                    "(CASE WHEN H.STATUS = 1 THEN 'Pending' " +
-                                                    "       WHEN H.STATUS = 2 THEN 'Accepted' " +
+                                                    "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
+                                                    "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
+                                                    "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
+                                                    "       WHEN H.STATUS = 3 THEN 'Dibatalkan' " +
                                                     "END) AS STATUS " +
                                                     "FROM H_TRANS H, PELANGGAN P, KARYAWAN K " +
                                                     "WHERE H.FK_KARYAWAN = K.ID AND H.FK_PELANGGAN = P.ID AND H.NOMOR_NOTA = '" + nomor_nota + "' ", App.conn);
             OracleDataReader reader = cmd.ExecuteReader();
-            
+
             while (reader.Read())
             {
                 lblNomorNota.Content = reader.GetValue(0).ToString();
@@ -46,15 +53,38 @@ namespace BreadTok
                 lblPelanggan.Content = reader.GetValue(4).ToString();
                 lblMetodePembayaran.Content = reader.GetValue(5).ToString();
                 lblStatus.Content = reader.GetValue(6).ToString();
-                
+
                 lblHargaTotal.Content = Convert.ToInt32(reader.GetValue(2).ToString()).ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
             }
             reader.Close();
 
-            loadDetailDTrans();
+            buttonActionHandler();
+
+            loadDetailTrans();
         }
 
-        private void loadDetailDTrans()
+        private void buttonActionHandler()
+        {
+            if (lblStatus.Content.Equals("Belum Bayar"))
+            {
+                btnKonfirmasi.Visibility = Visibility.Hidden;
+                btnBatalkan.Visibility = Visibility.Visible;
+                btnBatalkan.Margin = new Thickness(300, 392, 0, 0);
+            }
+            else if (lblStatus.Content.Equals("Request Bayar"))
+            {
+                btnKonfirmasi.Visibility = Visibility.Visible;
+                btnBatalkan.Visibility = Visibility.Visible;
+                btnBatalkan.Margin = new Thickness(425, 392, 0, 0);
+            }
+            else if (lblStatus.Content.Equals("Sudah Bayar") || lblStatus.Content.Equals("Dibatalkan"))
+            {
+                btnKonfirmasi.Visibility = Visibility.Hidden;
+                btnBatalkan.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void loadDetailTrans()
         {
             dtranses = new List<DTrans>();
             OracleCommand cmd = new OracleCommand("SELECT D.NOMOR_NOTA, R.NAMA, D.QUANTITY, D.HARGA, D.SUBTOTAL " +
@@ -87,6 +117,34 @@ namespace BreadTok
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
+            }
+        }
+
+        private void BtnBatalkan_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageHandler.confirmYesNo("Apakah anda ingin membatalkan pesanan ini?"))
+            {
+                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1 WHERE NOMOR_NOTA = :2 ", App.conn);
+                cmd.Parameters.Add(":1", 3);
+                cmd.Parameters.Add(":2", lblNomorNota.Content);
+                cmd.ExecuteNonQuery();
+
+                MessageHandler.messageSuccess("Cancel Transaksi");
+                loadHeaderTrans();
+            }
+        }
+
+        private void BtnKonfirmasi_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageHandler.confirmYesNo("Apakah anda ingin konfirmasi pesanan ini?"))
+            {
+                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1 WHERE NOMOR_NOTA = :2 ", App.conn);
+                cmd.Parameters.Add(":1", 2);
+                cmd.Parameters.Add(":2", lblNomorNota.Content);
+                cmd.ExecuteNonQuery();
+
+                MessageHandler.messageSuccess("Konfirmasi Pembayaran Transaksi");
+                loadHeaderTrans();
             }
         }
     }

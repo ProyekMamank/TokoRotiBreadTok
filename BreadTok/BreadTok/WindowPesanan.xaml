@@ -95,6 +95,32 @@
         </DataGrid>
         <Label Content="Harga Total :" HorizontalAlignment="Center" Margin="9,352,661,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblHargaTotal" Content="" ContentStringFormat="C" HorizontalAlignment="Center" Margin="143,352,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        
+        <Button Content="Konfirmasi Pembayaran" HorizontalAlignment="Left" Margin="178,392,0,0" x:Name="btnKonfirmasi" VerticalAlignment="Top" Width="200" Click="BtnKonfirmasi_Click" />
+        <Button Content="Batalkan Pesanan" HorizontalAlignment="Left" Margin="426,392,0,0" VerticalAlignment="Top" x:Name="btnBatalkan" Width="200" Foreground="White" Height="32" FontSize="14" Click="BtnBatalkan_Click" >
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFF92C56"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Width="200" Height="32"
+                                CornerRadius="3" Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
 
     </Grid>
 </Window>

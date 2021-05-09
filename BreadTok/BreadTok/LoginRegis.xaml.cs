@@ -156,7 +156,7 @@ namespace BreadTok
                                     cmd.Parameters.Add(":10", 1);
                                     cmd.ExecuteNonQuery();
 
-                                    MessageHandler.insertSuccess("Account");
+                                    MessageHandler.messageSuccess("Insert Account");
                                     clearRegisForm();
                                 }
                                 else
