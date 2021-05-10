@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BreadTok"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="WindowPelanggan" Height="569.934" Width="1028.469" WindowStyle="None"
         WindowStartupLocation="CenterScreen" AllowsTransparency="True" ResizeMode="CanResizeWithGrip">
@@ -34,7 +34,7 @@
                 <TextBlock VerticalAlignment="Center"
                             Margin="5 0 0 0" Text="BreadTok" FontWeight="Bold" FontSize="16" Grid.Column="0"/>
                 <TextBlock x:Name="lbWelcome" VerticalAlignment="Center" HorizontalAlignment="Left"
-                    Margin="0 0 0 0" Text="Selamat Datang, Lawrence Patrick!" Width="205"  Grid.Column="1"/>
+                    Margin="0 0 0 0" Text="Selamat Datang, Jasong!" Width="205"  Grid.Column="1"/>
                 <Button x:Name="btLogout" Content="Logout" HorizontalAlignment="Right" Margin="23.6,0,23.4,-3.4" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Grid.Column="2" Height="21" Click="btLogout_Click">
                     <Button.Style>
                         <Style TargetType="Button">
@@ -138,6 +138,7 @@
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="25" Grid.Row="0">
@@ -150,24 +151,43 @@
                               HeadersVisibility="All" Margin="0, 10, 0, 0"
                               IsReadOnly="True"
                               ColumnWidth="*" AutoGeneratingColumn="dgCart_AutoGeneratingColumn"
-                              Grid.Row="1">
+                              Grid.Row="1" Loaded="dgCart_Loaded">
                     </DataGrid>
                     <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="0, 0, 10, 0">
-                            Kode Voucher : 
+                            Payment Method :
+                        </TextBlock>
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="Choose One"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                            Margin="0, 0, 50, 0"
+                            Width="200"
+                            x:Name="cbMetode">
+                            <System:String>OVO</System:String>
+                            <System:String>GOPAY</System:String>
+                            <System:String>SHOPEEPAY</System:String>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock VerticalAlignment="Center" Margin="0, 0, 10, 0">
+                            Voucher Code : 
                         </TextBlock>
                         <ComboBox
                             materialDesign:HintAssist.Hint="Search"
                             materialDesign:HintAssist.HintOpacity=".26"
-                            Margin="0, 0, 50, 0"
+                            Margin="0, 0, 0, 0"
                             Width="200"
                             IsEditable="True" x:Name="cbVoucher">
                         </ComboBox>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                x:Name="btClearVoucher" Click="btClearVoucher_Click">
+                            <materialDesign:PackIcon Kind="Close"/>
+                        </Button>
                     </StackPanel>
-                    <TextBlock HorizontalAlignment="Right" x:Name="lbTotal" Grid.Row="3" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
+                    <TextBlock HorizontalAlignment="Right" x:Name="lbTotal" Grid.Row="4" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
                         Total : 
                     </TextBlock>
-                    <StackPanel Grid.Row="4" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Grid.Row="5" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button
                         Style="{StaticResource MaterialDesignRaisedLightButton}"
                         ToolTip="Resource name: MaterialDesignRaisedLightButton"
@@ -184,7 +204,7 @@
                         materialDesign:ButtonAssist.CornerRadius="15"
                         Margin="0, 0, 15, 0"
                         Content="Order" Grid.Row="3"
-                        x:Name="btOrder"/>
+                        x:Name="btOrder" Click="btOrder_Click"/>
                     </StackPanel>
                     
                 </Grid>

@@ -63,9 +63,10 @@ namespace BreadTok
                 jml.RemoveAt(idx);
             }
         }
-        public DataTable loadToDatagrid()
+        public DataTable getDataTable()
         {
             dt = new DataTable();
+            dt.Columns.Add("ID");
             dt.Columns.Add("Nama Roti");
             dt.Columns.Add("Harga Roti");
             dt.Columns.Add("Qty");
@@ -78,16 +79,7 @@ namespace BreadTok
             {
                 Roti r = rotis[i];
                 DataRow dr = dt.NewRow();
-                //dr["Nama Roti"] = r.nama_roti;
-                //dr["Harga Roti"] = r.harga_roti;
-                //dr["Qty"] = jml[i];
-                //dr["Subtotal"] = jml[i] * r.harga_roti;
-                //dr["Action"] = r.id_roti;
-                //dr[0] = r.nama_roti;
-                //dr[1] = r.harga_roti;
-                //dr[2] = jml[i];
-                //dr[3] = jml[i] * r.harga_roti;
-                //dr[4] = r.id_roti;
+                dr["ID"] = r.id_roti;
                 dr["Nama Roti"] = r.nama_roti;
                 dr["Harga Roti"] = r.harga_roti;
                 dr["Qty"] = jml[i];
@@ -99,9 +91,13 @@ namespace BreadTok
 
             return dt;
         }
-        public string getTotal()
+        public string getFormattedTotal()
         {
             return "Total : Rp " + total;
+        }
+        public int getCartItemCount()
+        {
+            return rotis.Count;
         }
         public void clear()
         {

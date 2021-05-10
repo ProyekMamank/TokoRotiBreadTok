@@ -91,9 +91,9 @@ namespace BreadTok
         }
         private void loadCart()
         {
-            DataTable dt = cart.loadToDatagrid();
+            DataTable dt = cart.getDataTable();
             dgCart.ItemsSource = dt.DefaultView;
-            lbTotal.Text = cart.getTotal();
+            lbTotal.Text = cart.getFormattedTotal();
         }
         private void clearCart()
         {
@@ -139,13 +139,12 @@ namespace BreadTok
 
             dgVoucher.ItemsSource = null;
             dgVoucher.ItemsSource = dtVoucher.DefaultView;
-            Console.WriteLine(dtVoucher.Columns.Count);
-            Console.WriteLine(dgVoucher.Columns.Count);
 
             // Combo box voucher saat checkout
             cbVoucher.ItemsSource = dtVoucher.DefaultView;
             cbVoucher.SelectedValuePath = "ID";
             cbVoucher.DisplayMemberPath = "Kode Voucher";
+
         }
 
         private void btAddToCart_Click(object sender, RoutedEventArgs e)
@@ -191,6 +190,93 @@ namespace BreadTok
         private void dgVoucher_Loaded(object sender, RoutedEventArgs e)
         {
             if (dgVoucher.Columns.Count > 0) dgVoucher.Columns[0].Visibility = Visibility.Hidden;
+        }
+
+        private void dgCart_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (dgCart.Columns.Count > 0) dgCart.Columns[0].Visibility = Visibility.Hidden;
+        }
+
+        private void btOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbMetode.SelectedIndex != -1 && cart.getCartItemCount() > 0)
+            {
+                Console.WriteLine(cbVoucher.SelectedValue);
+                using (OracleTransaction trans = App.conn.BeginTransaction())
+                {
+                    try
+                    {
+                        OracleCommand cmdNoNota = new OracleCommand();
+                        cmdNoNota.Connection = App.conn;
+                        cmdNoNota.CommandText = "NOMOR_NOTA_autogen";
+                        cmdNoNota.CommandType = CommandType.StoredProcedure;
+                        cmdNoNota.Parameters.Add(new OracleParameter()
+                        {
+                            Direction = ParameterDirection.ReturnValue,
+                            ParameterName = "nonota",
+                            OracleDbType = OracleDbType.Varchar2,
+                            Size = 15
+                        });
+
+                        cmdNoNota.ExecuteNonQuery();
+                        string nonota = cmdNoNota.Parameters["nonota"].Value.ToString();
+
+                        // H_TRANS
+                        OracleCommand cmdH = new OracleCommand();
+                        cmdH.Connection = App.conn;
+                        cmdH.CommandText = "insert into H_TRANS (NOMOR_NOTA,TOTAL,FK_PELANGGAN,METODE_PEMBAYARAN) " +
+                            "values (:nonota, :1, :2, :3)";
+                        cmdH.Parameters.Add(":nonota", nonota);
+                        cmdH.Parameters.Add(":1", cart.total);
+                        cmdH.Parameters.Add(":2", loggedUserID);
+                        cmdH.Parameters.Add(":3", cbMetode.SelectedItem.ToString());
+                        Console.WriteLine(cbMetode.SelectedItem.ToString());
+                        cmdH.ExecuteNonQuery();
+
+                        foreach (DataRow dr in cart.getDataTable().Rows)
+                        {
+                            OracleCommand cmdD = new OracleCommand();
+                            cmdD.Connection = App.conn;
+                            cmdD.CommandText = "insert into D_TRANS (NOMOR_NOTA,FK_ROTI, QUANTITY, SUBTOTAL) " +
+                                "values (:nonota, :roti, :qty, :sbt)";
+                            cmdD.Parameters.Add(":nonota", nonota);
+                            cmdD.Parameters.Add(":roti", dr["ID"]);
+                            cmdD.Parameters.Add(":qty", dr["Qty"]);
+                            cmdD.Parameters.Add(":sbt", dr["Subtotal"]);
+                            cmdD.ExecuteNonQuery();
+                        }
+
+                        trans.Commit();
+                        clearCart();
+                        loadData();
+                        loadVoucher();
+                        MessageHandler.messageSuccess("Order");
+                    }
+                    catch (OracleException ex)
+                    {
+                        trans.Rollback();
+                        if (ex.Number == 20001)
+                        {
+                            MessageBox.Show("Stok tidak mencukupi!");
+                        }
+                        else
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (cart.getCartItemCount() <= 0) MessageBox.Show("No item in cart! Order failed.");
+                else MessageBox.Show("Please Choose a Payment Method!");
+            }
+            
+        }
+
+        private void btClearVoucher_Click(object sender, RoutedEventArgs e)
+        {
+            cbVoucher.SelectedIndex = -1;
         }
     }
 }
