@@ -69,7 +69,7 @@
             </Grid>
 
         </materialDesign:ColorZone>
-       
+
         <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
                     materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Row="1" Grid.Column="0">
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
@@ -111,6 +111,7 @@
 
                 </Grid>
             </TabItem>
+
             <TabItem x:Name="tabMasterRoti" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -145,6 +146,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -154,13 +156,31 @@
                 </TabItem.Header>
                 <Grid x:Name="grid_DaftarPesanan">
                     <Label Content="Daftar Pesanan" HorizontalAlignment="Center" Margin="334,15,358,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24"/>
+
+                    <Label Content="Keyword :" HorizontalAlignment="Center" Margin="10,65,781,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="14"/>
+
+                    <TextBox x:Name="tbKeywordDafarPesanan" HorizontalAlignment="Left" Height="25" 
+                             materialDesign:HintAssist.Hint="Your Keyword Here"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" BorderBrush="#7F000000" FontFamily="Open Sans" Margin="83,65,0,0" TextChanged="TbKeywordDafarPesanan_TextChanged"/>
+
+                    <Label Content="Filter :" HorizontalAlignment="Center" Margin="456,65,358,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="14"/>
+
+                    <ComboBox
+                            materialDesign:HintAssist.Hint="Filter By"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                            Margin="521,65,138,459"
+                            Width="200"
+                            IsEditable="False" x:Name="cbFilter" Height="26" SelectionChanged="CbFilter_SelectionChanged">
+                    </ComboBox>
+
                     <DataGrid CanUserAddRows="False" x:Name="dtGridPesanan"
                               CanUserReorderColumns="False" CanUserResizeColumns="False"
                               CanUserDeleteRows="False" CanUserResizeRows="False"
                               AutoGenerateColumns="False"
-                              HeadersVisibility="All" Margin="0,57,0,10"
+                              HeadersVisibility="All" Margin="0,112,0,91"
                               IsReadOnly="True">
-                        
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nomor Nota" Binding="{Binding nomor_nota}" Width="*"
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" >
@@ -225,6 +245,20 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <Button x:Name="btnReportPesanan" Content="Print Report" Canvas.Left="145" Canvas.Top="378" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnReportPesanan_Click" Margin="723,484,10,26"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto" >
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Reports" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid x:Name="grid_Report">
+
                 </Grid>
             </TabItem>
         </TabControl>

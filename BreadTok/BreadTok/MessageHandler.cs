@@ -44,6 +44,11 @@ namespace BreadTok
             MessageBox.Show(msg + " Successful!");
         }
 
+        public static void dateInvalid()
+        {
+            MessageBox.Show("Date is Invalid");
+        }
+
         public static bool confirmYesNo(string msg)
         {
             MessageBoxResult res = MessageBox.Show(msg, "Confirm Message", MessageBoxButton.YesNo, MessageBoxImage.Question);

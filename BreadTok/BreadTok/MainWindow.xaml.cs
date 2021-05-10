@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using Oracle.DataAccess.Client;
+using System.ComponentModel;
 
 namespace BreadTok
 {
@@ -88,50 +89,89 @@ namespace BreadTok
 
             dtGridPesanan.ItemsSource = htranses;
 
+            cbFilter.Items.Add("Nomor Nota");
+            cbFilter.Items.Add("Tanggal");
+            cbFilter.Items.Add("Total");
+            cbFilter.Items.Add("Pelanggan");
+            cbFilter.Items.Add("Pembayaran");
+            cbFilter.Items.Add("Status");
+            cbFilter.SelectedIndex = 0;
+        }
+        
+        private void TbKeywordDafarPesanan_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterPesanan();
         }
 
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        private void CbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+            FilterPesanan();
+        }
+
+        private void FilterPesanan()
+        {
+            ICollectionView cv = CollectionViewSource.GetDefaultView(dtGridPesanan.ItemsSource);
+            string filter = tbKeywordDafarPesanan.Text;
+            if (filter == "")
+                cv.Filter = null;
+            else
             {
-                if (vis is DataGridRow)
+                cv.Filter = o =>
                 {
-                    var row = (DataGridRow)vis;
-                    row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-                    break;
-                }
+                    HTrans p = o as HTrans;
+                    if (cbFilter.SelectedItem.Equals("Nomor Nota"))
+                        return (p.nomor_nota.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Tanggal"))
+                        return (p.tanggal_trans.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Total"))
+                        return (p.total.ToString().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Pelanggan"))
+                        return (p.id_pelanggan.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Pembayaran"))
+                        return (p.metode_pembayaran.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Status"))
+                        return (p.status.ToUpper().Contains(filter.ToUpper()));
+                    return (p.nomor_nota.ToUpper().Contains(filter.ToUpper()));
+                };
             }
         }
 
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        private void BtnReportPesanan_Click(object sender, RoutedEventArgs e)
         {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-            {
-                if (vis is DataGridRow)
-                {
-                    var row = (DataGridRow)vis;
-                    row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-                    break;
-                }
-            }
+            WindowTransitionReportPesanan wtrp = new WindowTransitionReportPesanan();
+            toggleOverlay();
+            wtrp.ShowDialog();
+
+            toggleOverlay();
         }
+
 
         private void BtnDetailHTrans_Click(object sender, RoutedEventArgs e)
         {
             object ID = ((Button)sender).CommandParameter;
 
             WindowPesanan wp = new WindowPesanan(ID.ToString());
-            overlay.Visibility = Visibility.Visible;
-            overlay.Width = windowPesanan.ActualWidth;
-            overlay.Height = windowPesanan.ActualHeight;
-            overlay.Margin = new Thickness(0, 0, 0, 0);
+            toggleOverlay();
             wp.ShowDialog();
 
             loadDaftarPesanan();
-            overlay.Visibility = Visibility.Hidden;
+            toggleOverlay();
+        }
+
+        private void toggleOverlay()
+        {
             overlay.Width = windowPesanan.ActualWidth;
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
+
+            if (overlay.Visibility == Visibility.Hidden)
+            {
+                overlay.Visibility = Visibility.Visible;
+            }
+            else if (overlay.Visibility == Visibility.Visible)
+            {
+                overlay.Visibility = Visibility.Hidden;
+            }
         }
 
         private void loadData()
