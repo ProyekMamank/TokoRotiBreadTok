@@ -10,3 +10,17 @@ BEGIN
 END;
 /
 SHOW ERR;
+
+CREATE OR REPLACE TRIGGER AUTOGEN_ID_BAHAN
+BEFORE INSERT ON BAHAN
+FOR EACH ROW
+DECLARE
+    ID varchar2(100);
+BEGIN
+    select to_char(max(to_number(ID))+1)
+    into ID
+    from BAHAN;
+
+    :new.ID := ID;
+END;
+/

@@ -1,0 +1,126 @@
+﻿<Window x:Class="BreadTok.WindowPesanan"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xml:lang="id-ID"
+        xmlns:local="clr-namespace:BreadTok"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="WindowPesanan" Height="450" Width="800">
+    <Grid Background="#FFFAFAFA">
+        <materialDesign:ColorZone
+            Mode="PrimaryDark"
+            Padding="16"
+            CornerRadius="0"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Panel.ZIndex="1"
+            ClipToBounds="False"
+            MouseDown="Grid_MouseDown">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="675,0,0,0" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="BtnBack_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#fe6584"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Width="75" Height="20"
+                                CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </materialDesign:ColorZone>
+
+        <Label Content="Detail Pesanan" HorizontalAlignment="Center" Margin="0,70,0,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24"/>
+        <Label Content="Nomor Nota :" HorizontalAlignment="Center" Margin="10,114,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblNomorNota" Content="" HorizontalAlignment="Center" Margin="143,114,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Tanggal Transaksi :" HorizontalAlignment="Center" Margin="10,140,662,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="128"/>
+        <Label x:Name="lblTanggalTrans" Content="" HorizontalAlignment="Center" Margin="143,140,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Status :" HorizontalAlignment="Center" Margin="10,168,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblStatus" Content="" HorizontalAlignment="Center" Margin="143,168,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Pegawai :" HorizontalAlignment="Center" Margin="420,114,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblPegawai" Content="" HorizontalAlignment="Center" Margin="554,114,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Pelanggan :" HorizontalAlignment="Center" Margin="420,140,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblPelanggan" Content="" HorizontalAlignment="Center" Margin="554,140,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Metode Pembayaran :" HorizontalAlignment="Center" Margin="420,168,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblMetodePembayaran" Content="" HorizontalAlignment="Center" Margin="554,168,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <DataGrid CanUserAddRows="False" x:Name="dtGridDetailPesanan" 
+                  CanUserReorderColumns="False" CanUserResizeColumns="False"
+                  CanUserDeleteRows="False" CanUserResizeRows="False"
+                    AutoGenerateColumns="False"
+                    HeadersVisibility="All" Margin="0,202,0,98"
+                    IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nama Roti" Binding="{Binding id_roti}" Width="*"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                <materialDesign:DataGridTextColumn Header="Quantity" Binding="{Binding quantity}" Width="*"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                </materialDesign:DataGridTextColumn>
+
+                <DataGridTextColumn Header="Harga" Binding="{Binding harga, StringFormat=C, ConverterCulture='id-ID'}" Width="*"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Subtotal" Binding="{Binding subtotal, StringFormat=C, ConverterCulture='id-ID'}" Width="*"
+                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Harga Total :" HorizontalAlignment="Center" Margin="9,352,661,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblHargaTotal" Content="" ContentStringFormat="C" HorizontalAlignment="Center" Margin="143,352,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        
+        <Button Content="Konfirmasi Pembayaran" HorizontalAlignment="Left" Margin="178,392,0,0" x:Name="btnKonfirmasi" VerticalAlignment="Top" Width="200" Click="BtnKonfirmasi_Click" />
+        <Button Content="Batalkan Pesanan" HorizontalAlignment="Left" Margin="426,392,0,0" VerticalAlignment="Top" x:Name="btnBatalkan" Width="200" Foreground="White" Height="32" FontSize="14" Click="BtnBatalkan_Click" >
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFF92C56"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Width="200" Height="32"
+                                CornerRadius="3" Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+
+    </Grid>
+</Window>

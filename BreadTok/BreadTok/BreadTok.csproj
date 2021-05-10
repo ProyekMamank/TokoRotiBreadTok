@@ -26,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,6 +72,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CurrencyConverter.cs" />
+    <Compile Include="WindowPesanan.xaml.cs">
+      <DependentUpon>WindowPesanan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Cart.cs" />
     <Compile Include="Roti.cs" />
     <Compile Include="WindowPelanggan.xaml.cs">
@@ -93,9 +97,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bahan.cs" />
     <Compile Include="ConnectionForm.xaml.cs">
       <DependentUpon>ConnectionForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DTrans.cs" />
+    <Compile Include="HTrans.cs" />
     <Compile Include="LoginRegis.xaml.cs">
       <DependentUpon>LoginRegis.xaml</DependentUpon>
     </Compile>
@@ -103,6 +110,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowPesanan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowPelanggan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

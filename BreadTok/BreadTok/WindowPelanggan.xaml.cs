@@ -141,7 +141,6 @@ namespace BreadTok
             dgVoucher.ItemsSource = dtVoucher.DefaultView;
             Console.WriteLine(dtVoucher.Columns.Count);
             Console.WriteLine(dgVoucher.Columns.Count);
-            //dgVoucher.Columns[0].Visibility = Visibility.Hidden;
 
             // Combo box voucher saat checkout
             cbVoucher.ItemsSource = dtVoucher.DefaultView;
@@ -187,6 +186,11 @@ namespace BreadTok
         private void btClear_Click(object sender, RoutedEventArgs e)
         {
             clearCart();
+        }
+
+        private void dgVoucher_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (dgVoucher.Columns.Count > 0) dgVoucher.Columns[0].Visibility = Visibility.Hidden;
         }
     }
 }
