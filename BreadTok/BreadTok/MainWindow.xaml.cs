@@ -25,7 +25,7 @@ namespace BreadTok
     public partial class MainWindow : Window
     {
         private bahan b;
-        private int selectedIndex;
+        private int selectedId;
         string loggedUserID;
         public MainWindow(string id)
         {
@@ -144,10 +144,12 @@ namespace BreadTok
         {
             panelMasterBahan.Visibility = Visibility.Hidden;
             panelInsertBahan.Visibility = Visibility.Visible;
+            panelUpdateBahan.Visibility = Visibility.Hidden;
             btnDelete.Visibility = Visibility.Hidden;
+            btnInsert.Visibility = Visibility.Hidden;
             btnBack.Visibility = Visibility.Visible;
-            loadCbJenisBahan();
-            loadCbSupplier();
+            loadCbJenisBahan("insert");
+            loadCbSupplier("insert");
         }
 
 
@@ -155,7 +157,9 @@ namespace BreadTok
         {
             panelMasterBahan.Visibility = Visibility.Visible;
             panelInsertBahan.Visibility = Visibility.Hidden;
+            panelUpdateBahan.Visibility = Visibility.Hidden;
             btnDelete.Visibility = Visibility.Visible;
+            btnInsert.Visibility = Visibility.Visible;
             btnBack.Visibility = Visibility.Hidden;
         }
 
@@ -179,53 +183,108 @@ namespace BreadTok
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine((sender as Button).CommandParameter);
+            panelMasterBahan.Visibility = Visibility.Hidden;
+            panelInsertBahan.Visibility = Visibility.Hidden;
+            panelUpdateBahan.Visibility = Visibility.Visible;
+            btnDelete.Visibility = Visibility.Hidden;
+            btnBack.Visibility = Visibility.Visible;
+            btnInsert.Visibility = Visibility.Hidden;
+            loadCbJenisBahan("update");
+            loadCbSupplier("update");
+            setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
+            selectedId = Convert.ToInt32((sender as Button).CommandParameter);
         }
 
         private void dgBahan_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            selectedIndex = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
+            selectedId = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
         }
 
 
-        private void loadCbJenisBahan()
+        private void loadCbJenisBahan(string state)
         {
-            cbJenisBahan.Items.Clear();
-            OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from jenis_bahan";
-            cmd.Connection = App.conn;
-            OracleDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            if(state == "insert")
             {
-                cbJenisBahan.Items.Add(new ComboBoxItem()
+                cbJenisBahan.Items.Clear();
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from jenis_bahan";
+                cmd.Connection = App.conn;
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Name = "ID" + reader.GetString(0),
-                    Content = reader.GetString(1)
-                });
+                    cbJenisBahan.Items.Add(new ComboBoxItem()
+                    {
+                        Name = "ID" + reader.GetString(0),
+                        Content = reader.GetString(1)
+                    });
+                }
+                reader.Close();
+                cbJenisBahan.SelectedValuePath = "Name";
+                cbJenisBahan.SelectedIndex = 0;
             }
-            reader.Close();
-            cbJenisBahan.SelectedValuePath = "Name";
-            cbJenisBahan.SelectedIndex = 0;
+            else
+            {
+                cbJenisBahanUpdate.Items.Clear();
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from jenis_bahan";
+                cmd.Connection = App.conn;
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    cbJenisBahanUpdate.Items.Add(new ComboBoxItem()
+                    {
+                        Name = "ID" + reader.GetString(0),
+                        Content = reader.GetString(1)
+                    });
+                }
+                reader.Close();
+                cbJenisBahanUpdate.SelectedValuePath = "Name";
+                cbJenisBahanUpdate.SelectedIndex = 0;
+            }
+            
         }
 
-        private void loadCbSupplier()
+        private void loadCbSupplier(string state)
         {
-            cbSupplier.Items.Clear();
-            OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from supplier";
-            cmd.Connection = App.conn;
-            OracleDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            if (state == "insert")
             {
-                cbSupplier.Items.Add(new ComboBoxItem()
+                cbSupplier.Items.Clear();
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from supplier";
+                cmd.Connection = App.conn;
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    Name = "ID" + reader.GetString(0),
-                    Content = reader.GetString(1)
-                });
+                    cbSupplier.Items.Add(new ComboBoxItem()
+                    {
+                        Name = "ID" + reader.GetString(0),
+                        Content = reader.GetString(1)
+                    });
+                }
+                reader.Close();
+                cbSupplier.SelectedValuePath = "Name";
+                cbSupplier.SelectedIndex = 0;
             }
-            reader.Close();
-            cbSupplier.SelectedValuePath = "Name";
-            cbSupplier.SelectedIndex = 0;
+            else
+            {
+                cbSupplierUpdate.Items.Clear();
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from supplier";
+                cmd.Connection = App.conn;
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    cbSupplierUpdate.Items.Add(new ComboBoxItem()
+                    {
+                        Name = "ID" + reader.GetString(0),
+                        Content = reader.GetString(1)
+                    });
+                }
+                reader.Close();
+                cbSupplierUpdate.SelectedValuePath = "Name";
+                cbSupplierUpdate.SelectedIndex = 0;
+            }
+            
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -255,15 +314,106 @@ namespace BreadTok
 
             panelMasterBahan.Visibility = Visibility.Visible;
             panelInsertBahan.Visibility = Visibility.Hidden;
+            btnInsert.Visibility = Visibility.Visible;
             btnDelete.Visibility = Visibility.Visible;
             btnBack.Visibility = Visibility.Hidden;
         }
 
+        private void setupUpdatePanel(int id)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"select * from bahan where ID = {id}";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                tbMerkUpdate.Text = reader.GetValue(1).ToString();
+                tbQuantityUpdate.Text = reader.GetValue(2).ToString();
+                if(reader.GetValue(4).ToString() == "GRAM")
+                {
+                    cbSatuanUpdate.SelectedIndex = 0;
+                }
+                else if(reader.GetValue(4).ToString() == "mL")
+                {
+                    cbSatuanUpdate.SelectedIndex = 1;
+                }
+                else
+                {
+                    cbSatuanUpdate.SelectedIndex = 2;
+                }
+                tbHargaUpdate.Text = reader.GetValue(3).ToString();
+                int idxJenisBahan = 0;
+                foreach(ComboBoxItem cbItem in cbJenisBahanUpdate.Items)
+                {
+                    if(cbItem.Name == "ID" + reader.GetString(5))
+                    {
+                        break;
+                    }
+                    idxJenisBahan++;
+                }
+                int idxSupplier = 0;
+                foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
+                {
+                    if (cbItem.Name == "ID" + reader.GetString(6))
+                    {
+                        break;
+                    }
+                    idxSupplier++;
+                }
+                cbSupplierUpdate.SelectedIndex = idxSupplier;
+                cbJenisBahanUpdate.SelectedIndex = idxJenisBahan;
+
+            }
+            reader.Close();
+        }
         private void resetInsertPanel()
         {
             tbMerk.Text = "";
             tbQuantity.Text = "";
-            selectedIndex = -1;
+            tbHarga.Text = "";
+            tbQuantity.Text = "";
+            cbSatuan.SelectedIndex = 0;
+            selectedId = -1;
+        }
+        private void resetUpdatePanel()
+        {
+            tbMerkUpdate.Text = "";
+            tbQuantityUpdate.Text = "";
+            tbHargaUpdate.Text = "";
+            tbQuantityUpdate.Text = "";
+            cbSatuanUpdate.SelectedIndex = 0;
+            selectedId = -1;
+        }
+
+        private void btnSubmitUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            string merk = tbMerkUpdate.Text.ToUpper();
+            int qty = Convert.ToInt32(tbQuantityUpdate.Text);
+            int harga = Convert.ToInt32(tbHargaUpdate.Text);
+            string satuan = cbSatuanUpdate.SelectedItem.ToString();
+            string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
+            string supplier = cbSupplierUpdate.SelectedValue.ToString().Substring(2);
+
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedId}";
+            cmd.Connection = App.conn;
+            cmd.Parameters.Add(":1", merk);
+            cmd.Parameters.Add(":2", qty);
+            cmd.Parameters.Add(":3", harga);
+            cmd.Parameters.Add(":4", satuan);
+            cmd.Parameters.Add(":5", jenisBahan);
+            cmd.Parameters.Add(":6", supplier);
+            cmd.ExecuteNonQuery();
+
+            resetUpdatePanel();
+            loadData();
+
+            panelMasterBahan.Visibility = Visibility.Visible;
+            panelUpdateBahan.Visibility = Visibility.Hidden;
+            btnInsert.Visibility = Visibility.Visible;
+            btnDelete.Visibility = Visibility.Visible;
+            btnBack.Visibility = Visibility.Hidden;
         }
     }
 }
