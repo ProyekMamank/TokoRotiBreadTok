@@ -247,7 +247,7 @@ namespace BreadTok
                     cbSupplier.Items.Add(new ComboBoxItem()
                     {
                         Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(1)
+                        Content = reader.GetString(2)
                     });
                 }
                 reader.Close();
@@ -266,7 +266,7 @@ namespace BreadTok
                     cbSupplierUpdate.Items.Add(new ComboBoxItem()
                     {
                         Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(1)
+                        Content = reader.GetString(2)
                     });
                 }
                 reader.Close();
@@ -319,6 +319,19 @@ namespace BreadTok
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
+
+            if (tbMerk.Text == "" || tbQuantity.Text == "" || tbHarga.Text == "")
+            {
+                MessageBox.Show("ALL FIELD MUST BE FILLED FIRST!!!");
+                return;
+            }
+
+            if(!tbQuantity.Text.All(Char.IsDigit) || !tbHarga.Text.All(Char.IsDigit))
+            {
+                MessageBox.Show("QUANTITY AND PRICE MUST BE IN NUMBER!!!");
+                return;
+            }
+
             // TODO : pengecekan harus diisi + harus ada foto (cek imgSourceDir != "")
             string merk = tbMerk.Text.ToUpper();
             int qty = Convert.ToInt32(tbQuantity.Text);
@@ -326,6 +339,8 @@ namespace BreadTok
             string satuan = cbSatuan.SelectedItem.ToString();
             string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
             string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
+
+            
 
             // TODO : TRIGGER ID + KODE + Pic_Loc
             OracleCommand cmd = new OracleCommand();
@@ -475,6 +490,7 @@ namespace BreadTok
                 cmd.CommandText = $"select ID,status from karyawan where username='{username}'";
                 cmd.Connection = App.conn;
                 OracleDataReader reader = cmd.ExecuteReader();
+                Console.WriteLine(username);
                 while (reader.Read())
                 {
                     selectedIdKaryawan = Convert.ToInt32(reader.GetValue(0).ToString());
@@ -585,7 +601,7 @@ namespace BreadTok
 
             if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="")
             {
-                MessageBox.Show("PLEAS FILL OUT ALL THE FIELD FIRST!!!");
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
                 return;
             }
 
@@ -596,19 +612,21 @@ namespace BreadTok
             }
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "insert into karyawan values(:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11)";
+            cmd.CommandText = "insert into karyawan values(:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13)";
             cmd.Connection = App.conn;
             cmd.Parameters.Add(":1", "0");
-            cmd.Parameters.Add(":2", username);
-            cmd.Parameters.Add(":3", password);
-            cmd.Parameters.Add(":4", nama);
-            cmd.Parameters.Add(":5", jenisKelamin);
-            cmd.Parameters.Add(":6", alamat);
-            cmd.Parameters.Add(":7", email);
-            cmd.Parameters.Add(":8", noTelp);
-            cmd.Parameters.Add(":9", tglLahir);
-            cmd.Parameters.Add(":10", 1);
-            cmd.Parameters.Add(":11", jabatan);
+            cmd.Parameters.Add(":2", "0");
+            cmd.Parameters.Add(":3", username);
+            cmd.Parameters.Add(":4", password);
+            cmd.Parameters.Add(":5", nama);
+            cmd.Parameters.Add(":6", jenisKelamin);
+            cmd.Parameters.Add(":7", alamat);
+            cmd.Parameters.Add(":8", email);
+            cmd.Parameters.Add(":9", noTelp);
+            cmd.Parameters.Add(":10", tglLahir);
+            cmd.Parameters.Add(":11", 1);
+            cmd.Parameters.Add(":12", jabatan);
+            cmd.Parameters.Add(":13", "0");
             cmd.ExecuteNonQuery();
 
             resetInsertKaryawanPanel();

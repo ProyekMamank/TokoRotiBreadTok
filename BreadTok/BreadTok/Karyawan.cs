@@ -29,21 +29,21 @@ namespace BreadTok
             while (reader.Read())
             {
                 DataRow dr = dt.NewRow();
-                dr[0] = reader.GetValue(3).ToString();
+                dr[0] = reader.GetValue(4).ToString();
 
-                dr[1] = reader.GetValue(1).ToString();
+                dr[1] = reader.GetValue(2).ToString();
 
-                dr[2] = reader.GetValue(2).ToString();
+                dr[2] = reader.GetValue(3).ToString();
 
-                dr[3] = reader.GetValue(6).ToString();
+                dr[3] = reader.GetValue(7).ToString();
 
                 OracleCommand cmd2 = new OracleCommand();
-                cmd2.CommandText = $"select nama_jabatan from jabatan where ID = {Convert.ToInt32(reader.GetValue(10))}";
+                cmd2.CommandText = $"select nama_jabatan from jabatan where ID = {Convert.ToInt32(reader.GetValue(11))}";
                 cmd2.Connection = App.conn;
                 dr[4] = cmd2.ExecuteScalar().ToString();
 
                 string status = "";
-                if(reader.GetValue(9).ToString() == "1")
+                if(reader.GetValue(10).ToString() == "1")
                 {
                     status = "ACTIVE";
                 }
