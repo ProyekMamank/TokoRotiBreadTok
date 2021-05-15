@@ -69,7 +69,7 @@
             </Grid>
 
         </materialDesign:ColorZone>
-       
+
         <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
                     materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Row="1" Grid.Column="0">
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
@@ -84,7 +84,7 @@
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
                         <DataGrid x:Name="dgBahan" Height="468" IsReadOnly="True" AutoGeneratingColumn="dgBahan_AutoGeneratingColumn" MouseUp="dgBahan_MouseUp" Canvas.Left="10" Canvas.Top="36" Width="709" ColumnWidth="*"/>
                     </Canvas>
-                    <Canvas x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729"  Visibility="Hidden">
+                    <Canvas x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729"  Visibility="Visible">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Bahan"/>
                         <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
                         <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
@@ -94,6 +94,7 @@
                         <TextBox x:Name="tbMerk" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
                         <ComboBox x:Name="cbJenisBahan" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
                         <ComboBox x:Name="cbSupplier" Canvas.Left="145" Canvas.Top="305" Width="236" Height="29"/>
+                        <Image x:Name="imgInsert" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
                         <Button x:Name="btnSubmit" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmit_Click"/>
                         <ComboBox x:Name="cbSatuan" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0">
                             <System:String>GRAM</System:String>
@@ -102,6 +103,7 @@
                         </ComboBox>
                         <Label Content="HARGA :" Canvas.Left="54" Canvas.Top="180" FontWeight="Bold" FontSize="14" Height="29"/>
                         <TextBox x:Name="tbHarga" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236"/>
+                        <Button x:Name="btnOpenImg" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImg_Click" RenderTransformOrigin="0.624,2.088"/>
                     </Canvas>
                     <Canvas x:Name="panelUpdateBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729" Visibility="Hidden">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Update Bahan"/>
@@ -178,7 +180,7 @@
                               AutoGenerateColumns="False"
                               HeadersVisibility="All" Margin="0,57,0,10"
                               IsReadOnly="True">
-                        
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nomor Nota" Binding="{Binding nomor_nota}" Width="*"
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" >

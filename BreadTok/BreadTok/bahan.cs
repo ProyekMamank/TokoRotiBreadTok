@@ -29,19 +29,19 @@ namespace BreadTok
             while (reader.Read())
             {
                 DataRow dr = dt.NewRow();
-                dr[0] = reader.GetValue(1).ToString();
+                dr[0] = reader.GetValue(2).ToString();
 
                 OracleCommand cmd2 = new OracleCommand();
-                cmd2.CommandText = $"select nama_jenis from jenis_bahan where ID = {Convert.ToInt32(reader.GetValue(5))}";
+                cmd2.CommandText = $"select nama_jenis from jenis_bahan where ID = {Convert.ToInt32(reader.GetValue(6))}";
                 cmd2.Connection = App.conn;
                 dr[1] = cmd2.ExecuteScalar().ToString();
 
-                dr[2] = reader.GetValue(2).ToString() + " " + reader.GetValue(4).ToString();
+                dr[2] = reader.GetValue(3).ToString() + " " + reader.GetValue(5).ToString();
 
-                dr[3] = Convert.ToInt32(reader.GetValue(3));
+                dr[3] = Convert.ToInt32(reader.GetValue(4));
 
                 OracleCommand cmd3 = new OracleCommand();
-                cmd3.CommandText = $"select nama from supplier where ID = {Convert.ToInt32(reader.GetValue(6))}";
+                cmd3.CommandText = $"select nama from supplier where ID = {Convert.ToInt32(reader.GetValue(7))}";
                 cmd3.Connection = App.conn;
                 dr[4] = cmd3.ExecuteScalar().ToString();
 
