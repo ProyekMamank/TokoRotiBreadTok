@@ -16,10 +16,25 @@ BEFORE INSERT ON BAHAN
 FOR EACH ROW
 DECLARE
     ID varchar2(100);
+	START_CODE varchar2(20);
+    END_CODE varchar2(20);
 BEGIN
     select to_char(max(to_number(ID))+1)
     into ID
     from BAHAN;
+	
+	IF INSTR(:NEW.MERK, ' ') > 0 THEN
+        START_CODE := SUBSTR(:NEW.MERK, 1, 2) || SUBSTR(:NEW.MERK, INSTR(:NEW.MERK, ' ') + 1, 2);
+    ELSE
+        START_CODE := SUBSTR(:NEW.MERK, 1, 4);
+    END IF;
+	
+    SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(B.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
+    FROM BAHAN B
+    WHERE SUBSTR(B.KODE, 1, 4) = UPPER(START_CODE);
+
+    :NEW.KODE := START_CODE || END_CODE;
+	:NEW.PICTURE_LOCATION := START_CODE || END_CODE;
 
     :new.ID := ID;
 END;
