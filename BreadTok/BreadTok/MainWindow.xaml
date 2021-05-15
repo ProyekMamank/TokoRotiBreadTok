@@ -71,7 +71,7 @@
         </materialDesign:ColorZone>
 
         <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
-                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Row="1" Grid.Column="0">
+                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Column="0" Margin="0,0.4,0,0" Grid.Row="1">
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -127,9 +127,9 @@
                         <TextBox x:Name="tbHargaUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236"/>
                     </Canvas>
 
-                    <Button x:Name="btnInsert" Content="INSERT BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="115" Height="38" Click="btnInsert_Click" FontSize="12"/>
-                    <Button x:Name="btnDelete" Content="DELETE BAHAN" HorizontalAlignment="Left" Margin="744,152,0,0" VerticalAlignment="Top" Width="115" Height="38" FontSize="12"/>
-                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="712,486,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
+                    <Button x:Name="btnInsert" Content="INSERT&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="91" Height="62" Click="btnInsert_Click" FontSize="12"/>
+                    <Button x:Name="btnDelete" Content="DELETE&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,184,0,0" VerticalAlignment="Top" Width="91" Height="57" FontSize="12"/>
+                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
 
                 </Grid>
             </TabItem>
@@ -165,6 +165,48 @@
                         <ListBoxItem Content="Masih"/>
                         <ListBoxItem Content="Kosong Juga :P"/>
                     </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabMasterKaryawan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto" MouseDoubleClick="tabMasterKaryawan_MouseDoubleClick">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Account" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Master Karyawan" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Canvas x:Name="panelMasterKaryawan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Karyawan"/>
+                        <DataGrid x:Name="dgKaryawan" Height="468" IsReadOnly="True" Canvas.Left="10" Canvas.Top="36" Width="709" ColumnWidth="*" MouseUp="dgKaryawan_MouseUp"/>
+                    </Canvas>
+                    <Canvas x:Name="panelInsertKaryawan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729" Visibility="Hidden">
+                        <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Karyawan"/>
+                        <Label Content="NAMA :" Canvas.Left="75" Canvas.Top="35" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="USERNAME :" Canvas.Left="43" Canvas.Top="79" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="PASSWORD :" Canvas.Left="42" Canvas.Top="124" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="EMAIL :" Canvas.Left="76" Canvas.Top="171" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="JENIS KELAMIN :" Canvas.Left="16" Canvas.Top="213" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="ALAMAT :" Canvas.Left="63" Canvas.Top="258" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="NO. TELEPON :" Canvas.Left="31" Canvas.Top="306" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <Label Content="JABATAN :" Canvas.Left="56" Canvas.Top="393" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbNamaKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="35" Width="276"/>
+                        <TextBox x:Name="tbUsernameKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="79" Width="276"/>
+                        <TextBox x:Name="tbPasswordKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="124" Width="276"/>
+                        <TextBox x:Name="tbEmailKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="171" Width="276"/>
+                        <TextBox x:Name="tbAlamatKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="141" Canvas.Top="257" Width="276"/>
+                        <TextBox x:Name="tbNoTelpKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="306" Width="276"/>
+                        <RadioButton x:Name="rbLakiKaryawan" Content="Laki - Laki" Canvas.Left="140" Canvas.Top="218"/>
+                        <RadioButton x:Name="rbPerempuanKaryawan" Content="Perempuan" Canvas.Left="235" Canvas.Top="218"/>
+                        <ComboBox x:Name="cbJabatan" Canvas.Left="139" Canvas.Top="397" Width="176"/>
+                        <Button x:Name="btnSubmitKaryawan" Content="Submit" Canvas.Left="141" Canvas.Top="450" Width="107" Height="36" Background="#FF1EBD20" BorderBrush="#FF27C328" Click="btnSubmitKaryawan_Click"/>
+                        <Label Content="TANGGAL LAHIR :" Canvas.Left="7" Canvas.Top="351" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <DatePicker x:Name="dtpTanggalLahir" Canvas.Left="141" Canvas.Top="351" Height="29" Width="174"/>
+                    </Canvas>
+                    <Button x:Name="btnActive" Content="ACTIVE" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="91" Height="62" FontSize="12" IsEnabled="False" Click="btnActive_Click"/>
+                    <Button x:Name="btnSuspend" Content="SUSPEND" HorizontalAlignment="Left" Margin="744,152,0,0" VerticalAlignment="Top" Width="91" Height="62" FontSize="12" IsEnabled="False" Click="btnSuspend_Click"/>
+                    <Button x:Name="btnBackKaryawan" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Visibility="Hidden" Click="btnBackKaryawan_Click"/>
+                    <Button x:Name="btnInsertKaryawan" Content="INSERT&#xa;KARYAWAN" HorizontalAlignment="Left" Margin="744,219,9.8,0" VerticalAlignment="Top" Width="91" Height="62" FontSize="11" Click="btnInsertKaryawan_Click"/>
+
                 </Grid>
             </TabItem>
             <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">

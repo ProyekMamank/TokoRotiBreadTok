@@ -28,14 +28,18 @@ namespace BreadTok
     public partial class MainWindow : Window
     {
         private bahan b;
-        private int selectedId;
+        private Karyawan k;
+        private int selectedIdBahan;
+        private int selectedIdKaryawan;
         string loggedUserID;
         public MainWindow(string id)
         {
             InitializeComponent();
             b = new bahan();
+            k = new Karyawan();
             loggedUserID = id;
-            loadData();
+            loadDataBahan();
+            loadDataKaryawan();
             loadDaftarPesanan();
         }
 
@@ -114,11 +118,16 @@ namespace BreadTok
             overlay.Margin = new Thickness(0, 0, 0, 0);
         }
 
-        // BAHAN
-        private void loadData()
+        private void loadDataBahan()
         {
             dgBahan.ItemsSource = null;
             dgBahan.ItemsSource = b.loadData().DefaultView;
+        }
+
+        private void loadDataKaryawan()
+        {
+            dgKaryawan.ItemsSource = null;
+            dgKaryawan.ItemsSource = k.loadData().DefaultView;
         }
 
         private void btnInsert_Click(object sender, RoutedEventArgs e)
@@ -173,12 +182,12 @@ namespace BreadTok
             loadCbJenisBahan("update");
             loadCbSupplier("update");
             setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
-            selectedId = Convert.ToInt32((sender as Button).CommandParameter);
+            selectedIdBahan = Convert.ToInt32((sender as Button).CommandParameter);
         }
 
         private void dgBahan_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            selectedId = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
+            selectedIdBahan = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
         }
 
 
@@ -239,7 +248,7 @@ namespace BreadTok
                     cbSupplier.Items.Add(new ComboBoxItem()
                     {
                         Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(1)
+                        Content = reader.GetString(2)
                     });
                 }
                 reader.Close();
@@ -258,7 +267,7 @@ namespace BreadTok
                     cbSupplierUpdate.Items.Add(new ComboBoxItem()
                     {
                         Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(1)
+                        Content = reader.GetString(2)
                     });
                 }
                 reader.Close();
@@ -268,6 +277,25 @@ namespace BreadTok
             
         }
 
+        private void loadCbJabatan()
+        {
+            cbJabatan.Items.Clear();
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = "select * from jabatan";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                cbJabatan.Items.Add(new ComboBoxItem()
+                {
+                    Name = "ID" + reader.GetString(0),
+                    Content = reader.GetString(1)
+                });
+            }
+            reader.Close();
+            cbJabatan.SelectedValuePath = "Name";
+            cbJabatan.SelectedIndex = 0;
+        }
         string bahanImgSourceDir = "";
         private void BtnOpenImg_Click(object sender, RoutedEventArgs e)
         {
@@ -436,7 +464,7 @@ namespace BreadTok
             tbHarga.Text = "";
             tbQuantity.Text = "";
             cbSatuan.SelectedIndex = 0;
-            selectedId = -1;
+            selectedIdBahan = -1;
         }
         private void resetUpdatePanel()
         {
@@ -447,7 +475,21 @@ namespace BreadTok
             tbHargaUpdate.Text = "";
             tbQuantityUpdate.Text = "";
             cbSatuanUpdate.SelectedIndex = 0;
-            selectedId = -1;
+            selectedIdBahan = -1;
+        }
+        private void resetInsertKaryawanPanel()
+        {
+            tbNamaKaryawan.Text = "";
+            tbUsernameKaryawan.Text = "";
+            tbPasswordKaryawan.Text = "";
+            tbEmailKaryawan.Text = "";
+            tbAlamatKaryawan.Text = "";
+            tbNoTelpKaryawan.Text = "";
+            dtpTanggalLahir.Text = "";
+            rbLakiKaryawan.IsChecked = false;
+            rbPerempuanKaryawan.IsChecked = false;
+            cbJabatan.SelectedIndex = 0;
+            selectedIdKaryawan = -1;
         }
 
         private void btnSubmitUpdate_Click(object sender, RoutedEventArgs e)
@@ -527,6 +569,165 @@ namespace BreadTok
             }
         }
 
+        private void dgKaryawan_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if((((DataGrid)sender).SelectedItem as DataRowView) != null)
+            {
+                string username = (((DataGrid)sender).SelectedItem as DataRowView)[1].ToString();
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = $"select ID,status from karyawan where username='{username}'";
+                cmd.Connection = App.conn;
+                OracleDataReader reader = cmd.ExecuteReader();
+                Console.WriteLine(username);
+                while (reader.Read())
+                {
+                    selectedIdKaryawan = Convert.ToInt32(reader.GetValue(0).ToString());
+                    if (reader.GetValue(1).ToString() == "1")
+                    {
+                        btnActive.IsEnabled = false;
+                        btnSuspend.IsEnabled = true;
+                    }
+                    else
+                    {
+                        btnActive.IsEnabled = true;
+                        btnSuspend.IsEnabled = false;
+                    }
+                }
+                reader.Close();
+            }
+        }
+
+        private void tabMasterKaryawan_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            selectedIdKaryawan = -1;
+            btnActive.IsEnabled = false;
+            btnSuspend.IsEnabled = false;
+        }
+
+        private void btnActive_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedIdKaryawan >= 0)
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = $"update karyawan set status=1 where ID={selectedIdKaryawan}";
+                cmd.Connection = App.conn;
+                cmd.ExecuteNonQuery();
+                selectedIdKaryawan = -1;
+                loadDataKaryawan();
+            }
+            else
+            {
+                MessageBox.Show("TOLONG PILIH KARYAWAN TERLEBIH DAHULU");
+            }
+            
+        }
+
+        private void btnSuspend_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedIdKaryawan >= 0)
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = $"update karyawan set status=0 where ID={selectedIdKaryawan}";
+                cmd.Connection = App.conn;
+                cmd.ExecuteNonQuery();
+                selectedIdKaryawan = -1;
+                loadDataKaryawan();
+            }
+            else
+            {
+                MessageBox.Show("TOLONG PILIH KARYAWAN TERLEBIH DAHULU");
+            }
+        }
+
+        private void btnBackKaryawan_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterKaryawan.Visibility = Visibility.Visible;
+            panelInsertKaryawan.Visibility = Visibility.Hidden;
+            btnActive.Visibility = Visibility.Visible;
+            btnSuspend.Visibility = Visibility.Visible;
+            btnInsertKaryawan.Visibility = Visibility.Visible;
+            btnBackKaryawan.Visibility = Visibility.Hidden;
+            selectedIdKaryawan = -1;
+        }
+
+        private void btnInsertKaryawan_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterKaryawan.Visibility = Visibility.Hidden;
+            panelInsertKaryawan.Visibility = Visibility.Visible;
+            btnActive.Visibility = Visibility.Hidden;
+            btnSuspend.Visibility = Visibility.Hidden;
+            btnInsertKaryawan.Visibility = Visibility.Hidden;
+            btnBackKaryawan.Visibility = Visibility.Visible;
+            selectedIdKaryawan = -1;
+            loadCbJabatan();
+        }
+
+        private void btnSubmitKaryawan_Click(object sender, RoutedEventArgs e)
+        {
+            if (dtpTanggalLahir.SelectedDate == null)
+            {
+                MessageBox.Show("PLEAS FILL OUT ALL THE FIELD FIRST!!!");
+                return;
+            }
+
+            string nama = tbNamaKaryawan.Text;
+            string username = tbUsernameKaryawan.Text;
+            string password = tbPasswordKaryawan.Text;
+            string email = tbEmailKaryawan.Text;
+            string jenisKelamin = "";
+            if(rbLakiKaryawan.IsChecked == true)
+            {
+                jenisKelamin = "L";
+            }else if(rbPerempuanKaryawan.IsChecked == true)
+            {
+                jenisKelamin = "P";
+            }
+            string alamat = tbAlamatKaryawan.Text;
+            string noTelp = tbNoTelpKaryawan.Text;
+            DateTime tglLahir = dtpTanggalLahir.SelectedDate.Value;
+            string jabatan = cbJabatan.SelectedValue.ToString().Substring(2);
+
+            if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="")
+            {
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
+                return;
+            }
+
+            if (!noTelp.All(Char.IsDigit))
+            {
+                MessageBox.Show("NOTELP MUST CONSIST ALL NUMBERS!!!");
+                return;
+            }
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = "insert into karyawan values(:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13)";
+            cmd.Connection = App.conn;
+            cmd.Parameters.Add(":1", "0");
+            cmd.Parameters.Add(":2", "0");
+            cmd.Parameters.Add(":3", username);
+            cmd.Parameters.Add(":4", password);
+            cmd.Parameters.Add(":5", nama);
+            cmd.Parameters.Add(":6", jenisKelamin);
+            cmd.Parameters.Add(":7", alamat);
+            cmd.Parameters.Add(":8", email);
+            cmd.Parameters.Add(":9", noTelp);
+            cmd.Parameters.Add(":10", tglLahir);
+            cmd.Parameters.Add(":11", 1);
+            cmd.Parameters.Add(":12", jabatan);
+            cmd.Parameters.Add(":13", "0");
+            cmd.ExecuteNonQuery();
+
+            resetInsertKaryawanPanel();
+            loadDataKaryawan();
+
+            panelInsertKaryawan.Visibility = Visibility.Hidden;
+            panelMasterKaryawan.Visibility = Visibility.Visible;
+            btnBackKaryawan.Visibility = Visibility.Hidden;
+            btnActive.Visibility = Visibility.Visible;
+            btnSuspend.Visibility = Visibility.Visible;
+            btnInsertKaryawan.Visibility = Visibility.Visible;
+        }
+        
         private void deleteImage(Image img, string path)
         {
             var enviroment = System.Environment.CurrentDirectory;
