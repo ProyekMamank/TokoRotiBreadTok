@@ -322,7 +322,7 @@ namespace BreadTok
         {
             if (tbMerk.Text != "" && tbQuantity.Text != "" && tbHarga.Text != "" && bahanImgSourceDir != "")
             {
-                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbQuantity.Text, @"^\d+$"))
+                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbHarga.Text, @"^\d+$"))
                 {
                     if (Convert.ToInt32(tbQuantity.Text) > 0)
                     {
@@ -354,8 +354,10 @@ namespace BreadTok
                             cmd.Connection = App.conn;
                             saveImage(bahanImgSourceDir, "\\Resources\\Bahan\\", cmd.ExecuteScalar().ToString());
 
+                            MessageHandler.messageSuccess("Insert Bahan");
+
                             resetInsertPanel();
-                            loadData();
+                            loadDataBahan();
 
                             panelMasterBahan.Visibility = Visibility.Visible;
                             panelInsertBahan.Visibility = Visibility.Hidden;
@@ -496,7 +498,7 @@ namespace BreadTok
         {
             if (tbMerkUpdate.Text != "" && tbQuantityUpdate.Text != "" && tbHargaUpdate.Text != "")
             {
-                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbQuantity.Text, @"^\d+$"))
+                if (Regex.IsMatch(tbQuantityUpdate.Text, @"^\d+$") && Regex.IsMatch(tbHargaUpdate.Text, @"^\d+$"))
                 {
                     if (Convert.ToInt32(tbQuantityUpdate.Text) > 0)
                     {
@@ -511,7 +513,7 @@ namespace BreadTok
 
 
                             OracleCommand cmd = new OracleCommand();
-                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedId}";
+                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedIdBahan}";
                             cmd.Connection = App.conn;
                             cmd.Parameters.Add(":1", merk);
                             cmd.Parameters.Add(":2", qty);
@@ -523,7 +525,7 @@ namespace BreadTok
 
 
                             cmd = new OracleCommand();
-                            cmd.CommandText = $"select picture_location from bahan where id = {selectedId}";
+                            cmd.CommandText = $"select picture_location from bahan where id = {selectedIdBahan}";
                             cmd.Connection = App.conn;
                             string kodeBahanUpdating = cmd.ExecuteScalar().ToString();
                             if (gantiFotoBahan)
@@ -533,14 +535,20 @@ namespace BreadTok
                             }
                             else
                             {
-                                var enviroment = System.Environment.CurrentDirectory;
-                                string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Bahan\\" + bahanImgSourceDir;
-                                saveImage(imgSrc, "\\Resources\\Bahan\\", kodeBahanUpdating);
-                                deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
+                                if(bahanImgSourceDir != kodeBahanUpdating)
+                                {
+                                    var enviroment = System.Environment.CurrentDirectory;
+                                    string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Bahan\\" + bahanImgSourceDir;
+                                    saveImage(imgSrc, "\\Resources\\Bahan\\", kodeBahanUpdating);
+                                    MessageBox.Show("stop");
+                                    deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
+                                }
                             }
 
+                            MessageHandler.messageSuccess("Update Bahan");
+
                             resetUpdatePanel();
-                            loadData();
+                            loadDataBahan();
 
                             panelMasterBahan.Visibility = Visibility.Visible;
                             panelUpdateBahan.Visibility = Visibility.Hidden;
