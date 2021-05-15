@@ -18,6 +18,7 @@ using System.Data;
 using Oracle.DataAccess.Client;
 using System.IO;
 using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace BreadTok
 {
@@ -130,7 +131,7 @@ namespace BreadTok
             btnBack.Visibility = Visibility.Visible;
             loadCbJenisBahan("insert");
             loadCbSupplier("insert");
-            loadPlaceHolder(imgInsert);
+            loadImage(imgInsertbahan, "\\Resources\\ImagePlaceholder.png");
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -285,48 +286,99 @@ namespace BreadTok
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(selectedFileName);
                 bitmap.EndInit();
-                imgInsert.Source = bitmap;
+                imgInsertbahan.Source = bitmap;
             }
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            // TODO : pengecekan harus diisi + harus ada foto (cek imgSourceDir != "")
-            string merk = tbMerk.Text.ToUpper();
-            int qty = Convert.ToInt32(tbQuantity.Text);
-            int harga = Convert.ToInt32(tbHarga.Text);
-            string satuan = cbSatuan.SelectedItem.ToString();
-            string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
-            string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
+            if (tbMerk.Text != "" && tbQuantity.Text != "" && tbHarga.Text != "" && bahanImgSourceDir != "")
+            {
+                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbQuantity.Text, @"^\d+$"))
+                {
+                    if (Convert.ToInt32(tbQuantity.Text) > 0)
+                    {
+                        if (Convert.ToInt32(tbHarga.Text) > 0)
+                        {
+                            string merk = tbMerk.Text.ToUpper();
+                            int qty = Convert.ToInt32(tbQuantity.Text);
+                            int harga = Convert.ToInt32(tbHarga.Text);
+                            string satuan = cbSatuan.SelectedItem.ToString();
+                            string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
+                            string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
+                        
+                            OracleCommand cmd = new OracleCommand();
+                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
+                            cmd.Connection = App.conn;
+                            cmd.Parameters.Add(":1", "0"); //id
+                            cmd.Parameters.Add(":2", "0"); //kode
+                            cmd.Parameters.Add(":3", merk);
+                            cmd.Parameters.Add(":4", qty);
+                            cmd.Parameters.Add(":5", harga);
+                            cmd.Parameters.Add(":6", satuan);
+                            cmd.Parameters.Add(":7", jenisBahan);
+                            cmd.Parameters.Add(":8", supplier);
+                            cmd.Parameters.Add(":9", "0"); //pic_loc
+                            cmd.ExecuteNonQuery();
+                        
+                            cmd = new OracleCommand();
+                            cmd.CommandText = "select picture_location from bahan group by id, picture_location having id = (select max(to_number(id)) from bahan)";
+                            cmd.Connection = App.conn;
+                            saveImage(bahanImgSourceDir, "\\Resources\\Bahan\\", cmd.ExecuteScalar().ToString());
 
-            // TODO : TRIGGER ID + KODE + Pic_Loc
-            OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
-            cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", "0"); //id
-            cmd.Parameters.Add(":2", "0"); //kode
-            cmd.Parameters.Add(":3", merk);
-            cmd.Parameters.Add(":4", qty);
-            cmd.Parameters.Add(":5", harga);
-            cmd.Parameters.Add(":6", satuan);
-            cmd.Parameters.Add(":7", jenisBahan);
-            cmd.Parameters.Add(":8", supplier);
-            cmd.Parameters.Add(":9", "0"); //pic_loc
-            cmd.ExecuteNonQuery();
+                            resetInsertPanel();
+                            loadData();
 
-            // TODO : GANTI NAMA GAMBAR
-            saveImage(bahanImgSourceDir, "Resources\\Bahan\\", "tes.jpg");
-
-            resetInsertPanel();
-            loadData();
-
-            panelMasterBahan.Visibility = Visibility.Visible;
-            panelInsertBahan.Visibility = Visibility.Hidden;
-            btnInsert.Visibility = Visibility.Visible;
-            btnDelete.Visibility = Visibility.Visible;
-            btnBack.Visibility = Visibility.Hidden;
+                            panelMasterBahan.Visibility = Visibility.Visible;
+                            panelInsertBahan.Visibility = Visibility.Hidden;
+                            btnInsert.Visibility = Visibility.Visible;
+                            btnDelete.Visibility = Visibility.Visible;
+                            btnBack.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            MessageHandler.mustBeBigger("Harga ", 0);
+                        }
+                    }
+                    else
+                    {
+                        MessageHandler.mustBeBigger("Harga ", 0);
+                    }
+                }
+                else
+                {
+                    MessageHandler.isNotNumber("Quantity and Price");
+                }
+            }
+            else
+            {
+                MessageHandler.requireField();
+            }
         }
 
+        bool gantiFotoBahan = false;
+        private void BtnOpenImgBahanUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                bahanImgSourceDir = selectedFileName;
+                gantiFotoBahan = true;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgUpdateBahan.Source = bitmap;
+            }
+        }
+       
         private void setupUpdatePanel(int id)
         {
             OracleCommand cmd = new OracleCommand();
@@ -371,11 +423,14 @@ namespace BreadTok
                 cbSupplierUpdate.SelectedIndex = idxSupplier;
                 cbJenisBahanUpdate.SelectedIndex = idxJenisBahan;
 
+                bahanImgSourceDir = reader.GetString(8);
+                loadImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
             }
             reader.Close();
         }
         private void resetInsertPanel()
         {
+            bahanImgSourceDir = "";
             tbMerk.Text = "";
             tbQuantity.Text = "";
             tbHarga.Text = "";
@@ -385,6 +440,8 @@ namespace BreadTok
         }
         private void resetUpdatePanel()
         {
+            gantiFotoBahan = false;
+            bahanImgSourceDir = "";
             tbMerkUpdate.Text = "";
             tbQuantityUpdate.Text = "";
             tbHargaUpdate.Text = "";
@@ -395,51 +452,110 @@ namespace BreadTok
 
         private void btnSubmitUpdate_Click(object sender, RoutedEventArgs e)
         {
-            string merk = tbMerkUpdate.Text.ToUpper();
-            int qty = Convert.ToInt32(tbQuantityUpdate.Text);
-            int harga = Convert.ToInt32(tbHargaUpdate.Text);
-            string satuan = cbSatuanUpdate.SelectedItem.ToString();
-            string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
-            string supplier = cbSupplierUpdate.SelectedValue.ToString().Substring(2);
+            if (tbMerkUpdate.Text != "" && tbQuantityUpdate.Text != "" && tbHargaUpdate.Text != "")
+            {
+                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbQuantity.Text, @"^\d+$"))
+                {
+                    if (Convert.ToInt32(tbQuantityUpdate.Text) > 0)
+                    {
+                        if (Convert.ToInt32(tbHargaUpdate.Text) > 0)
+                        {
+                            string merk = tbMerkUpdate.Text.ToUpper();
+                            int qty = Convert.ToInt32(tbQuantityUpdate.Text);
+                            int harga = Convert.ToInt32(tbHargaUpdate.Text);
+                            string satuan = cbSatuanUpdate.SelectedItem.ToString();
+                            string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
+                            string supplier = cbSupplierUpdate.SelectedValue.ToString().Substring(2);
 
 
-            OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedId}";
-            cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", merk);
-            cmd.Parameters.Add(":2", qty);
-            cmd.Parameters.Add(":3", harga);
-            cmd.Parameters.Add(":4", satuan);
-            cmd.Parameters.Add(":5", jenisBahan);
-            cmd.Parameters.Add(":6", supplier);
-            cmd.ExecuteNonQuery();
+                            OracleCommand cmd = new OracleCommand();
+                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedId}";
+                            cmd.Connection = App.conn;
+                            cmd.Parameters.Add(":1", merk);
+                            cmd.Parameters.Add(":2", qty);
+                            cmd.Parameters.Add(":3", harga);
+                            cmd.Parameters.Add(":4", satuan);
+                            cmd.Parameters.Add(":5", jenisBahan);
+                            cmd.Parameters.Add(":6", supplier);
+                            cmd.ExecuteNonQuery();
 
-            resetUpdatePanel();
-            loadData();
 
-            panelMasterBahan.Visibility = Visibility.Visible;
-            panelUpdateBahan.Visibility = Visibility.Hidden;
-            btnInsert.Visibility = Visibility.Visible;
-            btnDelete.Visibility = Visibility.Visible;
-            btnBack.Visibility = Visibility.Hidden;
+                            cmd = new OracleCommand();
+                            cmd.CommandText = $"select picture_location from bahan where id = {selectedId}";
+                            cmd.Connection = App.conn;
+                            string kodeBahanUpdating = cmd.ExecuteScalar().ToString();
+                            if (gantiFotoBahan)
+                            {
+                                deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + kodeBahanUpdating);
+                                saveImage(bahanImgSourceDir, "\\Resources\\Bahan\\", kodeBahanUpdating);
+                            }
+                            else
+                            {
+                                var enviroment = System.Environment.CurrentDirectory;
+                                string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Bahan\\" + bahanImgSourceDir;
+                                saveImage(imgSrc, "\\Resources\\Bahan\\", kodeBahanUpdating);
+                                deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
+                            }
+
+                            resetUpdatePanel();
+                            loadData();
+
+                            panelMasterBahan.Visibility = Visibility.Visible;
+                            panelUpdateBahan.Visibility = Visibility.Hidden;
+                            btnInsert.Visibility = Visibility.Visible;
+                            btnDelete.Visibility = Visibility.Visible;
+                            btnBack.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            MessageHandler.mustBeBigger("Harga ", 0);
+                        }
+                    }
+                    else
+                    {
+                        MessageHandler.mustBeBigger("Harga ", 0);
+                    }
+                }
+                else
+                {
+                    MessageHandler.isNotNumber("Quantity and Price");
+                }
+            }
+            else
+            {
+                MessageHandler.requireField();
+            }
         }
 
-        private void loadPlaceHolder(Image img)
+        private void deleteImage(Image img, string path)
         {
             var enviroment = System.Environment.CurrentDirectory;
-            string imgPlaceholder = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\ImagePlaceholder.png";
+            string imgDist = Directory.GetParent(enviroment).Parent.FullName + path;
+            
+            img.Source = null;
+            File.Delete(imgDist);
+        }
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(imgPlaceholder);
-            bitmap.EndInit();
-            img.Source = bitmap;
+        private void loadImage(Image img, string path)
+        {
+            var enviroment = System.Environment.CurrentDirectory;
+            string imgDist = Directory.GetParent(enviroment).Parent.FullName + path;
+
+            using (var stream = File.OpenRead(imgDist))
+            {
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = stream;
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                img.Source = bmp;
+            }
         }
 
         private void saveImage(string imgSrcDir, string imgDestDir, string filename)
         {
             var enviroment = System.Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(enviroment).Parent.FullName + "\\";
+            string projectDirectory = Directory.GetParent(enviroment).Parent.FullName;
             try
             {
                 File.Copy(imgSrcDir, projectDirectory + imgDestDir + filename, true);

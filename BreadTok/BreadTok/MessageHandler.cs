@@ -44,6 +44,11 @@ namespace BreadTok
             MessageBox.Show(msg + " Successful!");
         }
 
+        public static void mustBeBigger(string field, int minimum)
+        {
+            MessageBox.Show(field + " Must be bigger than " + minimum);
+        }
+
         public static bool confirmYesNo(string msg)
         {
             MessageBoxResult res = MessageBox.Show(msg, "Confirm Message", MessageBoxButton.YesNo, MessageBoxImage.Question);
