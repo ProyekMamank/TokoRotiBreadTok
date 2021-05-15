@@ -24,3 +24,17 @@ BEGIN
     :new.ID := ID;
 END;
 /
+
+CREATE OR REPLACE TRIGGER AUTOGEN_ID_KARYAWAN
+BEFORE INSERT ON KARYAWAN
+FOR EACH ROW
+DECLARE
+    ID varchar2(100);
+BEGIN
+    select to_char(max(to_number(ID))+1)
+    into ID
+    from KARYAWAN;
+
+    :new.ID := ID;
+END;
+/
