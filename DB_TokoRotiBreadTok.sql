@@ -17,6 +17,7 @@ DROP TABLE D_TRANS CASCADE CONSTRAINTS PURGE;
 
 CREATE TABLE SUPPLIER (
     ID VARCHAR2(10) PRIMARY KEY,
+	KODE VARCHAR2(12) NOT NULL,
     NAMA VARCHAR(100) NOT NULL,
     ALAMAT VARCHAR2(100) NOT NULL,
     EMAIL VARCHAR(50),
@@ -73,6 +74,7 @@ CREATE TABLE JENIS_ROTI (
 
 CREATE TABLE ROTI(
     ID VARCHAR2(10) PRIMARY KEY,
+	KODE VARCHAR2(12) NOT NULL,
     NAMA VARCHAR2(100) NOT NULL,
     DESKRIPSI VARCHAR2(200) NOT NULL,
     HARGA NUMBER(25) NOT NULL,
@@ -93,6 +95,7 @@ CREATE TABLE JABATAN(
 
 CREATE TABLE KARYAWAN(
     ID VARCHAR2(10) PRIMARY KEY,
+	KODE VARCHAR2(12) NOT NULL,
     USERNAME VARCHAR2(100) NOT NULL,
     PASSWORD VARCHAR2(100) NOT NULL,
     NAMA VARCHAR(100) NOT NULL,
@@ -111,6 +114,7 @@ CREATE TABLE KARYAWAN(
 
 CREATE TABLE PELANGGAN(
     ID VARCHAR2(10) PRIMARY KEY,
+	KODE VARCHAR2(12) NOT NULL,
     USERNAME VARCHAR2(100) NOT NULL,
     PASSWORD VARCHAR2(100) NOT NULL,
     NAMA VARCHAR(100) NOT NULL,
@@ -167,17 +171,17 @@ CREATE TABLE USER_VOUCHER(
 -- 1: Non-Aktif
 
 -- SUPPLIER
-INSERT INTO SUPPLIER VALUES(1, 'PT Cahaya Ku Terang', 'Jalan Sabang Sampai Merauka No. 54', 'cahayakuterang@gmail.co.id', 082234478423);
-INSERT INTO SUPPLIER VALUES(2, 'Toko Bahan Kue Sylvia', 'Jalan Jalan Terus Aja Bang No. 32', 'cangkulenak@gmail.com', 083111554038);
-INSERT INTO SUPPLIER VALUES(3, 'Toko Handi Jaya', 'Jalan Walikota Mustafa No. 2a', 'handihandikong@gmail.co.id', 081234459247);
-INSERT INTO SUPPLIER VALUES(4, 'Toko Jaya Abadi', 'Jalan Halo halo Surabaya No. 4d', 'jayaabadi@gmail.com', 087132612371);
-INSERT INTO SUPPLIER VALUES(5, 'PT Hariku Cerah', 'Jalan Diponorogo No. 37', 'cerahhariku@gmail.com', 08312314123);
-INSERT INTO SUPPLIER VALUES(6, 'Toko Bahan Kue Langkah', 'Jalan Wakil Walikota Mustofa No. 4a', 'uhsheup@gmail.com', 081241231237);
-INSERT INTO SUPPLIER VALUES(7, 'Toko Bahan Kue Gledek', 'Jalan Buderan IH No. 78', 'tokogledek@gmail.com', 088123659285);
-INSERT INTO SUPPLIER VALUES(8, 'PT Tiga Gajah', 'Jalan Tiga Semut IV/29', 'tigagajah@gmail.com', 0872658923658);
-INSERT INTO SUPPLIER VALUES(9, 'PT Segitiga Pelangi', 'Jalan Angkat Kaki V No. 42', 'segitigapelangi@gmail.com', 082572638259);
-INSERT INTO SUPPLIER VALUES(10, 'Toko Sering Laku', 'Jalan Bagel No. 65', 'seringlaku@gmail.com', 087265916824);
-INSERT INTO SUPPLIER VALUES(11, 'Toko Bahan Kue Dua Anak', 'Jalan Anak Kembar No. 241', 'duaanak@gmail.com', 085726382592);
+INSERT INTO SUPPLIER VALUES(1, 'PTCA00001', 'PT Cahaya Ku Terang', 'Jalan Sabang Sampai Merauka No. 54', 'cahayakuterang@gmail.co.id', 082234478423);
+INSERT INTO SUPPLIER VALUES(2, 'TOBA00001', 'Toko Bahan Kue Sylvia', 'Jalan Jalan Terus Aja Bang No. 32', 'cangkulenak@gmail.com', 083111554038);
+INSERT INTO SUPPLIER VALUES(3, 'TOHA00001', 'Toko Handi Jaya', 'Jalan Walikota Mustafa No. 2a', 'handihandikong@gmail.co.id', 081234459247);
+INSERT INTO SUPPLIER VALUES(4, 'TOJA00001', 'Toko Jaya Abadi', 'Jalan Halo halo Surabaya No. 4d', 'jayaabadi@gmail.com', 087132612371);
+INSERT INTO SUPPLIER VALUES(5, 'PTHA00001', 'PT Hariku Cerah', 'Jalan Diponorogo No. 37', 'cerahhariku@gmail.com', 08312314123);
+INSERT INTO SUPPLIER VALUES(6, 'TOBA00002', 'Toko Bahan Kue Langkah', 'Jalan Wakil Walikota Mustofa No. 4a', 'uhsheup@gmail.com', 081241231237);
+INSERT INTO SUPPLIER VALUES(7, 'TOBA00003', 'Toko Bahan Kue Gledek', 'Jalan Buderan IH No. 78', 'tokogledek@gmail.com', 088123659285);
+INSERT INTO SUPPLIER VALUES(8, 'PTTI00001', 'PT Tiga Gajah', 'Jalan Tiga Semut IV/29', 'tigagajah@gmail.com', 0872658923658);
+INSERT INTO SUPPLIER VALUES(9, 'PTSE00001', 'PT Segitiga Pelangi', 'Jalan Angkat Kaki V No. 42', 'segitigapelangi@gmail.com', 082572638259);
+INSERT INTO SUPPLIER VALUES(10, 'PTSE00001', 'Toko Sering Laku', 'Jalan Bagel No. 65', 'seringlaku@gmail.com', 087265916824);
+INSERT INTO SUPPLIER VALUES(11, 'TOBA00004', 'Toko Bahan Kue Dua Anak', 'Jalan Anak Kembar No. 241', 'duaanak@gmail.com', 085726382592);
 
 -- JENIS_BAHAN
 INSERT INTO JENIS_BAHAN VALUES(1, 'FERMIPAN');
@@ -263,10 +267,10 @@ INSERT INTO JENIS_ROTI VALUES(4, 'DRY CAKE');
 INSERT INTO JENIS_ROTI VALUES(5, 'COOKIES');
 
 -- ROTI
-INSERT INTO ROTI VALUES(1, 'CROISSANT', 'A VERY EXQUISITE BREAD', 9000, 10, 1, 1, 1, 'a');
-INSERT INTO ROTI VALUES(2, 'RAISIN TOAST', 'HEALTHY!', 16000, 7, 1, 2, 2, 'a');
-INSERT INTO ROTI VALUES(3, '', '', 0, 0, 0, 0, 'a');
-INSERT INTO ROTI VALUES(4, '', '', 0, 0, 0, 0, 'a');
+INSERT INTO ROTI VALUES(1, 'CROI00001', 'CROISSANT', 'A VERY EXQUISITE BREAD', 9000, 10, 1, 1, 1, 'a');
+INSERT INTO ROTI VALUES(2, 'RATO00001', 'RAISIN TOAST', 'HEALTHY!', 16000, 7, 1, 2, 2, 'a');
+INSERT INTO ROTI VALUES(3, '', '', '', 0, 0, 0, 0, 'a');
+INSERT INTO ROTI VALUES(4, '', '', '', 0, 0, 0, 0, 'a');
 
 -- JABATAN
 INSERT INTO JABATAN VALUES(1, 'KARYAWAN');
@@ -276,15 +280,15 @@ INSERT INTO JABATAN VALUES(4, '');
 INSERT INTO JABATAN VALUES(5, '');
 
 -- KARYAWAN
-INSERT INTO KARYAWAN VALUES(1, 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(2, 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(3, 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Ngagel Jaya No. 26', 'melianapurnama@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 2, 'a');
-INSERT INTO KARYAWAN VALUES(4, '', 'P', '', '', 0, 0, 0, 'a');
+INSERT INTO KARYAWAN VALUES(1, 'BURA00001', 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'a');
+INSERT INTO KARYAWAN VALUES(2, 'SEAD00001', 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'a');
+INSERT INTO KARYAWAN VALUES(3, 'MEPU00001', 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Ngagel Jaya No. 26', 'melianapurnama@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 2, 'a');
+INSERT INTO KARYAWAN VALUES(4, '', '', 'P', '', '', 0, 0, 0, 'a');
 
 -- PELANGGAN
-INSERT INTO PELANGGAN VALUES(1, 'RaymondT', 'RaymondT', 'Raymond Tranatung', 'L', 'Jalan Penampungan No. 6', 'raymondt@gmail.com', 08345671222, TO_DATE('13/06/2001', 'dd/mm/yyyy'), 1, 'a');
-INSERT INTO PELANGGAN VALUES(2, 'LucianaG', 'LucianaG', 'Luciana Geraldine', 'P', 'Jalan Penampungan No. 9', 'lucianaa@gmail.com', 08512222451, TO_DATE('06/06/2001', 'dd/mm/yyyy'), 1, 'a');
-INSERT INTO PELANGGAN VALUES(3, 'a', 'a', 'Test Dummy', 'L', 'Jalan Jalan', 'email@gmail.com', 08123456789, TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(1, 'RATR00001', 'RaymondT', 'RaymondT', 'Raymond Tranatung', 'L', 'Jalan Penampungan No. 6', 'raymondt@gmail.com', 08345671222, TO_DATE('13/06/2001', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(2, 'LUGE00001', 'LucianaG', 'LucianaG', 'Luciana Geraldine', 'P', 'Jalan Penampungan No. 9', 'lucianaa@gmail.com', 08512222451, TO_DATE('06/06/2001', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(3, 'aaaa00001', 'a', 'a', 'Test Dummy', 'L', 'Jalan Jalan', 'email@gmail.com', 08123456789, TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 'a');
 
 -- VOURCHER
 INSERT INTO VOUCHER VALUES(1, 'HEMATDULUBOS', 'POTONGAN', 30000);
