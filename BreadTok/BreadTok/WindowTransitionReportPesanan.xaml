@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        Title="WindowTransitionReportPesanan" Height="200" Width="401.273"
+        Title="WindowTransitionReportPesanan" Height="276" Width="401.273"
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -20,6 +20,11 @@
         <DatePicker HorizontalAlignment="Left" Margin="30,102,0,0" VerticalAlignment="Top" Width="145" x:Name="dtAwal"/>
         <Label Content="s.d." HorizontalAlignment="Left" Margin="185,102,0,0" VerticalAlignment="Top" FontSize="12"/>
         <DatePicker HorizontalAlignment="Left" Margin="224,102,0,0" VerticalAlignment="Top" Width="145" x:Name="dtAkhir"/>
-        <Button x:Name="btnSelectReport" Content="Select" HorizontalAlignment="Left" Margin="30,158,0,0" VerticalAlignment="Top" Width="75" Click="BtnSelectReport_Click"/>
+
+        <Label Content="Pilih Status Penjualan" HorizontalAlignment="Left" Margin="30,149,0,0" VerticalAlignment="Top" FontSize="12"/>
+        <ComboBox x:Name="cbStatus" HorizontalAlignment="Left" Margin="30,178,0,0" VerticalAlignment="Top" Width="339"/>
+        
+        <Button x:Name="btnSelectReport" Content="Select" HorizontalAlignment="Left" Margin="30,224,0,0" VerticalAlignment="Top" Width="75" Click="BtnSelectReport_Click"/>
+        
     </Grid>
 </Window>

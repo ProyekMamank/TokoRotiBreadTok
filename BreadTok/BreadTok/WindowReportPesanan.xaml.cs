@@ -19,7 +19,7 @@ namespace BreadTok
     /// </summary>
     public partial class WindowReportPesanan : Window
     {
-        public WindowReportPesanan(DatePicker dateAwal, DatePicker dateAkhir)
+        public WindowReportPesanan(DatePicker dateAwal, DatePicker dateAkhir, int statusTrans)
         {
             InitializeComponent();
 
@@ -30,6 +30,7 @@ namespace BreadTok
 
             rpt.SetParameterValue("tglAwal", dateAwal.SelectedDate.Value.ToString("dd/MM/yyyy"));
             rpt.SetParameterValue("tglAkhir", dateAkhir.SelectedDate.Value.ToString("dd/MM/yyyy"));
+            rpt.SetParameterValue("statusTrans", statusTrans);
             cReportViewer.ViewerCore.ReportSource = rpt;
         }
 

@@ -8,10 +8,18 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:Viewer="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer" x:Class="BreadTok.WindowReportPesanan"
         mc:Ignorable="d"
-        Title="WindowReportPesanan" Height="450" Width="800"
+        Title="WindowReportPesanan" Height="599.7" Width="1024"
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
         <materialDesign:ColorZone
             Mode="PrimaryDark"
             Padding="16"
@@ -19,9 +27,14 @@
             materialDesign:ShadowAssist.ShadowDepth="Depth3"
             Panel.ZIndex="1"
             ClipToBounds="False"
-            MouseDown="Grid_MouseDown">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="675,0,0,0" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="BtnBack_Click">
+            MouseDown="Grid_MouseDown" Grid.Row="0">
+            <Grid Height="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Right" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="BtnBack_Click" Grid.Column="2">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Background" Value="#fe6584"/>
@@ -44,10 +57,10 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-            </StackPanel>
+            </Grid>
         </materialDesign:ColorZone>
 
-        <Viewer:CrystalReportsViewer HorizontalAlignment="Left" Height="393" VerticalAlignment="Top" Width="800" Margin="0,57,0,0" x:Name="cReportViewer"/>
+        <Viewer:CrystalReportsViewer Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto" x:Name="cReportViewer"/>
 
     </Grid>
 </Window>
