@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using Oracle.DataAccess.Client;
+using System.IO;
+using Microsoft.Win32;
 
 namespace BreadTok
 {
@@ -41,6 +43,8 @@ namespace BreadTok
         }
 
         List<HTrans> htranses = new List<HTrans>();
+
+        // GENERAL
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -62,6 +66,7 @@ namespace BreadTok
 
         }
 
+        // DAFTAR PESANAN
         private void loadDaftarPesanan()
         {
             OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, K.NAMA, P.NAMA, H.METODE_PEMBAYARAN, " +
@@ -92,32 +97,6 @@ namespace BreadTok
 
             dtGridPesanan.ItemsSource = htranses;
 
-        }
-
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-            {
-                if (vis is DataGridRow)
-                {
-                    var row = (DataGridRow)vis;
-                    row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-                    break;
-                }
-            }
-        }
-
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-            {
-                if (vis is DataGridRow)
-                {
-                    var row = (DataGridRow)vis;
-                    row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-                    break;
-                }
-            }
         }
 
         private void BtnDetailHTrans_Click(object sender, RoutedEventArgs e)
@@ -160,8 +139,8 @@ namespace BreadTok
             btnBack.Visibility = Visibility.Visible;
             loadCbJenisBahan("insert");
             loadCbSupplier("insert");
+            loadPlaceHolder(imgInsert);
         }
-
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
@@ -316,9 +295,31 @@ namespace BreadTok
             cbJabatan.SelectedValuePath = "Name";
             cbJabatan.SelectedIndex = 0;
         }
+        string bahanImgSourceDir = "";
+        private void BtnOpenImg_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                bahanImgSourceDir = selectedFileName;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgInsert.Source = bitmap;
+            }
+        }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
+            // TODO : pengecekan harus diisi + harus ada foto (cek imgSourceDir != "")
             string merk = tbMerk.Text.ToUpper();
             int qty = Convert.ToInt32(tbQuantity.Text);
             int harga = Convert.ToInt32(tbHarga.Text);
@@ -326,18 +327,23 @@ namespace BreadTok
             string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
             string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
 
-
+            // TODO : TRIGGER ID + KODE + Pic_Loc
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7)";
+            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
             cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", "0");
-            cmd.Parameters.Add(":2", merk);
-            cmd.Parameters.Add(":3", qty);
-            cmd.Parameters.Add(":4", harga);
-            cmd.Parameters.Add(":5", satuan);
-            cmd.Parameters.Add(":6", jenisBahan);
-            cmd.Parameters.Add(":7", supplier);
+            cmd.Parameters.Add(":1", "0"); //id
+            cmd.Parameters.Add(":2", "0"); //kode
+            cmd.Parameters.Add(":3", merk);
+            cmd.Parameters.Add(":4", qty);
+            cmd.Parameters.Add(":5", harga);
+            cmd.Parameters.Add(":6", satuan);
+            cmd.Parameters.Add(":7", jenisBahan);
+            cmd.Parameters.Add(":8", supplier);
+            cmd.Parameters.Add(":9", "0"); //pic_loc
             cmd.ExecuteNonQuery();
+
+            // TODO : GANTI NAMA GAMBAR
+            saveImage(bahanImgSourceDir, "Resources\\Bahan\\", "tes.jpg");
 
             resetInsertPanel();
             loadDataBahan();
@@ -357,13 +363,13 @@ namespace BreadTok
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                tbMerkUpdate.Text = reader.GetValue(1).ToString();
-                tbQuantityUpdate.Text = reader.GetValue(2).ToString();
-                if(reader.GetValue(4).ToString() == "GRAM")
+                tbMerkUpdate.Text = reader.GetValue(2).ToString();
+                tbQuantityUpdate.Text = reader.GetValue(3).ToString();
+                if(reader.GetValue(5).ToString() == "GRAM")
                 {
                     cbSatuanUpdate.SelectedIndex = 0;
                 }
-                else if(reader.GetValue(4).ToString() == "mL")
+                else if(reader.GetValue(5).ToString() == "mL")
                 {
                     cbSatuanUpdate.SelectedIndex = 1;
                 }
@@ -371,11 +377,11 @@ namespace BreadTok
                 {
                     cbSatuanUpdate.SelectedIndex = 2;
                 }
-                tbHargaUpdate.Text = reader.GetValue(3).ToString();
+                tbHargaUpdate.Text = reader.GetValue(4).ToString();
                 int idxJenisBahan = 0;
                 foreach(ComboBoxItem cbItem in cbJenisBahanUpdate.Items)
                 {
-                    if(cbItem.Name == "ID" + reader.GetString(5))
+                    if(cbItem.Name == "ID" + reader.GetString(6))
                     {
                         break;
                     }
@@ -384,7 +390,7 @@ namespace BreadTok
                 int idxSupplier = 0;
                 foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
                 {
-                    if (cbItem.Name == "ID" + reader.GetString(6))
+                    if (cbItem.Name == "ID" + reader.GetString(7))
                     {
                         break;
                     }
@@ -614,6 +620,32 @@ namespace BreadTok
             btnActive.Visibility = Visibility.Visible;
             btnSuspend.Visibility = Visibility.Visible;
             btnInsertKaryawan.Visibility = Visibility.Visible;
+        }
+        
+        private void loadPlaceHolder(Image img)
+        {
+            var enviroment = System.Environment.CurrentDirectory;
+            string imgPlaceholder = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\ImagePlaceholder.png";
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imgPlaceholder);
+            bitmap.EndInit();
+            img.Source = bitmap;
+        }
+
+        private void saveImage(string imgSrcDir, string imgDestDir, string filename)
+        {
+            var enviroment = System.Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(enviroment).Parent.FullName + "\\";
+            try
+            {
+                File.Copy(imgSrcDir, projectDirectory + imgDestDir + filename, true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
