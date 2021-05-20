@@ -897,6 +897,7 @@ namespace BreadTok
             selectedIdRoti = -1;
         }
 
+        string rotiImgSourceDir = "";
         private void setupUpdatePanelRoti(int id)
         {
             OracleCommand cmd = new OracleCommand();
@@ -918,6 +919,9 @@ namespace BreadTok
                     idxJenisRoti++;
                 }
                 cbJenisRoti.SelectedIndex = idxJenisRoti;
+
+                rotiImgSourceDir = reader.GetString(9);
+                loadImage(imgUpdateRoti, "\\Resources\\Roti\\" + rotiImgSourceDir);
 
             }
             reader.Close();
@@ -946,9 +950,31 @@ namespace BreadTok
             selectedIdRoti = -1;
         }
 
+        bool gantiFotoRoti = false;
+        private void btnOpenImgRotiUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                rotiImgSourceDir = selectedFileName;
+                gantiFotoRoti = true;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgUpdateRoti.Source = bitmap;
+            }
+        }
+
         private void btnSubmitRoti_Click(object sender, RoutedEventArgs e)
         {
-            
             string nama = tbNamaRoti.Text;
             string deskripsi = tbDeskripsiRoti.Text;
             string harga = tbHargaRoti.Text;
@@ -977,6 +1003,27 @@ namespace BreadTok
             cmd.Parameters.Add(":6", selectedIdRoti);
             cmd.ExecuteNonQuery();
 
+            cmd = new OracleCommand();
+            cmd.CommandText = $"select picture_location from roti where id = {selectedIdRoti}";
+            cmd.Connection = App.conn;
+            string kodeRotiUpdating = cmd.ExecuteScalar().ToString();
+            if (gantiFotoRoti)
+            {
+                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiUpdating);
+                saveImage(rotiImgSourceDir, "\\Resources\\Roti\\", kodeRotiUpdating);
+            }
+            else
+            {
+                if (rotiImgSourceDir != kodeRotiUpdating)
+                {
+                    var enviroment = System.Environment.CurrentDirectory;
+                    string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Roti\\" + rotiImgSourceDir;
+                    saveImage(imgSrc, "\\Resources\\Roti\\", kodeRotiUpdating);
+                    MessageBox.Show("stop");
+                    deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + rotiImgSourceDir);
+                }
+            }
+
             selectedIdRoti = -1;
             loadDataRoti();
 
@@ -985,6 +1032,5 @@ namespace BreadTok
             btnBackRoti.Visibility = Visibility.Hidden;
             btnDeleteRoti.Visibility = Visibility.Visible;
         }
-
     }
 }

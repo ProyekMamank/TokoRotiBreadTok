@@ -213,6 +213,8 @@
                         <TextBox x:Name="tbDeskripsiRoti" Height="112" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="79" Width="276" BorderThickness="1"/>
                         <TextBox x:Name="tbHargaRoti" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="206" Width="276"/>
                         <ComboBox x:Name="cbJenisRoti" Canvas.Left="140" Canvas.Top="257" Width="176"/>
+                        <Image x:Name="imgUpdateRoti" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
+                        <Button x:Name="btnOpenImgRotiUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" RenderTransformOrigin="0.624,2.088" Click="btnOpenImgRotiUpdate_Click"/>
                         <Button x:Name="btnSubmitRoti" Content="Submit" Canvas.Left="140" Canvas.Top="309" Width="107" Height="36" Background="#FF1EBD20" BorderBrush="#FF27C328" Click="btnSubmitRoti_Click"/>
                     </Canvas>
                     <Button x:Name="btnDeleteRoti" Content="Delete" HorizontalAlignment="Left" Margin="744,76,0,0" VerticalAlignment="Top" Width="91" Height="62" FontSize="12" Click="btnDeleteRoti_Click"/>
