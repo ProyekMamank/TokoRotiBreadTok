@@ -30,7 +30,9 @@ namespace BreadTok
         private Karyawan k;
         private int selectedIdBahan;
         private int selectedIdKaryawan;
+        private int selectedIdRoti;
         string loggedUserID;
+        List<Roti> rotis;
         public MainWindow(string id)
         {
             InitializeComponent();
@@ -39,6 +41,7 @@ namespace BreadTok
             loggedUserID = id;
             loadDataBahan();
             loadDataKaryawan();
+            loadDataRoti();
             loadDaftarPesanan();
         }
 
@@ -129,6 +132,34 @@ namespace BreadTok
             dgKaryawan.ItemsSource = k.loadData().DefaultView;
         }
 
+        private void loadDataRoti()
+        {
+            rotis = new List<Roti>();
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = App.conn;
+            cmd.CommandText = "select * from roti where status > 0";
+            OracleDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                rotis.Add(new Roti()
+                {
+                    id_roti = reader.GetValue(0).ToString(),
+                    kode_roti = reader.GetValue(1).ToString(),
+                    nama_roti = reader.GetValue(2).ToString(),
+                    deskripsi_roti = reader.GetValue(3).ToString(),
+                    harga_roti = Convert.ToInt32(reader.GetValue(4).ToString()),
+                    stok_roti = Convert.ToInt32(reader.GetValue(5).ToString()),
+                    status_roti = reader.GetValue(6).ToString(),
+                    fk_jenisroti = reader.GetValue(7).ToString(),
+                    fk_resep = reader.GetValue(8).ToString()
+                });
+            }
+            reader.Close();
+
+            dgRoti.ItemsSource = rotis;
+        }
+
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             panelMasterBahan.Visibility = Visibility.Hidden;
@@ -150,6 +181,7 @@ namespace BreadTok
             btnDelete.Visibility = Visibility.Visible;
             btnInsert.Visibility = Visibility.Visible;
             btnBack.Visibility = Visibility.Hidden;
+            selectedIdBahan = -1;
         }
 
         private void dgBahan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -180,13 +212,14 @@ namespace BreadTok
             btnInsert.Visibility = Visibility.Hidden;
             loadCbJenisBahan("update");
             loadCbSupplier("update");
-            setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
+            setupUpdatePanelBahan(Convert.ToInt32((sender as Button).CommandParameter));
             selectedIdBahan = Convert.ToInt32((sender as Button).CommandParameter);
         }
 
         private void dgBahan_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectedIdBahan = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
+            Console.WriteLine(((DataGrid)sender).SelectedItem);
         }
 
 
@@ -295,6 +328,27 @@ namespace BreadTok
             cbJabatan.SelectedValuePath = "Name";
             cbJabatan.SelectedIndex = 0;
         }
+
+        private void loadCbJenisRoti()
+        {
+            cbJenisRoti.Items.Clear();
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = "select * from jenis_roti";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                cbJenisRoti.Items.Add(new ComboBoxItem()
+                {
+                    Name = "ID" + reader.GetString(0),
+                    Content = reader.GetString(1)
+                });
+            }
+            reader.Close();
+            cbJenisRoti.SelectedValuePath = "Name";
+            cbJenisRoti.SelectedIndex = 0;
+        }
+
         string bahanImgSourceDir = "";
         private void BtnOpenImg_Click(object sender, RoutedEventArgs e)
         {
@@ -370,7 +424,7 @@ namespace BreadTok
             btnBack.Visibility = Visibility.Hidden;
         }
 
-        private void setupUpdatePanel(int id)
+        private void setupUpdatePanelBahan(int id)
         {
             OracleCommand cmd = new OracleCommand();
             cmd.CommandText = $"select * from bahan where ID = {id}";
@@ -471,6 +525,7 @@ namespace BreadTok
             cmd.Parameters.Add(":6", supplier);
             cmd.ExecuteNonQuery();
 
+            selectedIdBahan = -1;
             resetUpdatePanel();
             loadDataBahan();
 
@@ -578,7 +633,7 @@ namespace BreadTok
         {
             if (dtpTanggalLahir.SelectedDate == null)
             {
-                MessageBox.Show("PLEAS FILL OUT ALL THE FIELD FIRST!!!");
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
                 return;
             }
 
@@ -665,5 +720,114 @@ namespace BreadTok
                 Console.WriteLine(ex.Message);
             }
         }
+
+        private void btnUpdateRoti_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterRoti.Visibility = Visibility.Hidden;
+            panelUpdateRoti.Visibility = Visibility.Visible;
+            btnDeleteRoti.Visibility = Visibility.Hidden;
+            btnBackRoti.Visibility = Visibility.Visible;
+            loadCbJenisRoti();
+            setupUpdatePanelRoti(Convert.ToInt32((sender as Button).CommandParameter));
+            selectedIdRoti = Convert.ToInt32((sender as Button).CommandParameter);
+        }
+
+        private void btnBackRoti_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterRoti.Visibility = Visibility.Visible;
+            panelUpdateRoti.Visibility = Visibility.Hidden;
+            btnDeleteRoti.Visibility = Visibility.Visible;
+            btnBackRoti.Visibility = Visibility.Hidden;
+            selectedIdRoti = -1;
+        }
+
+        private void setupUpdatePanelRoti(int id)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"select * from roti where ID = {id}";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                tbNamaRoti.Text = reader.GetValue(2).ToString();
+                tbDeskripsiRoti.Text = reader.GetValue(3).ToString();
+                tbHargaRoti.Text = reader.GetValue(4).ToString();
+                int idxJenisRoti = 0;
+                foreach (ComboBoxItem cbItem in cbJenisRoti.Items)
+                {
+                    if (cbItem.Name == "ID" + reader.GetString(7))
+                    {
+                        break;
+                    }
+                    idxJenisRoti++;
+                }
+                cbJenisRoti.SelectedIndex = idxJenisRoti;
+
+            }
+            reader.Close();
+        }
+
+        private void dgRoti_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            selectedIdRoti = Convert.ToInt32((((DataGrid)sender).SelectedItem as Roti).id_roti);
+            Console.WriteLine(selectedIdRoti);
+        }
+
+        private void btnDeleteRoti_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedIdRoti < 0)
+            {
+                MessageBox.Show("PLEASE CHOOSE ROTI FIRST!!!");
+                return;
+            }
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"update roti set status = 0 where ID='{selectedIdRoti}'";
+            cmd.Connection = App.conn;
+            cmd.ExecuteNonQuery();
+
+            loadDataRoti();
+            selectedIdRoti = -1;
+        }
+
+        private void btnSubmitRoti_Click(object sender, RoutedEventArgs e)
+        {
+            
+            string nama = tbNamaRoti.Text;
+            string deskripsi = tbDeskripsiRoti.Text;
+            string harga = tbHargaRoti.Text;
+            string jenisRoti = cbJenisRoti.SelectedValue.ToString().Substring(2);
+
+            if (nama == "" || deskripsi == "" || harga == "" || jenisRoti == "")
+            {
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
+                return;
+            }
+
+            if (!harga.All(Char.IsDigit))
+            {
+                MessageBox.Show("HARGA MUST CONSIST ALL NUMBERS!!!");
+                return;
+            }
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = "update roti set nama=:1,deskripsi=:2,harga=:3,jenis_roti=:4 where id=:5";
+            cmd.Connection = App.conn;
+            cmd.Parameters.Add(":1", nama);
+            cmd.Parameters.Add(":2", deskripsi);
+            cmd.Parameters.Add(":3", Convert.ToInt32(harga));
+            cmd.Parameters.Add(":4", jenisRoti);
+            cmd.Parameters.Add(":5", selectedIdRoti);
+            cmd.ExecuteNonQuery();
+
+            selectedIdRoti = -1;
+            loadDataRoti();
+
+            panelUpdateRoti.Visibility = Visibility.Hidden;
+            panelMasterRoti.Visibility = Visibility.Visible;
+            btnBackRoti.Visibility = Visibility.Hidden;
+            btnDeleteRoti.Visibility = Visibility.Visible;
+        }
+
     }
 }

@@ -69,3 +69,38 @@ BEGIN
     :new.ID := ID;
 END;
 /
+
+CREATE OR REPLACE TRIGGER UPDATE_ID_ROTI
+BEFORE UPDATE ON ROTI
+FOR EACH ROW
+DECLARE
+    ID varchar2(100);
+	START_CODE varchar2(20);
+    END_CODE varchar2(20);
+BEGIN
+    IF INSTR(:NEW.NAMA, ' ') > 0 THEN
+        START_CODE := SUBSTR(:NEW.NAMA, 1, 2) || SUBSTR(:NEW.NAMA, INSTR(:NEW.NAMA, ' ') + 1, 2);
+    ELSE
+        START_CODE := SUBSTR(:NEW.NAMA, 1, 4);
+    END IF;
+
+    if(START_CODE != SUBSTR(:OLD.KODE,1,4)) then
+        select to_char(max(to_number(ID))+1)
+        into ID
+        from ROTI;
+
+        SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(K.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
+        FROM ROTI R
+        WHERE SUBSTR(R.KODE, 1, 4) = UPPER(START_CODE);
+
+        :NEW.KODE := UPPER(START_CODE || END_CODE);
+        :NEW.PICTURE_LOCATION := UPPER(START_CODE || END_CODE);
+    else
+        :NEW.KODE := :OLD.KODE;
+        :NEW.PICTURE_LOCATION := :OLD.KODE;
+    end if;
+
+
+
+END;
+/
