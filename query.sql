@@ -127,3 +127,7 @@ BEGIN
     end if;
 END;
 /
+
+COMMIT;
+
+

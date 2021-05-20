@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Title="WindowPesanan" Height="450" Width="800">
+        Title="WindowPesanan" Height="469.5" Width="800">
     <Grid Background="#FFFAFAFA">
         <materialDesign:ColorZone
             Mode="PrimaryDark"
@@ -56,6 +56,9 @@
         <Label Content="Status :" HorizontalAlignment="Center" Margin="10,168,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblStatus" Content="" HorizontalAlignment="Center" Margin="143,168,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
+        <Label Content="Kode Voucher :" HorizontalAlignment="Center" Margin="10,196,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblKodeVoucher" Content="" HorizontalAlignment="Center" Margin="143,196,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
         <Label Content="Pegawai :" HorizontalAlignment="Center" Margin="420,114,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblPegawai" Content="" HorizontalAlignment="Center" Margin="554,114,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
@@ -69,7 +72,7 @@
                   CanUserReorderColumns="False" CanUserResizeColumns="False"
                   CanUserDeleteRows="False" CanUserResizeRows="False"
                     AutoGenerateColumns="False"
-                    HeadersVisibility="All" Margin="0,202,0,98"
+                    HeadersVisibility="All" Margin="0,223,0,83"
                     IsReadOnly="True">
 
             <DataGrid.Columns>
@@ -93,11 +96,11 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Label Content="Harga Total :" HorizontalAlignment="Center" Margin="9,352,661,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblHargaTotal" Content="" ContentStringFormat="C" HorizontalAlignment="Center" Margin="143,352,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-        
-        <Button Content="Konfirmasi Pembayaran" HorizontalAlignment="Left" Margin="178,392,0,0" x:Name="btnKonfirmasi" VerticalAlignment="Top" Width="200" Click="BtnKonfirmasi_Click" />
-        <Button Content="Batalkan Pesanan" HorizontalAlignment="Left" Margin="426,392,0,0" VerticalAlignment="Top" x:Name="btnBatalkan" Width="200" Foreground="White" Height="32" FontSize="14" Click="BtnBatalkan_Click" >
+        <Label Content="Harga Total :" HorizontalAlignment="Center" Margin="10,392,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblHargaTotal" Content="" ContentStringFormat="C" HorizontalAlignment="Center" Margin="144,392,456,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Button Content="Konfirmasi Pembayaran" HorizontalAlignment="Left" Margin="186,428,0,0" x:Name="btnKonfirmasi" VerticalAlignment="Top" Width="200" Click="BtnKonfirmasi_Click" />
+        <Button Content="Batalkan Pesanan" HorizontalAlignment="Left" Margin="434,428,0,0" VerticalAlignment="Top" x:Name="btnBatalkan" Width="200" Foreground="White" Height="32" FontSize="14" Click="BtnBatalkan_Click" >
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Background" Value="#FFF92C56"/>
@@ -120,6 +123,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+
 
 
     </Grid>

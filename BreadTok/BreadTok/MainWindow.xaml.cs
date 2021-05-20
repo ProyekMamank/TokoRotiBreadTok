@@ -40,6 +40,10 @@ namespace BreadTok
             b = new bahan();
             k = new Karyawan();
             loggedUserID = id;
+
+            OracleCommand cmd = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + loggedUserID + "'", App.conn);
+            lbWelcome.Text = "Selamat Datang, " + cmd.ExecuteScalar().ToString() + "!";
+
             loadDataBahan();
             loadDataKaryawan();
             loadDataRoti();
@@ -73,14 +77,14 @@ namespace BreadTok
         // DAFTAR PESANAN
         private void loadDaftarPesanan()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, K.NAMA, P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
                                                     "       WHEN H.STATUS = 3 THEN 'Dibatalkan' " +
                                                     "END) AS STATUS " +
-                                                    "FROM H_TRANS H, PELANGGAN P, KARYAWAN K " +
-                                                    "WHERE H.FK_KARYAWAN = K.ID AND H.FK_PELANGGAN = P.ID " +
+                                                    "FROM H_TRANS H, PELANGGAN P " +
+                                                    "WHERE H.FK_PELANGGAN = P.ID " +
                                                     "ORDER BY H.NOMOR_NOTA", App.conn);
             OracleDataReader reader = cmd.ExecuteReader();
 
@@ -91,10 +95,11 @@ namespace BreadTok
                     nomor_nota = reader.GetValue(0).ToString(),
                     tanggal_trans = reader.GetValue(1).ToString(),
                     total = Convert.ToInt32(reader.GetValue(2).ToString()),
-                    id_karyawan = reader.GetValue(3).ToString(),
-                    id_pelanggan = reader.GetValue(4).ToString(),
-                    metode_pembayaran = reader.GetValue(5).ToString(),
-                    status = reader.GetValue(6).ToString()
+                    id_karyawan = "",
+                    id_pelanggan = reader.GetValue(3).ToString(),
+                    metode_pembayaran = reader.GetValue(4).ToString(),
+                    status = reader.GetValue(5).ToString(),
+                    kode_voucher = "-"
                 });
             }
             reader.Close();
@@ -107,7 +112,7 @@ namespace BreadTok
         {
             object ID = ((Button)sender).CommandParameter;
 
-            WindowPesanan wp = new WindowPesanan(ID.ToString());
+            WindowPesanan wp = new WindowPesanan(ID.ToString(), loggedUserID);
             overlay.Visibility = Visibility.Visible;
             overlay.Width = windowPesanan.ActualWidth;
             overlay.Height = windowPesanan.ActualHeight;
@@ -187,7 +192,7 @@ namespace BreadTok
 
         private void dgBahan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "ACTION")
+            if (e.PropertyName == "Update")
             {
                 DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
                 DataTemplate buttonTemplate = new DataTemplate();
@@ -195,13 +200,13 @@ namespace BreadTok
                 buttonTemplate.VisualTree = buttonFactory;
                 //add handler or you can add binding to command if you want to handle click
                 buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnUpdate_Click));
-                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("ACTION"));
-                buttonFactory.SetValue(Button.ContentProperty, "UPDATE");
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Update"));
+                buttonFactory.SetValue(Button.ContentProperty, "Update");
                 buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.Green));
                 buttonColumn.CellTemplate = buttonTemplate;
                 e.Column = buttonColumn;
             }
-            else if(e.PropertyName == "DETAIL")
+            else if(e.PropertyName == "Detail")
             {
                 DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
                 DataTemplate buttonTemplate = new DataTemplate();
@@ -209,8 +214,8 @@ namespace BreadTok
                 buttonTemplate.VisualTree = buttonFactory;
                 //add handler or you can add binding to command if you want to handle click
                 buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowBahan));
-                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
-                buttonFactory.SetValue(Button.ContentProperty, "DETAIL");
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Detail"));
+                buttonFactory.SetValue(Button.ContentProperty, "Detail");
                 buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
                 buttonFactory.SetValue(Button.WidthProperty, 80.0);
                 buttonColumn.CellTemplate = buttonTemplate;

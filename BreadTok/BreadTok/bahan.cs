@@ -15,12 +15,12 @@ namespace BreadTok
         public DataTable loadData()
         {
             dt = new DataTable();
-            dt.Columns.Add("MERK");
-            dt.Columns.Add("JENIS BAHAN");
-            dt.Columns.Add("STOCK");
-            dt.Columns.Add("HARGA");
-            dt.Columns.Add("DETAIL");
-            dt.Columns.Add("ACTION");
+            dt.Columns.Add("Merk");
+            dt.Columns.Add("Jenis Bahan");
+            dt.Columns.Add("Stok");
+            dt.Columns.Add("Harga");
+            dt.Columns.Add("Detail");
+            dt.Columns.Add("Update");
 
             OracleCommand cmd = new OracleCommand();
             cmd.CommandText = "select * from bahan";
