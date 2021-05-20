@@ -14,6 +14,8 @@ namespace BreadTok
         public string id_karyawan { get; set; }
         public string id_pelanggan { get; set; }
         public string metode_pembayaran { get; set; }
+        public string id_voucher { get; set; }
         public string status { get; set; }
+        public List<DTrans> dtrans { get; set; }
     }
 }

@@ -101,7 +101,7 @@
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
                             </materialDesign:DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Harga" Binding="{Binding harga_roti}"
+                            <DataGridTextColumn Header="Harga" Binding="{Binding harga_roti, StringFormat=C, ConverterCulture='id-ID'}"
                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
                             </DataGridTextColumn>
@@ -234,6 +234,36 @@
                               HeadersVisibility="All" Margin="0, 10, 0, 0"
                               IsReadOnly="True"
                               ColumnWidth="*" AutoGeneratingColumn="dgCart_AutoGeneratingColumn"
+                              Grid.Row="1">
+                    </DataGrid>
+
+                </Grid>
+
+            </TabItem>
+
+            <TabItem
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="History" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Order History" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="25" Grid.Row="0">
+                        Order History
+                    </TextBlock>
+                    <DataGrid CanUserAddRows="False" x:Name="dgHistory"
+                              CanUserReorderColumns="False" CanUserResizeColumns="False"
+                              CanUserDeleteRows="False" CanUserResizeRows="False"
+                              AutoGenerateColumns="True"
+                              HeadersVisibility="All" Margin="0, 10, 0, 0"
+                              IsReadOnly="True"
+                              ColumnWidth="*"
                               Grid.Row="1">
                     </DataGrid>
 

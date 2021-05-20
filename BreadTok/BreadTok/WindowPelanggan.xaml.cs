@@ -41,7 +41,7 @@ namespace BreadTok
             lbWelcome.Text = $"Selamat Datang, {nama}!";
             cart = new Cart();
             dgRoti.ColumnWidth = DataGridLength.Auto;
-            loadData();
+            loadRoti();
             loadCart();
             loadVoucher();
         }
@@ -63,7 +63,7 @@ namespace BreadTok
             }
         }
 
-        private void loadData()
+        private void loadRoti()
         {
             rotis = new List<Roti>();
             OracleCommand cmd = new OracleCommand();
@@ -146,6 +146,10 @@ namespace BreadTok
             cbVoucher.DisplayMemberPath = "Kode Voucher";
 
         }
+        private void loadHistory()
+        {
+
+        }
 
         private void btAddToCart_Click(object sender, RoutedEventArgs e)
         {
@@ -194,7 +198,10 @@ namespace BreadTok
 
         private void dgCart_Loaded(object sender, RoutedEventArgs e)
         {
-            if (dgCart.Columns.Count > 0) dgCart.Columns[0].Visibility = Visibility.Hidden;
+            if (dgCart.Columns.Count > 0) 
+            { 
+                dgCart.Columns[0].Visibility = Visibility.Hidden;
+            }
         }
 
         private void btOrder_Click(object sender, RoutedEventArgs e)
@@ -248,7 +255,7 @@ namespace BreadTok
 
                         trans.Commit();
                         clearCart();
-                        loadData();
+                        loadRoti();
                         loadVoucher();
                         MessageHandler.messageSuccess("Order");
                     }

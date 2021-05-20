@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,7 +94,7 @@ namespace BreadTok
         }
         public string getFormattedTotal()
         {
-            return "Total : Rp " + total;
+            return "Total : " + total.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
         }
         public int getCartItemCount()
         {
