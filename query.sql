@@ -102,6 +102,7 @@ DECLARE
     ID varchar2(100);
 	START_CODE varchar2(20);
     END_CODE varchar2(20);
+	pragma autonomous_transaction;
 BEGIN
     IF INSTR(:NEW.NAMA, ' ') > 0 THEN
         START_CODE := SUBSTR(:NEW.NAMA, 1, 2) || SUBSTR(:NEW.NAMA, INSTR(:NEW.NAMA, ' ') + 1, 2);
@@ -114,18 +115,15 @@ BEGIN
         into ID
         from ROTI;
 
-        SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(K.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
+        SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(R.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
         FROM ROTI R
         WHERE SUBSTR(R.KODE, 1, 4) = UPPER(START_CODE);
 
         :NEW.KODE := UPPER(START_CODE || END_CODE);
-        :NEW.PICTURE_LOCATION := UPPER(START_CODE || END_CODE);
+        :NEW.PICTURE_LOCATION := UPPER(START_CODE || END_CODE) ||  '.jpg';
     else
         :NEW.KODE := :OLD.KODE;
-        :NEW.PICTURE_LOCATION := :OLD.KODE;
+        :NEW.PICTURE_LOCATION := :OLD.KODE ||  '.jpg';
     end if;
-
-
-
 END;
 /

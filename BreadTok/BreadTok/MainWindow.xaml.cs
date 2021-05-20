@@ -213,7 +213,7 @@ namespace BreadTok
             btnInsert.Visibility = Visibility.Hidden;
             loadCbJenisBahan("update");
             loadCbSupplier("update");
-            setupUpdatePanelBahan(Convert.ToInt32((sender as Button).CommandParameter));
+            setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
             selectedIdBahan = Convert.ToInt32((sender as Button).CommandParameter);
         }
 
@@ -919,13 +919,14 @@ namespace BreadTok
             }
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "update roti set nama=:1,deskripsi=:2,harga=:3,jenis_roti=:4 where id=:5";
+            cmd.CommandText = "update roti set kode=:1,nama=:2,deskripsi=:3,harga=:4,jenis_roti=:5 where id=:6";
             cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", nama);
-            cmd.Parameters.Add(":2", deskripsi);
-            cmd.Parameters.Add(":3", Convert.ToInt32(harga));
-            cmd.Parameters.Add(":4", jenisRoti);
-            cmd.Parameters.Add(":5", selectedIdRoti);
+            cmd.Parameters.Add(":1", "0");
+            cmd.Parameters.Add(":2", nama);
+            cmd.Parameters.Add(":3", deskripsi);
+            cmd.Parameters.Add(":4", Convert.ToInt32(harga));
+            cmd.Parameters.Add(":5", jenisRoti);
+            cmd.Parameters.Add(":6", selectedIdRoti);
             cmd.ExecuteNonQuery();
 
             selectedIdRoti = -1;
