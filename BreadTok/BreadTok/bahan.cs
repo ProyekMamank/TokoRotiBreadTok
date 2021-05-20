@@ -19,7 +19,7 @@ namespace BreadTok
             dt.Columns.Add("JENIS BAHAN");
             dt.Columns.Add("STOCK");
             dt.Columns.Add("HARGA");
-            dt.Columns.Add("SUPPLIER");
+            dt.Columns.Add("DETAIL");
             dt.Columns.Add("ACTION");
 
             OracleCommand cmd = new OracleCommand();
@@ -39,12 +39,9 @@ namespace BreadTok
                 dr[2] = reader.GetValue(3).ToString() + " " + reader.GetValue(5).ToString();
 
                 dr[3] = Convert.ToInt32(reader.GetValue(4));
+                
 
-                OracleCommand cmd3 = new OracleCommand();
-                cmd3.CommandText = $"select nama from supplier where ID = {Convert.ToInt32(reader.GetValue(7))}";
-                cmd3.Connection = App.conn;
-                dr[4] = cmd3.ExecuteScalar().ToString();
-
+                dr[4] = reader.GetValue(0).ToString();
                 dr[5] = reader.GetValue(0).ToString();
                 dt.Rows.Add(dr);
             }

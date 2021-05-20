@@ -201,6 +201,49 @@ namespace BreadTok
                 buttonColumn.CellTemplate = buttonTemplate;
                 e.Column = buttonColumn;
             }
+            else if(e.PropertyName == "DETAIL")
+            {
+                DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
+                DataTemplate buttonTemplate = new DataTemplate();
+                FrameworkElementFactory buttonFactory = new FrameworkElementFactory(typeof(Button));
+                buttonTemplate.VisualTree = buttonFactory;
+                //add handler or you can add binding to command if you want to handle click
+                buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowBahan));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
+                buttonFactory.SetValue(Button.ContentProperty, "DETAIL");
+                buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
+                buttonFactory.SetValue(Button.WidthProperty, 80.0);
+                buttonColumn.CellTemplate = buttonTemplate;
+                e.Column = buttonColumn;
+            }
+        }
+        
+        private void DgBahan_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgBahan.Columns[0].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[1].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[2].Width = DataGridLength.Auto;
+            dgBahan.Columns[3].Width = DataGridLength.Auto;
+            dgBahan.Columns[4].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[5].Width = DataGridLength.SizeToCells;
+        }
+
+        private void btnOpenWindowBahan(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowBahan wp = new WindowBahan(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wp.ShowDialog();
+
+            //loadDaftarPesanan();
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)

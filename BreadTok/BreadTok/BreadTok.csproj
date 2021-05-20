@@ -74,6 +74,9 @@
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="Karyawan.cs" />
+    <Compile Include="WindowBahan.xaml.cs">
+      <DependentUpon>WindowBahan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowPesanan.xaml.cs">
       <DependentUpon>WindowPesanan.xaml</DependentUpon>
     </Compile>
@@ -111,6 +114,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowBahan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowPesanan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
