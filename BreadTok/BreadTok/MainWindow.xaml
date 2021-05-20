@@ -82,7 +82,7 @@
                 <Grid>
                     <Canvas x:Name="panelMasterBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Master Bahan"/>
-                        <DataGrid x:Name="dgBahan" Height="468" IsReadOnly="True" AutoGeneratingColumn="dgBahan_AutoGeneratingColumn" MouseUp="dgBahan_MouseUp" Canvas.Left="10" Canvas.Top="36" Width="709" ColumnWidth="*"/>
+                        <DataGrid x:Name="dgBahan" Height="468" IsReadOnly="True" AutoGeneratingColumn="dgBahan_AutoGeneratingColumn" MouseUp="dgBahan_MouseUp" Canvas.Left="10" Canvas.Top="36" Width="709" ColumnWidth="*" Loaded="DgBahan_Loaded"/>
                     </Canvas>
                     <Canvas x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729"  Visibility="Hidden">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Bahan"/>
