@@ -281,33 +281,57 @@ INSERT INTO D_RESEP VALUES(0, 0, 0);
 -- JENIS_ROTI
 INSERT INTO JENIS_ROTI VALUES(1, 'BREAD');
 INSERT INTO JENIS_ROTI VALUES(2, 'TOAST');
-INSERT INTO JENIS_ROTI VALUES(3, 'WHOLE CAKE');
+INSERT INTO JENIS_ROTI VALUES(3, 'FLAT BREAD');
 INSERT INTO JENIS_ROTI VALUES(4, 'DRY CAKE');
 INSERT INTO JENIS_ROTI VALUES(5, 'COOKIES');
+INSERT INTO JENIS_ROTI VALUES(6, 'WAFFLE');
+INSERT INTO JENIS_ROTI VALUES(7, 'PANCAKE');
 
 -- ROTI
-INSERT INTO ROTI VALUES(1, 'CROI00001', 'CROISSANT', 'A VERY EXQUISITE BREAD', 9000, 10, 1, 1, 1, 'a');
-INSERT INTO ROTI VALUES(2, 'RATO00001', 'RAISIN TOAST', 'HEALTHY!', 16000, 7, 1, 2, 2, 'a');
-INSERT INTO ROTI VALUES(3, '', '', '', 0, 0, 0, 0, 'a');
-INSERT INTO ROTI VALUES(4, '', '', '', 0, 0, 0, 0, 'a');
+INSERT INTO ROTI VALUES(1, 'CROI00001', 'Croissant', 'A Very Exquisite Bread', 9000, 10, 1, 1, 1, 'CROI00001.jpg');
+INSERT INTO ROTI VALUES(2, 'RATO00001', 'Raisin Toast', 'Healthy!', 16000, 7, 1, 2, 2, 'RATO00001.jpg');
+INSERT INTO ROTI VALUES(3, 'BRIO00001', 'Brioche', 'A Highly Enriched Bread From France!', 22000, 9, 1, 1, 3, 'BRIO00001.jpg');
+INSERT INTO ROTI VALUES(4, 'BEWA00001', 'Belgian Waffle', 'Larger Wafle Is Yummy!', 25000, 10, 1, 6, 4, 'BEWA00001.jpg');
+INSERT INTO ROTI VALUES(5, 'BISC00001', 'Biscuit', 'Perfect For a Snack!', 8000, 35, 1, 5, 5, 'BISC00001.jpg');
+INSERT INTO ROTI VALUES(6, 'CABR00001', 'Carrot Bread', 'A Healthy Choice!', 18000, 8, 0, 1, 6, 'CABR00001.jpg');
+INSERT INTO ROTI VALUES(7, 'CHAP00001', 'Chapati', 'It Would Be Nice For a Kebab', 5000, 20, 1, 3, 7, 'CHAP00001.jpg');
+INSERT INTO ROTI VALUES(8, 'CREP00001', 'Crepe', 'Extremeley Thin Pancake', 7500, 16, 1, 7, 8, 'CREP00001.jpg');
+INSERT INTO ROTI VALUES(9, 'DORA00001', 'Dorayaki', 'Japanese Trademark', 18000, 40, 1, 7, 9, 'DORA00001.jpg');
+INSERT INTO ROTI VALUES(10, 'FOUG00001', 'Fougasse', 'Delicate Bread', 16000, 14, 1, 1, 10, 'FOUG00001.jpg');
+INSERT INTO ROTI VALUES(11, 'ROBA00001', 'Roti Bakar', 'Indonesia Number One Bread', 15000, 21, 1, 2, 11, 'ROBA00001.jpg');
+INSERT INTO ROTI VALUES(12, 'TORT00001', 'Tortilla', 'Flat Yet Applicable To Any Food', 6000, 37, 1, 3, 12, 'TORT00001.jpg');
+INSERT INTO ROTI VALUES(13, 'WHBR00001', 'White bread', 'Classic', 13500, 10, 1, 1, 13, 'WHBR00001.jpg');
+INSERT INTO ROTI VALUES(14, 'BIZI00001', 'Bing Zi', 'Originally From China', 7500, 5, 1, 3, 14, 'BIZI00001.jpg');
+INSERT INTO ROTI VALUES(15, 'POBR00001', 'Potato Bread', 'Who Would Deny This?', 12000, 7, 0, 1, 15, 'POBR00001.jpg');
 
 -- JABATAN
 INSERT INTO JABATAN VALUES(1, 'KARYAWAN');
 INSERT INTO JABATAN VALUES(2, 'MANAGER');
 INSERT INTO JABATAN VALUES(3, 'CHEF');
-INSERT INTO JABATAN VALUES(4, '');
-INSERT INTO JABATAN VALUES(5, '');
 
 -- KARYAWAN
 INSERT INTO KARYAWAN VALUES(1, 'BURA00001', 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'a');
 INSERT INTO KARYAWAN VALUES(2, 'SEAD00001', 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(3, 'MEPU00001', 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Ngagel Jaya No. 26', 'melianapurnama@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 2, 'a');
-INSERT INTO KARYAWAN VALUES(4, '', '', 'P', '', '', 0, 0, 0, 'a');
+INSERT INTO KARYAWAN VALUES(3, 'YADA00001', 'YaekoD', 'YaekoD', 'Yaeko Dario', 'P', 'Jalan Ngagel Jaya No. 26', 'yaekodario@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 1, 'a');
+INSERT INTO KARYAWAN VALUES(4, 'MEPU00001', 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Penamparan No. 15', 'melianapurnama@gmail.com', 0838555682, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 0, 2, 'a');
+INSERT INTO KARYAWAN VALUES(5, 'MIED00001', 'MihaelaE', 'MihaelaE', 'Mihaela Edvige', 'L', 'Jalan Kipas Dewa No. 6', 'mihaelaedvige@gmail.com', 0897555472, TO_DATE('12/08/1984', 'dd/mm/yyyy'), 1, 2, 'a');
+INSERT INTO KARYAWAN VALUES(6, 'EMBR00001', 'EmiliB', 'EmiliB', 'Emili Brendan', 'P', 'Jalan Kursi Terbang No. 12', 'emilibrendan@gmail.com', 0875433694, TO_DATE('28/06/1990', 'dd/mm/yyyy'), 1, 2, 'a');
+INSERT INTO KARYAWAN VALUES(7, 'KAPA00001', 'KassandrosP', 'KassandrosP', 'Kassandros Paraskeve', 'L', 'Jalan Ikan Koi No. 67', 'kassandros@gmail.com', 08713772929 , TO_DATE('30/07/1992', 'dd/mm/yyyy'), 1, 3, 'a');
+INSERT INTO KARYAWAN VALUES(8, 'FANI00001', 'FabianN', 'FabianN', 'Fabian Nicodemo', 'L', 'Jalan Ikan Mas No. 64', 'fabianico@gmail.com', 08743533798 , TO_DATE('16/11/1988', 'dd/mm/yyyy'), 1, 3, 'a');
+INSERT INTO KARYAWAN VALUES(9, 'ALAR00001', 'AliceA', 'AliceA', 'Alice Artur', 'P', 'Jalan Ikan Badut No. 91', 'aliceeee@gmail.com', 08721197429 , TO_DATE('04/11/1989', 'dd/mm/yyyy'), 1, 3, 'a');
+INSERT INTO KARYAWAN VALUES(10, 'AAAA00001', 'a', 'a', 'Test Dummy', 'P', 'Jalan Jalan Kuy No. 91', 'email@gmail.com', 08123456789 , TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 2, 'a');
 
 -- PELANGGAN
 INSERT INTO PELANGGAN VALUES(1, 'RATR00001', 'RaymondT', 'RaymondT', 'Raymond Tranatung', 'L', 'Jalan Penampungan No. 6', 'raymondt@gmail.com', 08345671222, TO_DATE('13/06/2001', 'dd/mm/yyyy'), 1, 'a');
 INSERT INTO PELANGGAN VALUES(2, 'LUGE00001', 'LucianaG', 'LucianaG', 'Luciana Geraldine', 'P', 'Jalan Penampungan No. 9', 'lucianaa@gmail.com', 08512222451, TO_DATE('06/06/2001', 'dd/mm/yyyy'), 1, 'a');
-INSERT INTO PELANGGAN VALUES(3, 'aaaa00001', 'a', 'a', 'Test Dummy', 'L', 'Jalan Jalan', 'email@gmail.com', 08123456789, TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(3, 'ROYU00001', 'RoyY', 'RoyY', 'Roy Yuri', 'L', 'Jalan Ngagel Selatan No. 12', 'royy@gmail.com', 08512366135, TO_DATE('30/05/1992', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(4, 'ORHA00001', 'OrlaH', 'OrlaH', 'Orla Hanifa', 'P', 'Jalan Pamungkas Blok A No. 121', 'orlah@gmail.com', 0878555167, TO_DATE('21/12/1989', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(5, 'WAIV00001', 'WaelI', 'WaelI', 'Wael Ivanka', 'L', 'Jalan Sudirman Gang 2 No. 12', 'waeli@gmail.com', 0812215949, TO_DATE('24/03/1993', 'dd/mm/yyyy'), 0, 'a');
+INSERT INTO PELANGGAN VALUES(6, 'AIVI00001', 'AikaterineV', 'AikaterineV', 'Aikaterine Vitaliano', 'P', 'Jalan Kapasari Gang 1 No. 4', 'aikaterine@gmail.com', 0859525744, TO_DATE('15/10/1992', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(7, 'GLVL00001', 'GlendaV', 'GlendaV', 'Glenda Vlad', 'L', 'Jalan Roti Bakar No. 34a', 'glendav@gmail.com', 0812675723, TO_DATE('17/09/1996', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(8, 'THPA00001', 'ThorsteinP', 'ThorsteinP', 'Thorstein Parminder', 'P', 'Jalan Perjalanan No. 45', 'thorstein@gmail.com', 0838555838, TO_DATE('05/05/2003', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(9, 'UMVA00001', 'UmarV', 'UmarV', 'Umar Valentin', 'L', 'Jalan Perjalanan No. 46', 'umarr@gmail.com', 08385123167, TO_DATE('09/09/1999', 'dd/mm/yyyy'), 1, 'a');
+INSERT INTO PELANGGAN VALUES(10, 'AAAA00001', 'a', 'a', 'Test Dummy', 'L', 'Jalan Jalan', 'email@gmail.com', 08123456789, TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 'a');
 
 -- VOURCHER
 INSERT INTO VOUCHER VALUES(1, 'HEMATDULUBOS', 'POTONGAN', 30000);
@@ -317,10 +341,20 @@ INSERT INTO VOUCHER VALUES(4, 'ROYALFAMILY', 'DISKON', 50);
 INSERT INTO VOUCHER VALUES(5, 'BREADTOKDONG', 'POTONGAN', 25000);
 
 -- H_TRANS
-INSERT INTO H_TRANS VALUES('NOTA20210114001', TO_DATE('14-01-2021', 'DD-MM-YYYY'), 61000, null, 2, 'OVO', 1);
-INSERT INTO H_TRANS VALUES('NOTA20210114002', TO_DATE('14-01-2021', 'DD-MM-YYYY'), 126000, null, 1, 'OVO', 1);
-INSERT INTO H_TRANS VALUES('NOTA20210206001', TO_DATE('06-02-2021', 'DD-MM-YYYY'), 14000, null, 1, 'GO-PAY', 0);
-INSERT INTO H_TRANS VALUES('NOTA20210207001', TO_DATE('07-02-2021', 'DD-MM-YYYY'), 53000, null, 2, 'SHOPEEPAY', 1);
+INSERT INTO H_TRANS VALUES('NOTA20210114001', TO_DATE('14-01-2021', 'DD-MM-YYYY'), 61000, null, 2, 'OVO', 3);
+INSERT INTO H_TRANS VALUES('NOTA20210114002', TO_DATE('14-01-2021', 'DD-MM-YYYY'), 126000, null, 1, 'OVO', 2);
+INSERT INTO H_TRANS VALUES('NOTA20210206001', TO_DATE('06-02-2021', 'DD-MM-YYYY'), 14000, null, 1, 'GO-PAY', 2);
+INSERT INTO H_TRANS VALUES('NOTA20210207001', TO_DATE('07-02-2021', 'DD-MM-YYYY'), 53000, null, 3, 'SHOPEEPAY', 1);
+--
+INSERT INTO H_TRANS VALUES('NOTA20210207002', TO_DATE('07-02-2021', 'DD-MM-YYYY'), 53000, null, 6, 'GO-PAY', 0);
+INSERT INTO H_TRANS VALUES('NOTA20210207003', TO_DATE('07-02-2021', 'DD-MM-YYYY'), 53000, null, 4, 'SHOPEEPAY', 1);
+INSERT INTO H_TRANS VALUES('NOTA20210209001', TO_DATE('09-02-2021', 'DD-MM-YYYY'), 53000, null, 5, 'OVO', 1);
+INSERT INTO H_TRANS VALUES('NOTA20210209002', TO_DATE('09-02-2021', 'DD-MM-YYYY'), 53000, null, 7, 'SHOPEEPAY', 3);
+INSERT INTO H_TRANS VALUES('NOTA20210213001', TO_DATE('13-02-2021', 'DD-MM-YYYY'), 53000, null, 2, 'GO-PAY', 0);
+INSERT INTO H_TRANS VALUES('NOTA20210215001', TO_DATE('15-02-2021', 'DD-MM-YYYY'), 53000, null, 8, 'OVO', 0);
+INSERT INTO H_TRANS VALUES('NOTA20210216001', TO_DATE('16-02-2021', 'DD-MM-YYYY'), 53000, null, 9, 'SHOPEEPAY', 1);
+INSERT INTO H_TRANS VALUES('NOTA20210218001', TO_DATE('18-02-2021', 'DD-MM-YYYY'), 53000, null, 4, 'GO-PAY', 1);
+INSERT INTO H_TRANS VALUES('NOTA20210220001', TO_DATE('20-02-2021', 'DD-MM-YYYY'), 53000, null, 5, 'SHOPEEPAY', 1);
 
 -- D_TRANS
 INSERT INTO D_TRANS VALUES('NOTA20210114001', 1, 5, 9000, 45000);
