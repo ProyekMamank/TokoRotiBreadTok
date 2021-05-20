@@ -23,6 +23,7 @@ namespace BreadTok
     {
         string loggedUserID;
         List<Roti> rotis;
+        List<UserVoucher> vouchers;
         Cart cart;
         DataTable dtVoucher;
 
@@ -44,6 +45,19 @@ namespace BreadTok
             loadRoti();
             loadCart();
             loadVoucher();
+        }
+        class UserVoucher
+        {
+            public string ID { get; set; }
+            public string kode { get; set; }
+            public string jenis { get; set; }
+            public string nominal { get; set; }
+            public int realNominal { get; set; }
+
+            public override string ToString()
+            {
+                return $"{kode} ({nominal})";
+            }
         }
 
         private void btLogout_Click(object sender, RoutedEventArgs e)
@@ -94,6 +108,8 @@ namespace BreadTok
             DataTable dt = cart.getDataTable();
             dgCart.ItemsSource = dt.DefaultView;
             lbTotal.Text = cart.getFormattedTotal();
+            lbPotongan.Text = cart.getFormattedPotongan();
+            lbGrandTotal.Text = cart.getFormattedGrandTotal();
         }
         private void clearCart()
         {
@@ -102,28 +118,22 @@ namespace BreadTok
         }
         private void loadVoucher()
         {
-            dtVoucher = new DataTable();
-            dtVoucher.Columns.Add("ID");
-            dtVoucher.Columns.Add("Kode Voucher");
-            dtVoucher.Columns.Add("Jenis Voucher");
-            dtVoucher.Columns.Add("Nominal");
+            vouchers = new List<UserVoucher>();
+
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = App.conn;
             cmd.CommandText = "select UV.ID, V.NAMA, V.JENIS, V.POTONGAN " +
                 "from VOUCHER V " +
                 "join USER_VOUCHER UV on V.ID = UV.FK_VOUCHER " +
                 "join PELANGGAN P on P.ID = UV.FK_PELANGGAN " +
-                "where UV.STATUS > 0 AND UV.FK_PELANGGAN = :1";
+                "where UV.STATUS > 0 AND UV.FK_PELANGGAN = :1 AND UV.STATUS > 0";
             cmd.Parameters.Add(":1", loggedUserID);
             OracleDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
-                DataRow dr = dtVoucher.NewRow();
-                dr["ID"] = reader.GetValue(0).ToString();
-                dr["Kode Voucher"] = reader.GetValue(1).ToString();
-                dr["Jenis Voucher"] = reader.GetValue(2).ToString();
                 string nom = reader.GetValue(3).ToString();
+                string realNom = nom;
                 if (reader.GetValue(2).ToString() == "DISKON")
                 {
                     nom += "%";
@@ -132,18 +142,25 @@ namespace BreadTok
                 {
                     nom = "Rp " + nom;
                 }
-                dr["Nominal"] = nom;
-                dtVoucher.Rows.Add(dr);
+
+                vouchers.Add(new UserVoucher()
+                {
+                    ID = reader.GetValue(0).ToString(),
+                    kode = reader.GetValue(1).ToString(),
+                    jenis = reader.GetValue(2).ToString(),
+                    nominal = nom,
+                    realNominal = Convert.ToInt32(realNom)
+                });
             }
             reader.Close();
 
+            // DataGrid List Voucher
             dgVoucher.ItemsSource = null;
-            dgVoucher.ItemsSource = dtVoucher.DefaultView;
+            dgVoucher.ItemsSource = vouchers;
 
             // Combo box voucher saat checkout
-            cbVoucher.ItemsSource = dtVoucher.DefaultView;
+            cbVoucher.ItemsSource = vouchers;
             cbVoucher.SelectedValuePath = "ID";
-            cbVoucher.DisplayMemberPath = "Kode Voucher";
 
         }
         private void loadHistory()
@@ -193,7 +210,11 @@ namespace BreadTok
 
         private void dgVoucher_Loaded(object sender, RoutedEventArgs e)
         {
-            if (dgVoucher.Columns.Count > 0) dgVoucher.Columns[0].Visibility = Visibility.Hidden;
+            if (dgVoucher.Columns.Count > 0)
+            {
+                dgVoucher.Columns[0].Visibility = Visibility.Hidden;
+                dgVoucher.Columns[4].Visibility = Visibility.Hidden;
+            }
         }
 
         private void dgCart_Loaded(object sender, RoutedEventArgs e)
@@ -231,15 +252,17 @@ namespace BreadTok
                         // H_TRANS
                         OracleCommand cmdH = new OracleCommand();
                         cmdH.Connection = App.conn;
-                        cmdH.CommandText = "insert into H_TRANS (NOMOR_NOTA,TOTAL,FK_PELANGGAN,METODE_PEMBAYARAN) " +
-                            "values (:nonota, :1, :2, :3)";
+                        cmdH.CommandText = "insert into H_TRANS (NOMOR_NOTA,TOTAL,FK_PELANGGAN,METODE_PEMBAYARAN,FK_USER_VOUCHER) " +
+                            "values (:nonota, :1, :2, :3, :fkvoucher)";
                         cmdH.Parameters.Add(":nonota", nonota);
-                        cmdH.Parameters.Add(":1", cart.total);
+                        cmdH.Parameters.Add(":1", cart.getGrandTotal());
                         cmdH.Parameters.Add(":2", loggedUserID);
                         cmdH.Parameters.Add(":3", cbMetode.SelectedItem.ToString());
+                        cmdH.Parameters.Add(":fkvoucher", cbVoucher.SelectedValue);
                         Console.WriteLine(cbMetode.SelectedItem.ToString());
                         cmdH.ExecuteNonQuery();
 
+                        // D_TRANS
                         foreach (DataRow dr in cart.getDataTable().Rows)
                         {
                             OracleCommand cmdD = new OracleCommand();
@@ -251,6 +274,14 @@ namespace BreadTok
                             cmdD.Parameters.Add(":qty", dr["Qty"]);
                             cmdD.Parameters.Add(":sbt", dr["Subtotal"]);
                             cmdD.ExecuteNonQuery();
+                        }
+
+                        if (cbVoucher.SelectedValue != null)
+                        {
+                            OracleCommand cmdUV = new OracleCommand();
+                            cmdUV.Connection = App.conn;
+                            cmdUV.CommandText = $"update user_voucher set status=0 where id='{cbVoucher.SelectedValue}'";
+                            cmdUV.ExecuteNonQuery();
                         }
 
                         trans.Commit();
@@ -284,6 +315,28 @@ namespace BreadTok
         private void btClearVoucher_Click(object sender, RoutedEventArgs e)
         {
             cbVoucher.SelectedIndex = -1;
+        }
+
+        private void cbVoucher_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbVoucher.SelectedIndex != -1)
+            {
+                UserVoucher selUV = vouchers[cbVoucher.SelectedIndex];
+                if (selUV.jenis == "DISKON")
+                {
+                    cart.setPotongan(selUV.realNominal);
+                }
+                else
+                {
+                    // Potongan
+                    cart.setPotongan(-selUV.realNominal);
+                }
+            }
+            else
+            {
+                cart.setPotongan(0);
+            }
+            loadCart();
         }
     }
 }

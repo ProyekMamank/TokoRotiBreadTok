@@ -139,6 +139,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="25" Grid.Row="0">
@@ -177,17 +179,39 @@
                             materialDesign:HintAssist.HintOpacity=".26"
                             Margin="0, 0, 0, 0"
                             Width="200"
-                            IsEditable="True" x:Name="cbVoucher">
+                            IsEditable="True" x:Name="cbVoucher" SelectionChanged="cbVoucher_SelectionChanged">
                         </ComboBox>
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 x:Name="btClearVoucher" Click="btClearVoucher_Click">
                             <materialDesign:PackIcon Kind="Close"/>
                         </Button>
                     </StackPanel>
-                    <TextBlock HorizontalAlignment="Right" x:Name="lbTotal" Grid.Row="4" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
-                        Total : 
-                    </TextBlock>
-                    <StackPanel Grid.Row="5" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock TextAlignment="Right" FontSize="16" Margin="0,0,10,0">
+                            Total :
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Right" x:Name="lbTotal" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
+                            Rp 
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock TextAlignment="Right" FontSize="16" Margin="0,0,10,0">
+                            Potongan :
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Right" x:Name="lbPotongan" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="16">
+                            Rp
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock TextAlignment="Right" FontSize="18" Margin="0,0,10,0">
+                            Grand Total :
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Right" x:Name="lbGrandTotal" TextAlignment="Left" Width="200" VerticalAlignment="Center" FontSize="18" FontWeight="Bold">
+                            Rp
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="7" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button
                         Style="{StaticResource MaterialDesignRaisedLightButton}"
                         ToolTip="Resource name: MaterialDesignRaisedLightButton"
@@ -234,7 +258,7 @@
                               HeadersVisibility="All" Margin="0, 10, 0, 0"
                               IsReadOnly="True"
                               ColumnWidth="*" AutoGeneratingColumn="dgCart_AutoGeneratingColumn"
-                              Grid.Row="1">
+                              Grid.Row="1" Loaded="dgVoucher_Loaded">
                     </DataGrid>
 
                 </Grid>

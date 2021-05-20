@@ -13,7 +13,8 @@ namespace BreadTok
     {
         public List<Roti> rotis { get; set; }
         public List<int> jml { get; set; }
-        public int total { get; set; }
+        private int total { get; set; }
+        private int potongan { get; set; }
         DataTable dt;
         public Cart()
         {
@@ -94,7 +95,16 @@ namespace BreadTok
         }
         public string getFormattedTotal()
         {
-            return "Total : " + total.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+            return getTotal().ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+        }
+        public string getFormattedGrandTotal()
+        {
+            return getGrandTotal().ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+        }
+        public string getFormattedPotongan()
+        {
+            int realPot = potongan <= 0 ? -potongan : (int)(total * (potongan / 100.0));
+            return realPot.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
         }
         public int getCartItemCount()
         {
@@ -105,6 +115,19 @@ namespace BreadTok
             rotis.Clear();
             jml.Clear();
             total = 0;
+        }
+        public int getTotal()
+        {
+            return total;
+        }
+        public int getGrandTotal()
+        {
+            int realPot = potongan <= 0 ? -potongan : (int)(total * (potongan / 100.0));
+            return Math.Max(total - realPot,0);
+        }
+        public void setPotongan(int pot)
+        {
+            this.potongan = pot;
         }
     }
 }
