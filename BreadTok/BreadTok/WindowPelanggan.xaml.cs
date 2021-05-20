@@ -24,6 +24,7 @@ namespace BreadTok
         string loggedUserID;
         List<Roti> rotis;
         List<UserVoucher> vouchers;
+        List<HTrans> histories;
         Cart cart;
         DataTable dtVoucher;
 
@@ -45,6 +46,7 @@ namespace BreadTok
             loadRoti();
             loadCart();
             loadVoucher();
+            loadHistory();
         }
         class UserVoucher
         {
@@ -165,7 +167,103 @@ namespace BreadTok
         }
         private void loadHistory()
         {
+            histories = new List<HTrans>();
+            OracleCommand cmdH = new OracleCommand();
+            cmdH.Connection = App.conn;
+            cmdH.CommandText =
+                @"select
+                       H.NOMOR_NOTA,
+                       INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD FmMONTH YYYY')),
+                       H.TOTAL,
+                       nvl(K.NAMA,'-'),
+                       P.NAMA,
+                       H.METODE_PEMBAYARAN,
+                       nvl(V.NAMA,'-'),
+                       (CASE WHEN H.STATUS = 0 THEN 'Belum Bayar'
+                           WHEN H.STATUS = 1 THEN 'Request Bayar'
+                           WHEN H.STATUS = 2 THEN 'Sudah Bayar'
+                           WHEN H.STATUS = 3 THEN 'Dibatalkan'
+                           END),
+                       (select nvl(sum(D.QUANTITY),0) as jml
+                            from D_TRANS D
+                            where D.NOMOR_NOTA = H.NOMOR_NOTA
+                        )
+                from H_TRANS H
+                join PELANGGAN P on P.ID = H.FK_PELANGGAN
+                left join USER_VOUCHER UV on UV.ID = H.FK_USER_VOUCHER
+                left join VOUCHER V on V.ID = UV.FK_VOUCHER
+                left join KARYAWAN K on K.ID = H.FK_KARYAWAN
+                where H.FK_PELANGGAN = :id_pelanggan
+                order by H.TANGGAL_TRANS desc"
+            ;
+            cmdH.Parameters.Add(":id_pelanggan", loggedUserID);
+            OracleDataReader reader = cmdH.ExecuteReader();
+            while (reader.Read())
+            {
+                histories.Add(new HTrans()
+                {
+                    nomor_nota = reader.GetValue(0).ToString(),
+                    tanggal_trans = reader.GetValue(1).ToString(),
+                    total = Convert.ToInt32(reader.GetValue(2).ToString()),
+                    nama_karyawan = reader.GetValue(3).ToString(),
+                    nama_pelanggan = reader.GetValue(4).ToString(),
+                    metode_pembayaran = reader.GetValue(5).ToString(),
+                    id_voucher = reader.GetValue(6).ToString(),
+                    status = reader.GetValue(7).ToString(),
+                    countRoti = reader.GetValue(8).ToString(),
+                    action = reader.GetValue(0).ToString()
+                });
+            }
 
+            dgHistory.ItemsSource = null;
+            dgHistory.ItemsSource = histories;
+
+            foreach (HTrans ht in histories)
+            {
+                List<DTrans> dt = new List<DTrans>();
+
+                OracleCommand cmdD = new OracleCommand();
+                cmdD.Connection = App.conn;
+                cmdD.CommandText =
+                    @"select
+                           DT.NOMOR_NOTA,
+                           DT.FK_ROTI,
+                           R.NAMA,
+                           DT.QUANTITY,
+                           DT.HARGA,
+                           DT.SUBTOTAL
+                    from D_TRANS DT
+                    join ROTI R on DT.FK_ROTI = R.ID
+                    where DT.NOMOR_NOTA = :nonota";
+                cmdD.Parameters.Add(":nonota", ht.nomor_nota);
+                OracleDataReader readerD = cmdD.ExecuteReader();
+                while (readerD.Read())
+                {
+                    dt.Add(new DTrans() { 
+                        nomor_nota = readerD.GetValue(0).ToString(),
+                        id_roti = readerD.GetValue(1).ToString(),
+                        nama_roti = readerD.GetValue(2).ToString(),
+                        quantity = Convert.ToInt32(readerD.GetValue(3).ToString()),
+                        harga = Convert.ToInt32(readerD.GetValue(4).ToString()),
+                        subtotal = Convert.ToInt32(readerD.GetValue(5).ToString())
+                    });
+                }
+                ht.dtrans = dt;
+            }
+        }
+        private void overlayOn()
+        {
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = this.ActualWidth;
+            overlay.Height = this.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+        private void overlayOff()
+        {
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = this.ActualWidth;
+            overlay.Height = this.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
         }
 
         private void btAddToCart_Click(object sender, RoutedEventArgs e)
@@ -288,6 +386,7 @@ namespace BreadTok
                         clearCart();
                         loadRoti();
                         loadVoucher();
+                        loadHistory();
                         MessageHandler.messageSuccess("Order");
                     }
                     catch (OracleException ex)
@@ -337,6 +436,79 @@ namespace BreadTok
                 cart.setPotongan(0);
             }
             loadCart();
+        }
+
+        private void dgHistory_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (dgHistory.Columns.Count > 0)
+            {
+                //public string nomor_nota { get; set; }
+                //public string tanggal_trans { get; set; }
+                //public int total { get; set; }
+                //public string id_karyawan { get; set; }
+                //public string id_pelanggan { get; set; }
+                //public string nama_karyawan { get; set; }
+                //public string nama_pelanggan { get; set; }
+                //public string metode_pembayaran { get; set; }
+                //public string id_voucher { get; set; }
+                //public string status { get; set; }
+                //public string countRoti { get; set; }
+                //public List<DTrans> dtrans { get; set; }
+                dgHistory.Columns[0].Header = "Nomor Nota";
+                dgHistory.Columns[1].Header = "Tanggal Transaksi";
+                dgHistory.Columns[2].Header = "Total";
+                dgHistory.Columns[3].Header = "ID Karyawan";
+                dgHistory.Columns[4].Header = "ID Pelanggan";
+                dgHistory.Columns[5].Header = "Nama Karyawan";
+                dgHistory.Columns[6].Header = "Nama Pelanggan";
+                dgHistory.Columns[7].Header = "Metode";
+                dgHistory.Columns[8].Header = "Kode Voucher";
+                dgHistory.Columns[9].Header = "Status";
+                dgHistory.Columns[10].Header = "Jumlah Roti";
+                dgHistory.Columns[11].Header = "DTRANS";
+                dgHistory.Columns[12].Header = "Action";
+
+
+                dgHistory.Columns[3].Visibility = Visibility.Hidden;
+                dgHistory.Columns[4].Visibility = Visibility.Hidden;
+                dgHistory.Columns[6].Visibility = Visibility.Hidden;
+                dgHistory.Columns[8].Visibility = Visibility.Hidden;
+                dgHistory.Columns[11].Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void dgHistory_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "action")
+            {
+                DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
+                DataTemplate buttonTemplate = new DataTemplate();
+                FrameworkElementFactory buttonFactory = new FrameworkElementFactory(typeof(Button));
+                buttonTemplate.VisualTree = buttonFactory;
+                //add handler or you can add binding to command if you want to handle click
+                buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btDetailHistory));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("action"));
+                buttonFactory.SetValue(Button.ContentProperty, "Detail");
+                buttonColumn.CellTemplate = buttonTemplate;
+                e.Column = buttonColumn;
+            }
+        }
+        private void btDetailHistory(object sender, RoutedEventArgs e)
+        {
+            //Console.WriteLine(((Button)sender).CommandParameter.ToString());
+            HTrans selHT = null;
+            foreach (HTrans h in histories)
+            {
+                if (h.nomor_nota == ((Button)sender).CommandParameter.ToString())
+                {
+                    selHT = h;
+                    break;
+                }
+            }
+            WindowDetailHistory dh = new WindowDetailHistory(selHT);
+            overlayOn();
+            dh.ShowDialog();
+            overlayOff();
         }
     }
 }

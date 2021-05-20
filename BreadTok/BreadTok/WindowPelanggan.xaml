@@ -16,6 +16,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Rectangle Panel.ZIndex="99" Fill="Black" x:Name="overlay" 
+                   Height="599.7" Width="1024" Grid.RowSpan="2"
+                   Opacity=".4" Visibility="Hidden"/>
         <materialDesign:ColorZone
             Mode="PrimaryDark"
             Padding="16"
@@ -288,7 +291,7 @@
                               HeadersVisibility="All" Margin="0, 10, 0, 0"
                               IsReadOnly="True"
                               ColumnWidth="*"
-                              Grid.Row="1">
+                              Grid.Row="1" Loaded="dgHistory_Loaded" AutoGeneratingColumn="dgHistory_AutoGeneratingColumn">
                     </DataGrid>
 
                 </Grid>
