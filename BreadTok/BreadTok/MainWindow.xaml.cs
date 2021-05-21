@@ -34,6 +34,7 @@ namespace BreadTok
         private int selectedIdRoti;
         string loggedUserID;
         List<Roti> rotis;
+        List<Resep> reseps;
         public MainWindow(string id)
         {
             InitializeComponent();
@@ -54,6 +55,7 @@ namespace BreadTok
             loadDataBahan();
             loadDataKaryawan();
             loadDataRoti();
+            loadDataResep();
             loadDaftarPesanan();
         }
 
@@ -171,6 +173,31 @@ namespace BreadTok
             reader.Close();
 
             dgRoti.ItemsSource = rotis;
+        }
+
+        private void loadDataResep()
+        {
+            reseps = new List<Resep>();
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = App.conn;
+            cmd.CommandText = "select * from h_resep";
+            OracleDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                cmd = new OracleCommand();
+                cmd.CommandText = $"select count(*) from d_resep where id_h_resep='{reader.GetValue(0).ToString()}'";
+                cmd.Connection = App.conn;
+                reseps.Add(new Resep()
+                {
+                    id_resep = reader.GetValue(0).ToString(),
+                    nama_resep = reader.GetValue(1).ToString(),
+                    jumlah_bahan = Convert.ToInt32(cmd.ExecuteScalar().ToString()),
+                });
+            }
+            reader.Close();
+
+            dgResep.ItemsSource = reseps;
         }
 
         private void btnInsert_Click(object sender, RoutedEventArgs e)
@@ -590,6 +617,7 @@ namespace BreadTok
         }
         private void resetInsertKaryawanPanel()
         {
+            karyawanImgSourceDir = "";
             tbNamaKaryawan.Text = "";
             tbUsernameKaryawan.Text = "";
             tbPasswordKaryawan.Text = "";
@@ -730,6 +758,8 @@ namespace BreadTok
                 cmd.Connection = App.conn;
                 cmd.ExecuteNonQuery();
                 selectedIdKaryawan = -1;
+                btnActive.IsEnabled = false;
+                btnSuspend.IsEnabled = false;
                 loadDataKaryawan();
             }
             else
@@ -748,7 +778,10 @@ namespace BreadTok
                 cmd.Connection = App.conn;
                 cmd.ExecuteNonQuery();
                 selectedIdKaryawan = -1;
+                btnActive.IsEnabled = false;
+                btnSuspend.IsEnabled = false;
                 loadDataKaryawan();
+
             }
             else
             {
@@ -777,6 +810,29 @@ namespace BreadTok
             btnBackKaryawan.Visibility = Visibility.Visible;
             selectedIdKaryawan = -1;
             loadCbJabatan();
+            loadImage(imgInsertkaryawan, "\\Resources\\ImagePlaceholder.png");
+        }
+
+        string karyawanImgSourceDir = "";
+        private void btnOpenImgKaryawan_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                karyawanImgSourceDir = selectedFileName;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgInsertkaryawan.Source = bitmap;
+            }
         }
 
         private void btnSubmitKaryawan_Click(object sender, RoutedEventArgs e)
@@ -804,7 +860,7 @@ namespace BreadTok
             DateTime tglLahir = dtpTanggalLahir.SelectedDate.Value;
             string jabatan = cbJabatan.SelectedValue.ToString().Substring(2);
 
-            if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="")
+            if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="" || karyawanImgSourceDir == "")
             {
                 MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
                 return;
@@ -833,6 +889,13 @@ namespace BreadTok
             cmd.Parameters.Add(":12", jabatan);
             cmd.Parameters.Add(":13", "0");
             cmd.ExecuteNonQuery();
+
+            cmd = new OracleCommand();
+            cmd.CommandText = "select picture_location from karyawan group by id, picture_location having id = (select max(to_number(id)) from karyawan)";
+            cmd.Connection = App.conn;
+            saveImage(karyawanImgSourceDir, "\\Resources\\Karyawan\\", cmd.ExecuteScalar().ToString());
+
+            MessageHandler.messageSuccess("Insert Karyawan");
 
             resetInsertKaryawanPanel();
             loadDataKaryawan();
@@ -1042,6 +1105,23 @@ namespace BreadTok
             panelMasterRoti.Visibility = Visibility.Visible;
             btnBackRoti.Visibility = Visibility.Hidden;
             btnDeleteRoti.Visibility = Visibility.Visible;
+        }
+
+        private void btnOpenWindowDetailRoti(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowResep wr = new WindowResep(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wr.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
         }
     }
 }

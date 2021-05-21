@@ -50,9 +50,5 @@ namespace BreadTok
             return dt;
         }
 
-        public DataTable searchData()
-        {
-            return dt;
-        }
     }
 }
