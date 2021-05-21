@@ -41,8 +41,15 @@ namespace BreadTok
             k = new Karyawan();
             loggedUserID = id;
 
-            OracleCommand cmd = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + loggedUserID + "'", App.conn);
-            lbWelcome.Text = "Selamat Datang, " + cmd.ExecuteScalar().ToString() + "!";
+            if (Convert.ToInt32(loggedUserID) > 0)
+            {
+                OracleCommand cmd = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + loggedUserID + "'", App.conn);
+                lbWelcome.Text = "Selamat Datang, " + cmd.ExecuteScalar().ToString() + "!";
+            }
+            else
+            {
+                lbWelcome.Text = "Selamat Datang, Admin!";
+            }
 
             loadDataBahan();
             loadDataKaryawan();
@@ -979,6 +986,10 @@ namespace BreadTok
             string deskripsi = tbDeskripsiRoti.Text;
             string harga = tbHargaRoti.Text;
             string jenisRoti = cbJenisRoti.SelectedValue.ToString().Substring(2);
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"select picture_location from roti where id = {selectedIdRoti}";
+            cmd.Connection = App.conn;
+            string kodeRotiLama = cmd.ExecuteScalar().ToString();
 
             if (nama == "" || deskripsi == "" || harga == "" || jenisRoti == "")
             {
@@ -992,7 +1003,7 @@ namespace BreadTok
                 return;
             }
 
-            OracleCommand cmd = new OracleCommand();
+            cmd = new OracleCommand();
             cmd.CommandText = "update roti set kode=:1,nama=:2,deskripsi=:3,harga=:4,jenis_roti=:5 where id=:6";
             cmd.Connection = App.conn;
             cmd.Parameters.Add(":1", "0");
@@ -1009,7 +1020,7 @@ namespace BreadTok
             string kodeRotiUpdating = cmd.ExecuteScalar().ToString();
             if (gantiFotoRoti)
             {
-                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiUpdating);
+                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiLama);
                 saveImage(rotiImgSourceDir, "\\Resources\\Roti\\", kodeRotiUpdating);
             }
             else
