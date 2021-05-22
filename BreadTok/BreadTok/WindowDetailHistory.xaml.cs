@@ -79,5 +79,12 @@ namespace BreadTok
                 dgDetailHistory.Columns[1].Visibility = Visibility.Hidden;
             }
         }
+
+        private void btOrder_Click(object sender, RoutedEventArgs e)
+        {
+            // Cetak struk
+            WindowCetakStruk cs = new WindowCetakStruk(ht.nomor_nota, this);
+            cs.ShowDialog();
+        }
     }
 }

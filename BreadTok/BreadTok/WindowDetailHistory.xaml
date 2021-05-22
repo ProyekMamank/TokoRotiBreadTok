@@ -80,6 +80,6 @@
             materialDesign:ButtonAssist.CornerRadius="15"
             Margin="0,439,34,17"
             Content="Cetak Struk"
-            x:Name="btOrder"/>
+            x:Name="btOrder" Click="btOrder_Click"/>
     </Grid>
 </Window>

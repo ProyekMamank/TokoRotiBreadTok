@@ -84,7 +84,7 @@ namespace BreadTok
             rotis = new List<Roti>();
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = App.conn;
-            cmd.CommandText = "select * from roti where status > 0";
+            cmd.CommandText = "select ID,NAMA,DESKRIPSI,HARGA,STOK,STATUS,JENIS_ROTI,FK_RESEP from roti where status > 0";
             OracleDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
