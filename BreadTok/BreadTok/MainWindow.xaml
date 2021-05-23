@@ -289,6 +289,192 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="tabPengadaanBahan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PackageVariant" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Pengadaan Bahan" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <DataGrid x:Name="dgPengadaanBahan"
+                      CanUserAddRows="False"
+                      SelectionUnit="FullRow"
+                      SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="25,42,24,294" MouseDoubleClick="dgPengadaanBahan_MouseDoubleClick" IsReadOnly="True" />
+                    <TextBlock
+                      Style="{StaticResource MaterialDesignButtonTextBlock}"
+                      Text="CART BAHAN" Margin="28,278,644,250" 
+                        />
+                    <TextBlock
+                      Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                      Text="*Double Click to add item to Cart" Margin="641,10,24,518" FontStyle="Italic" TextAlignment="Right" />
+                    <DataGrid x:Name="dgCartBahan"
+                        CanUserAddRows="False"
+                        SelectionUnit="FullRow"
+                        IsReadOnly="True"
+                        SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="28,309,322,10" MouseDown="dgCartBahan_MouseDown" />
+                    <GroupBox
+                        Header="Detail Bahan"
+                        Margin="541,272,24,87">
+                        <Canvas x:Name="cvDetailPengadaanBahan" Margin="0,-9,0,-8">
+                            <TextBlock x:Name="lbDetailBahanNamaBahan" Text="-" Canvas.Top="10" Canvas.Left="78" FontWeight="Bold" Foreground="#DD000000" TextAlignment="Right" HorizontalAlignment="Right" Width="178" FontSize="9"/>
+                            <TextBlock x:Name="lbDetailBahanSuffix"
+                              Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                              Text="mL" TextAlignment="Center" Canvas.Left="83" Canvas.Top="118" Width="38" />
+                            <TextBlock x:Name="lbSubtotalBeliBahan"
+                              Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                              Text="Rp -" TextAlignment="Right" Canvas.Left="156" Canvas.Top="79" Width="99" FontWeight="Bold" />
+                            <TextBox x:Name="tbDetailBahanQuantity"
+                              materialDesign:HintAssist.Hint="Jumlah Beli"
+                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                              VerticalAlignment="Center" Canvas.Top="103" Width="83" Text="0" IsEnabled="False" 
+                              PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                            <Button x:Name="bPengadaanUpdate"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                                Content="UPDATE" IsEnabled="False" Canvas.Left="173" Canvas.Top="108" Click="bPengadaanUpdate_Click" />
+                            <TextBlock
+                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                Text="Subtotal" Canvas.Top="79" Width="49" FontWeight="Bold" />
+                            <TextBlock
+                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                Text="Nama" Canvas.Top="5" Width="49" FontWeight="Bold" />
+                            <TextBlock
+                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                Text="Harga Satuan" Canvas.Top="29" Width="83" FontWeight="Bold" />
+                            <TextBlock
+                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                Text="Stok Sekarang" Canvas.Top="55" Width="83" FontWeight="Bold" />
+                            <TextBlock x:Name="lbDetailBahanHargaSatuan" Text="-" Canvas.Top="34" Canvas.Left="78" FontWeight="Bold" Foreground="#DD000000" TextAlignment="Right" HorizontalAlignment="Right" Width="178"/>
+                            <TextBlock x:Name="lbDetailBahanStokSekarang" Text="-" Canvas.Top="59" Canvas.Left="78" FontWeight="Bold" Foreground="#DD000000" TextAlignment="Right" HorizontalAlignment="Right" Width="178"/>
+                            <TextBlock x:Name="lbDetailBahanKodeBahan" Text="-" Canvas.Top="-22" Canvas.Left="78" FontWeight="Bold" Foreground="#DDFFFFFF" TextAlignment="Right" HorizontalAlignment="Right" Width="178" FontSize="9"/>
+                        </Canvas>
+                    </GroupBox>
+                    <Button x:Name="bPengadaanBayar"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                                Content="BELI" IsEnabled="False" Canvas.Left="196" Canvas.Top="158" Margin="747,508,24,10" Background="#FF1EBD20" BorderBrush="#FF1EBD20" Click="bPengadaanBayar_Click" />
+                    <Button x:Name="bHapusCartBahan"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                        Content="HAPUS" Margin="318,270,434,248" IsEnabled="False" Click="bHapusCartBahan_Click" />
+                    <Button x:Name="bClearCartBahan"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                        Content="CLEAR" Margin="430,270,322,248" IsEnabled="False" Click="bClearCartBahan_Click" />
+                    <TextBlock
+                        Style="{StaticResource MaterialDesignButtonTextBlock}"
+                        Text="PENGADAAN BAHAN" Margin="25,12,647,516" FontWeight="Bold" FontSize="14" 
+                        />
+                    <TextBlock
+                        Style="{StaticResource MaterialDesignButtonTextBlock}"
+                        Text="TOTAL" Margin="541,514,258,14" 
+                        />
+                    <TextBlock x:Name="lbBeliBahanGrandTotal"
+                        Style="{StaticResource MaterialDesignButtonTextBlock}"
+                        Text="Rp -" Margin="592,514,104,14" TextAlignment="Right" FontWeight="Bold" Foreground="#FFD62828" 
+                        />
+                    <ComboBox x:Name="cbPengadaanSupplier"
+                      materialDesign:HintAssist.Hint="Supplier"
+                      materialDesign:HintAssist.HintOpacity=".56"
+                      IsEditable="True" Margin="543,468,25,57" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                        <ComboBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-0.014"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ComboBox.RenderTransform>
+                    </ComboBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabChef" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ChefHat" FontSize="15" Height="20" Width="auto"/>
+                        <TextBlock Text="Chef" Margin="10 0 0 0" FontSize="15"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <DataGrid x:Name="dgChefRoti"
+                      CanUserAddRows="False"
+                      SelectionUnit="FullRow"
+                      SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="25,42,24,274" IsReadOnly="True" MouseDoubleClick="dgChefRoti_MouseDoubleClick" />
+                    <TextBlock
+                      Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                      Text="*Double Click to select item" Margin="641,10,24,518" FontStyle="Italic" TextAlignment="Right" />
+                    <TextBlock
+                        Style="{StaticResource MaterialDesignButtonTextBlock}"
+                        Text="TABEL ROTI" Margin="25,12,647,516" FontWeight="Bold" FontSize="14" 
+                        />
+                    <DataGrid x:Name="dgChefResep"
+                        CanUserAddRows="False"
+                        SelectionUnit="FullRow"
+                        SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="25,334,510,26" IsReadOnly="True" MouseDoubleClick="dgChefResep_MouseDoubleClick" />
+                    <TextBlock
+                        Style="{StaticResource MaterialDesignButtonTextBlock}"
+                        Text="RESEP" Margin="25,303,647,225" FontWeight="Bold" FontSize="14" 
+                        />
+                    <TextBox x:Name="tbChefNamaRoti"
+                              materialDesign:HintAssist.Hint="Nama Roti"
+                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                              VerticalAlignment="Center" Canvas.Top="138" Text="CROISSANT" Margin="369,334,259,180" IsEnabled="False" />
+                    <ComboBox x:Name="cbChefJenisRoti"
+                      materialDesign:HintAssist.Hint="Tipe Roti"
+                      materialDesign:HintAssist.HintOpacity=".56"
+                      IsEditable="True" Margin="368,442,263,83" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                        <ComboBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-0.014"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ComboBox.RenderTransform>
+                    </ComboBox>
+                    <CheckBox
+                        x:Name="bChefOptionInsert"
+                        Content="Buat Roti Baru" Margin="369,299,318,223" Click="bChefOptionInsert_Click" />
+                    <TextBox x:Name="tbChefDeskripsiRoti"
+                        materialDesign:HintAssist.Hint="Deskripsi Roti"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Center" Text="CROISSANT" Margin="369,383,259,131" IsEnabled="False" />
+                    <ComboBox x:Name="cbChefBahan"
+                        materialDesign:HintAssist.Hint="Bahan Roti"
+                        materialDesign:HintAssist.HintOpacity=".56"
+                        IsEditable="True" Margin="607,346,24,179" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                        <ComboBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-0.014"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ComboBox.RenderTransform>
+                    </ComboBox>
+                    <TextBox x:Name="tbChefBahanQuantity"
+                        materialDesign:HintAssist.Hint="Jumlah Bahan"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Center" Text="50" Margin="607,383,158,131" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
+                    
+                    <Button x:Name="bChefTambahBahan"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                                Content="TAMBAH KE RESEP" IsEnabled="False" Canvas.Left="173" Canvas.Top="143" Margin="607,436,24,82" Click="bChefTambahBahan_Click" />
+                    <Button x:Name="bChefTambahRoti"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                        Content="TAMBAH ROTI" IsEnabled="False" Margin="607,480,24,38" Click="bChefTambahRoti_Click" Background="#FF1EBD20" BorderBrush="#FF1EBD20"/>
+                    <Button x:Name="bChefTambahStokRoti"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                        Content="TAMBAH STOK ROTI" IsEnabled="False" Margin="369,480,262,38" Click="bChefTambahStokRoti_Click" />
+                    <TextBlock x:Name="lbChefHint"
+                        Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                        Text="*Double Click to remove item" Margin="155,301,510,227" FontStyle="Italic" TextAlignment="Right" Opacity="0" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
