@@ -47,10 +47,10 @@ namespace BreadTok
         
         private void loadDetailBahan()
         {
-            OracleCommand cmd = new OracleCommand("SELECT B.KODE, B.MERK, B.QTY_STOK, B.HARGA, B.SATUAN, JB.NAMA_JENIS, S.NAMA, B.PICTURE_LOCATION " +
-                                                "FROM BAHAN B, JENIS_BAHAN JB, SUPPLIER S " +
+            OracleCommand cmd = new OracleCommand("SELECT B.KODE, B.MERK, B.QTY_STOK, B.HARGA, B.SATUAN, JB.NAMA_JENIS, B.PICTURE_LOCATION " +
+                                                "FROM BAHAN B, JENIS_BAHAN JB " +
                                                 "WHERE B.JENIS_BAHAN = JB.ID AND " +
-                                                "B.FK_SUPPLIER = S.ID AND B.ID = '" + id + "' ", App.conn);
+                                                "B.ID = '" + id + "' ", App.conn);
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -60,8 +60,7 @@ namespace BreadTok
                 lblHarga.Content = Convert.ToInt32(reader.GetValue(3).ToString()).ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
                 lblSatuan.Content = reader.GetValue(4).ToString();
                 lblJenis.Content = reader.GetValue(5).ToString();
-                lblSupplier.Content = reader.GetValue(6).ToString();
-                loadImage(imgBahan, "\\Resources\\Bahan\\" + reader.GetValue(7).ToString());
+                loadImage(imgBahan, "\\Resources\\Bahan\\" + reader.GetValue(6).ToString());
             }
             reader.Close();
         }

@@ -89,11 +89,9 @@
                         <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
                         <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
                         <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <Label Content="SUPPLIER :" Canvas.Left="39" Canvas.Top="305" FontWeight="Bold" FontSize="14" Height="29"/>
                         <TextBox x:Name="tbQuantity" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56"/>
                         <TextBox x:Name="tbMerk" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
                         <ComboBox x:Name="cbJenisBahan" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
-                        <ComboBox x:Name="cbSupplier" Canvas.Left="145" Canvas.Top="305" Width="236" Height="29"/>
                         <Image x:Name="imgInsertbahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
                         <Button x:Name="btnOpenImg" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImg_Click" RenderTransformOrigin="0.624,2.088"/>
                         <Button x:Name="btnSubmit" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmit_Click"/>
@@ -110,11 +108,9 @@
                         <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
                         <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
                         <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <Label Content="SUPPLIER :" Canvas.Left="39" Canvas.Top="305" FontWeight="Bold" FontSize="14" Height="29"/>
                         <TextBox x:Name="tbQuantityUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56"/>
                         <TextBox x:Name="tbMerkUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
                         <ComboBox x:Name="cbJenisBahanUpdate" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
-                        <ComboBox x:Name="cbSupplierUpdate" Canvas.Left="145" Canvas.Top="305" Width="236" Height="29"/>
                         <Image x:Name="imgUpdateBahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
                         <Button x:Name="btnOpenImgBahanUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImgBahanUpdate_Click" RenderTransformOrigin="0.624,2.088"/>
                         <Button x:Name="btnSubmitUpdate" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmitUpdate_Click"/>
@@ -128,7 +124,7 @@
                     </Canvas>
 
                     <Button x:Name="btnInsert" Content="INSERT&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="91" Height="62" Click="btnInsert_Click" FontSize="12"/>
-                    <Button x:Name="btnDelete" Content="DELETE&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,184,0,0" VerticalAlignment="Top" Width="91" Height="57" FontSize="12"/>
+                    <Button x:Name="btnDelete" Content="DELETE&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,184,0,0" VerticalAlignment="Top" Width="91" Height="57" FontSize="12" Click="BtnDelete_Click"/>
                     <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
 
                 </Grid>
