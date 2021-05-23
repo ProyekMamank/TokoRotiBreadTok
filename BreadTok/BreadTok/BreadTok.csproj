@@ -18,7 +18,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -74,6 +74,7 @@
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="Karyawan.cs" />
+    <Compile Include="Supplier.cs" />
     <Compile Include="WindowPesanan.xaml.cs">
       <DependentUpon>WindowPesanan.xaml</DependentUpon>
     </Compile>
