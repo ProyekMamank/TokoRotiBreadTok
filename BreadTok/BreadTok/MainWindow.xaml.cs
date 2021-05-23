@@ -34,7 +34,7 @@ namespace BreadTok
             b = new bahan();
             loggedUserID = id;
             loadData();
-            loadDaftarPesanan();
+            //loadDaftarPesanan();
         }
 
         List<HTrans> htranses = new List<HTrans>();
@@ -61,25 +61,31 @@ namespace BreadTok
 
         private void loadDaftarPesanan()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, K.NAMA, P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, P.FK_KARYAWAN, P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
                                                     "       WHEN H.STATUS = 3 THEN 'Dibatalkan' " +
                                                     "END) AS STATUS " +
-                                                    "FROM H_TRANS H, PELANGGAN P, KARYAWAN K " +
-                                                    "WHERE H.FK_KARYAWAN = K.ID AND H.FK_PELANGGAN = P.ID " +
+                                                    "FROM H_TRANS H, PELANGGAN P " +
+                                                    "WHERE H.FK_PELANGGAN = P.ID " +
                                                     "ORDER BY H.NOMOR_NOTA", App.conn);
             OracleDataReader reader = cmd.ExecuteReader();
-
+            
             htranses = new List<HTrans>();
             while (reader.Read()){
+                string id_karyawan = "-";
+                if (reader.GetValue(3).ToString() != "")
+                {
+                    OracleCommand cmd2 = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + reader.GetValue(3).ToString() + "'", App.conn);
+                    id_karyawan = cmd2.ExecuteScalar().ToString();
+                }
                 htranses.Add(new HTrans()
                 {
                     nomor_nota = reader.GetValue(0).ToString(),
                     tanggal_trans = reader.GetValue(1).ToString(),
                     total = Convert.ToInt32(reader.GetValue(2).ToString()),
-                    id_karyawan = reader.GetValue(3).ToString(),
+                    id_karyawan = id_karyawan,
                     id_pelanggan = reader.GetValue(4).ToString(),
                     metode_pembayaran = reader.GetValue(5).ToString(),
                     status = reader.GetValue(6).ToString()
