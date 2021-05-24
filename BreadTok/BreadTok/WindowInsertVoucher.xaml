@@ -1,0 +1,60 @@
+﻿<Window x:Class="BreadTok.WindowInsertVoucher"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xml:lang="id-ID"
+        xmlns:local="clr-namespace:BreadTok"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="WindowPesanan" Height="450" Width="800">
+    <Grid Background="#FFFAFAFA">
+        <materialDesign:ColorZone
+            Mode="PrimaryDark"
+            Padding="16"
+            CornerRadius="0"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Panel.ZIndex="1"
+            ClipToBounds="False"
+            MouseDown="Grid_MouseDown">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="675,0,0,0" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="BtnBack_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#fe6584"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Width="75" Height="20"
+                                CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </materialDesign:ColorZone>
+
+        <Label Content="Insert Voucher" HorizontalAlignment="Center" Margin="311,82,322,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24" Width="167"/>
+        <Label Content="Nama :" HorizontalAlignment="Left" Margin="239,148,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="Jenis :" HorizontalAlignment="Left" Margin="239,209,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="Potongan :" HorizontalAlignment="Left" Margin="239,269,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="tbNama" HorizontalAlignment="Left" Height="24" Margin="358,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <TextBox x:Name="tbHarga" HorizontalAlignment="Left" Height="24" Margin="358,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <ComboBox x:Name="cbJenis" HorizontalAlignment="Left" Margin="358,214,0,0" VerticalAlignment="Top" Width="167"/>
+        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="358,337,0,0" VerticalAlignment="Top" Width="101" Height="42" Background="#FF1DCB32" BorderBrush="#FF30B927" Click="btnSubmit_Click"/>
+
+
+    </Grid>
+</Window>

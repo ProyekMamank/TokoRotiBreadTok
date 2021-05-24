@@ -75,8 +75,14 @@
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="Karyawan.cs" />
     <Compile Include="Resep.cs" />
+    <Compile Include="WindowBagiVoucher.xaml.cs">
+      <DependentUpon>WindowBagiVoucher.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowBahan.xaml.cs">
       <DependentUpon>WindowBahan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowInsertVoucher.xaml.cs">
+      <DependentUpon>WindowInsertVoucher.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowKaryawan.xaml.cs">
       <DependentUpon>WindowKaryawan.xaml</DependentUpon>
@@ -121,7 +127,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowBagiVoucher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowBahan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowInsertVoucher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

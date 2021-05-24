@@ -1176,5 +1176,35 @@ namespace BreadTok
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
         }
+
+        private void btnBuatVoucher_Click(object sender, RoutedEventArgs e)
+        {
+            WindowInsertVoucher wiv = new WindowInsertVoucher();
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wiv.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        private void btnBagiVoucher_Click(object sender, RoutedEventArgs e)
+        {
+            WindowBagiVoucher wib = new WindowBagiVoucher();
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wib.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
     }
 }

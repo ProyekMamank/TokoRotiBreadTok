@@ -11,6 +11,8 @@ END;
 /
 SHOW ERR;
 
+
+
 CREATE OR REPLACE TRIGGER AUTOGEN_ID_BAHAN
 BEFORE INSERT OR UPDATE ON BAHAN
 FOR EACH ROW
@@ -63,6 +65,34 @@ BEGIN
 			:new.STATUS := 1;
 		end if;
 	end if;
+END;
+/
+
+CREATE OR REPLACE TRIGGER AUTOGEN_ID_VOUCHER
+BEFORE INSERT ON VOUCHER
+FOR EACH ROW
+DECLARE
+    ID varchar2(100);
+BEGIN
+    select to_char(max(to_number(ID))+1)
+    into ID
+    from VOUCHER;
+    
+    :new.ID := ID;
+END;
+/
+
+CREATE OR REPLACE TRIGGER AUTOGEN_ID_USER_VOUCHER
+BEFORE INSERT ON USER_VOUCHER
+FOR EACH ROW
+DECLARE
+    ID varchar2(100);
+BEGIN
+    select to_char(max(to_number(ID))+1)
+    into ID
+    from USER_VOUCHER;
+    
+    :new.ID := ID;
 END;
 /
 

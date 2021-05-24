@@ -73,9 +73,9 @@ namespace BreadTok
                 }
                 lblJK.Content = jk;
 
-                lblTglLahir.Content = reader.GetValue(6).ToString();
+                lblTglLahir.Content = reader.GetValue(9).ToString();
                 lblTelp.Content = reader.GetValue(8).ToString();
-                lblAlamat.Content = reader.GetValue(9).ToString();
+                lblAlamat.Content = reader.GetValue(6).ToString();
                 loadImage(imgKaryawan, "\\Resources\\Karyawan\\" + reader.GetValue(12).ToString());
             }
             reader.Close();
