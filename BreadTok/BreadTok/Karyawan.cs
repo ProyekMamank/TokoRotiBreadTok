@@ -17,10 +17,8 @@ namespace BreadTok
             dt = new DataTable();
             dt.Columns.Add("NAMA");
             dt.Columns.Add("USERNAME");
-            dt.Columns.Add("PASSWORD");
-            dt.Columns.Add("EMAIL");
-            dt.Columns.Add("JABATAN");
             dt.Columns.Add("STATUS");
+            dt.Columns.Add("DETAIL");
 
             OracleCommand cmd = new OracleCommand();
             cmd.CommandText = "select * from karyawan";
@@ -33,15 +31,6 @@ namespace BreadTok
 
                 dr[1] = reader.GetValue(2).ToString();
 
-                dr[2] = reader.GetValue(3).ToString();
-
-                dr[3] = reader.GetValue(7).ToString();
-
-                OracleCommand cmd2 = new OracleCommand();
-                cmd2.CommandText = $"select nama_jabatan from jabatan where ID = {Convert.ToInt32(reader.GetValue(11))}";
-                cmd2.Connection = App.conn;
-                dr[4] = cmd2.ExecuteScalar().ToString();
-
                 string status = "";
                 if(reader.GetValue(10).ToString() == "1")
                 {
@@ -52,7 +41,9 @@ namespace BreadTok
                     status = "SUSPENDED";
                 }
 
-                dr[5] = status;
+                dr[2] = status;
+
+                dr[3] = reader.GetValue(0).ToString();
                 dt.Rows.Add(dr);
             }
             reader.Close();

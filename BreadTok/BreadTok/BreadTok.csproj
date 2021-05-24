@@ -78,6 +78,9 @@
     <Compile Include="WindowBahan.xaml.cs">
       <DependentUpon>WindowBahan.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowKaryawan.xaml.cs">
+      <DependentUpon>WindowKaryawan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowPesanan.xaml.cs">
       <DependentUpon>WindowPesanan.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowBahan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowKaryawan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

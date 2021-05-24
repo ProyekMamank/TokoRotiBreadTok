@@ -1123,5 +1123,41 @@ namespace BreadTok
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
         }
+
+        private void dgKaryawan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "DETAIL")
+            {
+                DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
+                DataTemplate buttonTemplate = new DataTemplate();
+                FrameworkElementFactory buttonFactory = new FrameworkElementFactory(typeof(Button));
+                buttonTemplate.VisualTree = buttonFactory;
+                //add handler or you can add binding to command if you want to handle click
+                buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowDetailKaryawan));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
+                buttonFactory.SetValue(Button.ContentProperty, "Detail");
+                buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
+                buttonFactory.SetValue(Button.WidthProperty, 80.0);
+                buttonColumn.CellTemplate = buttonTemplate;
+                e.Column = buttonColumn;
+            }
+        }
+
+        private void btnOpenWindowDetailKaryawan(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowKaryawan wk = new WindowKaryawan(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wk.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
     }
 }
