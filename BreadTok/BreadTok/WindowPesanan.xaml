@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Title="WindowPesanan" Height="469.5" Width="800">
+        Title="WindowPesanan" Height="472" Width="800" Loaded="Window_Loaded">
     <Grid Background="#FFFAFAFA">
         <materialDesign:ColorZone
             Mode="PrimaryDark"
@@ -53,8 +53,8 @@
         <Label Content="Tanggal Transaksi :" HorizontalAlignment="Center" Margin="10,140,662,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="128"/>
         <Label x:Name="lblTanggalTrans" Content="" HorizontalAlignment="Center" Margin="143,140,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
-        <Label Content="Status :" HorizontalAlignment="Center" Margin="10,168,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblStatus" Content="" HorizontalAlignment="Center" Margin="143,168,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Status :" HorizontalAlignment="Center" Margin="421,168,249,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblStatus" Content="" HorizontalAlignment="Center" Margin="554,168,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
         <Label Content="Kode Voucher :" HorizontalAlignment="Center" Margin="10,196,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblKodeVoucher" Content="" HorizontalAlignment="Center" Margin="143,196,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
@@ -65,14 +65,14 @@
         <Label Content="Pelanggan :" HorizontalAlignment="Center" Margin="420,140,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblPelanggan" Content="" HorizontalAlignment="Center" Margin="554,140,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
-        <Label Content="Metode Pembayaran :" HorizontalAlignment="Center" Margin="420,168,250,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblMetodePembayaran" Content="" HorizontalAlignment="Center" Margin="554,168,46,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Metode Pembayaran :" HorizontalAlignment="Center" Margin="9,168,661,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblMetodePembayaran" Content="" HorizontalAlignment="Center" Margin="143,168,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
         <DataGrid CanUserAddRows="False" x:Name="dtGridDetailPesanan" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False"
                   CanUserDeleteRows="False" CanUserResizeRows="False"
                     AutoGenerateColumns="False"
-                    HeadersVisibility="All" Margin="0,223,0,83"
+                    HeadersVisibility="All" Margin="0,223,0,83"|
                     IsReadOnly="True">
 
             <DataGrid.Columns>
@@ -123,6 +123,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <Label Content="Kode Voucher :" HorizontalAlignment="Center" Margin="10,195,660,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblKodeVoucher" Content="" HorizontalAlignment="Center" Margin="143,195,457,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
 
 

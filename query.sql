@@ -56,15 +56,14 @@ BEGIN
 		SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(B.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
 		FROM BAHAN B
 		WHERE SUBSTR(B.KODE, 1, 4) = UPPER(START_CODE);
+    :NEW.KODE := START_CODE || END_CODE;
+    :NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
 
-		:NEW.KODE := START_CODE || END_CODE;
-		:NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
-
-		if flag = 1 then
-			:new.ID := ID;
-			:new.STATUS := 1;
-		end if;
-	end if;
+    if flag = 1 then
+      :new.ID := ID;
+      :new.STATUS := 1;
+    end if;
+  end if;
 END;
 /
 
@@ -93,6 +92,14 @@ BEGIN
     from USER_VOUCHER;
     
     :new.ID := ID;
+    :NEW.KODE := START_CODE || END_CODE;
+		:NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
+
+		if flag = 1 then
+			:new.ID := ID;
+			:new.STATUS := 1;
+		end if;
+	end if;
 END;
 /
 
@@ -156,6 +163,80 @@ BEGIN
         :NEW.KODE := :OLD.KODE;
         :NEW.PICTURE_LOCATION := :OLD.KODE ||  '.jpg';
     end if;
+END;
+/
+
+-- Trigger d_trans
+CREATE OR REPLACE TRIGGER D_TRANS_trigger
+BEFORE insert on D_TRANS
+for each row
+DECLARE
+    currstok number;
+    err_no_stok exception;
+    hargaNow number;
+BEGIN
+    select stok into currstok from ROTI where ID=:NEW.FK_ROTI;
+    if (:NEW.QUANTITY > currstok) then
+        raise err_no_stok;
+    end if;
+    select HARGA into hargaNow from ROTI where ID=:NEW.FK_ROTI;
+    :NEW.HARGA := hargaNow;
+    update ROTI set STOK = STOK-:NEW.QUANTITY where ID = :NEW.FK_ROTI;
+EXCEPTION
+    when err_no_stok then
+        raise_application_error(-20001, 'Stok tidak mencukupi!');
+END;
+/
+
+--Trigger h_trans
+CREATE OR REPLACE TRIGGER H_TRANS_trigger
+BEFORE insert on H_TRANS
+for each row
+DECLARE
+BEGIN
+    :NEW.TANGGAL_TRANS := sysdate;
+    :NEW.STATUS := 0;
+END;
+/
+
+--Func Autogen no nota
+CREATE OR REPLACE FUNCTION NOMOR_NOTA_autogen
+return varchar2
+is
+    newid varchar2(15);
+    urutan varchar2(3);
+begin
+    newid := 'NOTA' || to_char(sysdate,'YYYYMMDD');
+    select lpad(nvl(max(to_number(substr(NOMOR_NOTA, 13, 3))), 0)+1, 3, '0') into urutan
+    from H_TRANS where NOMOR_NOTA like newid || '%';
+    newid := newid || urutan;
+    return newid;
+end;
+/
+
+
+--Trigger Pelanggan
+CREATE OR REPLACE TRIGGER PELANGGAN_trigger_bef_ins
+BEFORE insert on PELANGGAN
+for each row
+DECLARE
+    a varchar2(2);
+    b varchar2(2);
+    gab varchar2(4);
+    newUrutan varchar2(5);
+BEGIN
+--     length(replace(:NEW.NAMA,' ',''))
+    if (length(:NEW.NAMA) - length(replace(:NEW.NAMA,' ','')) > 0) then
+        a := substr(:NEW.NAMA,1,2);
+        b := substr(:NEW.NAMA,instr(:NEW.NAMA,' ')+1,2);
+    else
+        a := substr(:NEW.NAMA,1,2);
+        b := substr(:NEW.NAMA,3,2);
+    end if;
+    gab := upper(a || b);
+    select lpad(nvl(max(to_number(substr(KODE,-4,4))),0)+1,5,'0') into newUrutan from PELANGGAN where KODE like gab || '%';
+--     select lpad(nvl(max(to_number(substr(KODE,-4,4))),0)+1,5,'0') from PELANGGAN where KODE like 'RATR' || '%';
+    :NEW.KODE := gab || newUrutan;
 END;
 /
 

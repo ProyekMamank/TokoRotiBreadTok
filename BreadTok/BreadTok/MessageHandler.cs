@@ -48,6 +48,11 @@ namespace BreadTok
         {
             MessageBox.Show(field + " Must be bigger than " + minimum);
         }
+      
+        public static void dateInvalid()
+        {
+            MessageBox.Show("Date is Invalid");
+        }
 
         public static bool confirmYesNo(string msg)
         {

@@ -25,6 +25,7 @@ namespace BreadTok
         string nomor_nota;
         string id_karyawan;
         List<DTrans> dtranses;
+        string id_karyawan;
         public WindowPesanan(string nomor_nota, string id_karyawan)
         {
             InitializeComponent();
@@ -37,7 +38,7 @@ namespace BreadTok
 
         private void loadHeaderTrans()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, NVL(H.FK_KARYAWAN, 'null'), P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, NVL(H.FK_KARYAWAN, ''), P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
@@ -51,7 +52,8 @@ namespace BreadTok
             {
                 lblNomorNota.Content = reader.GetValue(0).ToString();
                 lblTanggalTrans.Content = reader.GetValue(1).ToString();
-                if (reader.GetValue(3).ToString() == "null")
+                
+                if (reader.GetValue(3).ToString() == "")
                 {
                     lblPegawai.Content = "-";
                 }
@@ -60,7 +62,6 @@ namespace BreadTok
                     OracleCommand cmd2 = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + reader.GetValue(3).ToString() + "'", App.conn);
                     lblPegawai.Content = cmd2.ExecuteScalar().ToString();
                 }
-                
                 
                 lblPelanggan.Content = reader.GetValue(4).ToString();
                 lblMetodePembayaran.Content = reader.GetValue(5).ToString();
@@ -88,7 +89,7 @@ namespace BreadTok
             {
                 btnKonfirmasi.Visibility = Visibility.Visible;
                 btnBatalkan.Visibility = Visibility.Visible;
-                btnBatalkan.Margin = new Thickness(425, 428, 0, 0);
+                btnBatalkan.Margin = new Thickness(425, 420, 0, 0);
             }
             else if (lblStatus.Content.Equals("Sudah Bayar") || lblStatus.Content.Equals("Dibatalkan"))
             {
@@ -161,6 +162,11 @@ namespace BreadTok
                 MessageHandler.messageSuccess("Konfirmasi Pembayaran Transaksi");
                 loadHeaderTrans();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
