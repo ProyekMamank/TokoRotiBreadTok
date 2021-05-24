@@ -171,7 +171,7 @@ is
 begin
     newid := 'NOTA' || to_char(sysdate,'YYYYMMDD');
     select lpad(nvl(max(to_number(substr(NOMOR_NOTA, 13, 3))), 0)+1, 3, '0') into urutan
-    from H_TRANS where NOMOR_NOTA like newid || '%';z
+    from H_TRANS where NOMOR_NOTA like newid || '%';
     newid := newid || urutan;
     return newid;
 end;

@@ -51,14 +51,14 @@ namespace BreadTok
         class UserVoucher
         {
             public string ID { get; set; }
-            public string kode { get; set; }
-            public string jenis { get; set; }
-            public string nominal { get; set; }
+            public string Kode { get; set; }
+            public string Jenis { get; set; }
+            public string Nominal { get; set; }
             public int realNominal { get; set; }
 
             public override string ToString()
             {
-                return $"{kode} ({nominal})";
+                return $"{Kode} ({Nominal})";
             }
         }
 
@@ -148,9 +148,9 @@ namespace BreadTok
                 vouchers.Add(new UserVoucher()
                 {
                     ID = reader.GetValue(0).ToString(),
-                    kode = reader.GetValue(1).ToString(),
-                    jenis = reader.GetValue(2).ToString(),
-                    nominal = nom,
+                    Kode = reader.GetValue(1).ToString(),
+                    Jenis = reader.GetValue(2).ToString(),
+                    Nominal = nom,
                     realNominal = Convert.ToInt32(realNom)
                 });
             }
@@ -421,7 +421,7 @@ namespace BreadTok
             if (cbVoucher.SelectedIndex != -1)
             {
                 UserVoucher selUV = vouchers[cbVoucher.SelectedIndex];
-                if (selUV.jenis == "DISKON")
+                if (selUV.Jenis == "DISKON")
                 {
                     cart.setPotongan(selUV.realNominal);
                 }
