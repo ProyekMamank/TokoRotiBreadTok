@@ -23,7 +23,7 @@ namespace BreadTok
             dt.Columns.Add("Update");
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from bahan";
+            cmd.CommandText = "select * from bahan where status > 0";
             cmd.Connection = App.conn;
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())

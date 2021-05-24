@@ -209,7 +209,7 @@ namespace BreadTok
             btnInsert.Visibility = Visibility.Hidden;
             btnBack.Visibility = Visibility.Visible;
             loadCbJenisBahan("insert");
-            loadCbSupplier("insert");
+            //loadCbSupplier("insert");
             loadImage(imgInsertbahan, "\\Resources\\ImagePlaceholder.png");
         }
 
@@ -294,7 +294,7 @@ namespace BreadTok
             btnBack.Visibility = Visibility.Visible;
             btnInsert.Visibility = Visibility.Hidden;
             loadCbJenisBahan("update");
-            loadCbSupplier("update");
+            //loadCbSupplier("update");
             setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
             selectedIdBahan = Convert.ToInt32((sender as Button).CommandParameter);
         }
@@ -349,48 +349,48 @@ namespace BreadTok
             
         }
 
-        private void loadCbSupplier(string state)
-        {
-            if (state == "insert")
-            {
-                cbSupplier.Items.Clear();
-                OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "select * from supplier";
-                cmd.Connection = App.conn;
-                OracleDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    cbSupplier.Items.Add(new ComboBoxItem()
-                    {
-                        Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(2)
-                    });
-                }
-                reader.Close();
-                cbSupplier.SelectedValuePath = "Name";
-                cbSupplier.SelectedIndex = 0;
-            }
-            else
-            {
-                cbSupplierUpdate.Items.Clear();
-                OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "select * from supplier";
-                cmd.Connection = App.conn;
-                OracleDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    cbSupplierUpdate.Items.Add(new ComboBoxItem()
-                    {
-                        Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(2)
-                    });
-                }
-                reader.Close();
-                cbSupplierUpdate.SelectedValuePath = "Name";
-                cbSupplierUpdate.SelectedIndex = 0;
-            }
+        //private void loadCbSupplier(string state)
+        //{
+        //    if (state == "insert")
+        //    {
+        //        cbSupplier.Items.Clear();
+        //        OracleCommand cmd = new OracleCommand();
+        //        cmd.CommandText = "select * from supplier";
+        //        cmd.Connection = App.conn;
+        //        OracleDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            cbSupplier.Items.Add(new ComboBoxItem()
+        //            {
+        //                Name = "ID" + reader.GetString(0),
+        //                Content = reader.GetString(2)
+        //            });
+        //        }
+        //        reader.Close();
+        //        cbSupplier.SelectedValuePath = "Name";
+        //        cbSupplier.SelectedIndex = 0;
+        //    }
+        //    else
+        //    {
+        //        cbSupplierUpdate.Items.Clear();
+        //        OracleCommand cmd = new OracleCommand();
+        //        cmd.CommandText = "select * from supplier";
+        //        cmd.Connection = App.conn;
+        //        OracleDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            cbSupplierUpdate.Items.Add(new ComboBoxItem()
+        //            {
+        //                Name = "ID" + reader.GetString(0),
+        //                Content = reader.GetString(2)
+        //            });
+        //        }
+        //        reader.Close();
+        //        cbSupplierUpdate.SelectedValuePath = "Name";
+        //        cbSupplierUpdate.SelectedIndex = 0;
+        //    }
             
-        }
+        //}
 
         private void loadCbJabatan()
         {
@@ -469,10 +469,9 @@ namespace BreadTok
                             int harga = Convert.ToInt32(tbHarga.Text);
                             string satuan = cbSatuan.SelectedItem.ToString();
                             string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
-                            string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
                         
                             OracleCommand cmd = new OracleCommand();
-                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
+                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8)";
                             cmd.Connection = App.conn;
                             cmd.Parameters.Add(":1", "0"); //id
                             cmd.Parameters.Add(":2", "0"); //kode
@@ -481,8 +480,7 @@ namespace BreadTok
                             cmd.Parameters.Add(":5", harga);
                             cmd.Parameters.Add(":6", satuan);
                             cmd.Parameters.Add(":7", jenisBahan);
-                            cmd.Parameters.Add(":8", supplier);
-                            cmd.Parameters.Add(":9", "0"); //pic_loc
+                            cmd.Parameters.Add(":8", "0"); //pic_loc
                             cmd.ExecuteNonQuery();
                         
                             cmd = new OracleCommand();
@@ -577,19 +575,19 @@ namespace BreadTok
                     }
                     idxJenisBahan++;
                 }
-                int idxSupplier = 0;
-                foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
-                {
-                    if (cbItem.Name == "ID" + reader.GetString(7))
-                    {
-                        break;
-                    }
-                    idxSupplier++;
-                }
-                cbSupplierUpdate.SelectedIndex = idxSupplier;
+                //int idxSupplier = 0;
+                //foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
+                //{
+                //    if (cbItem.Name == "ID" + reader.GetString(7))
+                //    {
+                //        break;
+                //    }
+                //    idxSupplier++;
+                //}
+                //cbSupplierUpdate.SelectedIndex = idxSupplier;
                 cbJenisBahanUpdate.SelectedIndex = idxJenisBahan;
 
-                bahanImgSourceDir = reader.GetString(8);
+                bahanImgSourceDir = reader.GetString(7);
                 loadImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
             }
             reader.Close();
@@ -630,7 +628,7 @@ namespace BreadTok
             cbJabatan.SelectedIndex = 0;
             selectedIdKaryawan = -1;
         }
-
+        
         private void btnSubmitUpdate_Click(object sender, RoutedEventArgs e)
         {
             if (tbMerkUpdate.Text != "" && tbQuantityUpdate.Text != "" && tbHargaUpdate.Text != "")
@@ -646,18 +644,16 @@ namespace BreadTok
                             int harga = Convert.ToInt32(tbHargaUpdate.Text);
                             string satuan = cbSatuanUpdate.SelectedItem.ToString();
                             string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
-                            string supplier = cbSupplierUpdate.SelectedValue.ToString().Substring(2);
 
 
                             OracleCommand cmd = new OracleCommand();
-                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedIdBahan}";
+                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5 where ID={selectedIdBahan}";
                             cmd.Connection = App.conn;
                             cmd.Parameters.Add(":1", merk);
                             cmd.Parameters.Add(":2", qty);
                             cmd.Parameters.Add(":3", harga);
                             cmd.Parameters.Add(":4", satuan);
                             cmd.Parameters.Add(":5", jenisBahan);
-                            cmd.Parameters.Add(":6", supplier);
                             cmd.ExecuteNonQuery();
 
 
@@ -713,6 +709,26 @@ namespace BreadTok
                 MessageHandler.requireField();
             }
         }
+        
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedIdBahan < 0)
+            {
+                MessageBox.Show("Please Pick Ingredient First");
+                return;
+            }
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"update bahan set status = 0 where ID='{selectedIdBahan}'";
+            cmd.Connection = App.conn;
+            cmd.ExecuteNonQuery();
+
+            loadDataBahan();
+            selectedIdBahan = -1;
+            MessageHandler.messageSuccess("Delete Ingredients");
+        }
+
 
         private void dgKaryawan_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -1007,7 +1023,7 @@ namespace BreadTok
         {
             if(selectedIdRoti < 0)
             {
-                MessageBox.Show("PLEASE CHOOSE ROTI FIRST!!!");
+                MessageBox.Show("Please Pick Bread First");
                 return;
             }
 
@@ -1018,6 +1034,7 @@ namespace BreadTok
 
             loadDataRoti();
             selectedIdRoti = -1;
+            MessageHandler.messageSuccess("Delete Bread");
         }
 
         bool gantiFotoRoti = false;

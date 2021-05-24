@@ -66,8 +66,5 @@
         <Label Content="Jenis Bahan :" HorizontalAlignment="Center" Margin="280,254,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
         <Label x:Name="lblJenis" Content="" HorizontalAlignment="Center" Margin="414,254,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
-        <Label Content="Supplier :" HorizontalAlignment="Center" Margin="280,282,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblSupplier" Content="" HorizontalAlignment="Center" Margin="414,282,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-
     </Grid>
 </Window>
