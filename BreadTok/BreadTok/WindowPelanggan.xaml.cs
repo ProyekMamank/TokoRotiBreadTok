@@ -108,13 +108,14 @@ namespace BreadTok
                 rotis.Add(new Roti()
                 {
                     id_roti = reader.GetValue(0).ToString(),
-                    nama_roti = reader.GetValue(1).ToString(),
-                    deskripsi_roti = reader.GetValue(2).ToString(),
-                    harga_roti = Convert.ToInt32(reader.GetValue(3).ToString()),
-                    stok_roti = Convert.ToInt32(reader.GetValue(4).ToString()),
-                    status_roti = reader.GetValue(5).ToString(),
-                    fk_jenisroti = reader.GetValue(6).ToString(),
-                    fk_resep = reader.GetValue(7).ToString()
+                    kode_roti = reader.GetValue(1).ToString(),
+                    nama_roti = reader.GetValue(2).ToString(),
+                    deskripsi_roti = reader.GetValue(3).ToString(),
+                    harga_roti = Convert.ToInt32(reader.GetValue(4).ToString()),
+                    stok_roti = Convert.ToInt32(reader.GetValue(5).ToString()),
+                    status_roti = reader.GetValue(6).ToString(),
+                    fk_jenisroti = reader.GetValue(7).ToString(),
+                    fk_resep = reader.GetValue(8).ToString()
                 });
             }
             reader.Close();

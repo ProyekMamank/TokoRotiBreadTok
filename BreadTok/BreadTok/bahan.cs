@@ -15,36 +15,32 @@ namespace BreadTok
         public DataTable loadData()
         {
             dt = new DataTable();
-            dt.Columns.Add("MERK");
-            dt.Columns.Add("JENIS BAHAN");
-            dt.Columns.Add("STOCK");
-            dt.Columns.Add("HARGA");
-            dt.Columns.Add("SUPPLIER");
-            dt.Columns.Add("ACTION");
+            dt.Columns.Add("Merk");
+            dt.Columns.Add("Jenis Bahan");
+            dt.Columns.Add("Stok");
+            dt.Columns.Add("Harga");
+            dt.Columns.Add("Detail");
+            dt.Columns.Add("Update");
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from bahan";
+            cmd.CommandText = "select * from bahan where status > 0";
             cmd.Connection = App.conn;
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 DataRow dr = dt.NewRow();
-                dr[0] = reader.GetValue(1).ToString();
+                dr[0] = reader.GetValue(2).ToString();
 
                 OracleCommand cmd2 = new OracleCommand();
-                cmd2.CommandText = $"select nama_jenis from jenis_bahan where ID = {Convert.ToInt32(reader.GetValue(5))}";
+                cmd2.CommandText = $"select nama_jenis from jenis_bahan where ID = {Convert.ToInt32(reader.GetValue(6))}";
                 cmd2.Connection = App.conn;
                 dr[1] = cmd2.ExecuteScalar().ToString();
 
-                dr[2] = reader.GetValue(2).ToString() + " " + reader.GetValue(4).ToString();
+                dr[2] = reader.GetValue(3).ToString() + " " + reader.GetValue(5).ToString();
 
-                dr[3] = Convert.ToInt32(reader.GetValue(3));
+                dr[3] = Convert.ToInt32(reader.GetValue(4));
 
-                OracleCommand cmd3 = new OracleCommand();
-                cmd3.CommandText = $"select nama from supplier where ID = {Convert.ToInt32(reader.GetValue(6))}";
-                cmd3.Connection = App.conn;
-                dr[4] = cmd3.ExecuteScalar().ToString();
-
+                dr[4] = reader.GetValue(0).ToString();
                 dr[5] = reader.GetValue(0).ToString();
                 dt.Rows.Add(dr);
             }
@@ -56,6 +52,44 @@ namespace BreadTok
         public DataTable searchData()
         {
             return dt;
+        }
+
+        public DataRow getOneRecordData(string columns, string whereClause)
+        {
+            DataTable listBahan = new DataTable();
+            OracleCommand cmd = new OracleCommand($"SELECT {columns} FROM BAHAN B JOIN JENIS_BAHAN JB ON B.JENIS_BAHAN = JB.ID  {whereClause}", App.conn);
+            cmd.ExecuteReader();
+            OracleDataAdapter adapter = new OracleDataAdapter(cmd);
+            adapter.Fill(listBahan);
+            return listBahan.Rows[0];
+        }
+
+        public DataTable fillDataTable(string columns, string whereClause, DataTable data)
+        {
+            OracleCommand cmd = new OracleCommand($"SELECT {columns} FROM BAHAN B JOIN JENIS_BAHAN JB ON B.JENIS_BAHAN = JB.ID {whereClause}", App.conn);
+            cmd.ExecuteReader();
+            OracleDataAdapter adapter = new OracleDataAdapter(cmd);
+            adapter.Fill(data);
+            return data;
+        }
+
+        public string getColumnByID(string columnName, int id)
+        {
+            OracleCommand cmd = new OracleCommand($"SELECT {columnName.ToUpper()} FROM BAHAN WHERE ID = {id}", App.conn);
+            return cmd.ExecuteScalar().ToString();
+        }
+
+        public string getColumnByKode(string columnName, string kode)
+        {
+            OracleCommand cmd = new OracleCommand($"SELECT {columnName.ToUpper()} FROM BAHAN WHERE KODE = '{kode}'", App.conn);
+            return cmd.ExecuteScalar().ToString();
+        }
+
+        public void updateStokBahan(int value, int id, string kodeSupplier)
+        {
+            OracleCommand cmd = new OracleCommand($"UPDATE BAHAN SET QTY_STOK = QTY_STOK + {value} WHERE ID = {id}", App.conn);
+            cmd.ExecuteNonQuery();
+            cmd = new OracleCommand($"INSERT INTO H_BELI_BAHAN VALUES('',SYSDATE,", App.conn);
         }
     }
 }

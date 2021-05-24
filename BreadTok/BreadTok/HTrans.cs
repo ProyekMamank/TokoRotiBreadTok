@@ -21,5 +21,6 @@ namespace BreadTok
         public string countRoti { get; set; }
         public List<DTrans> dtrans { get; set; }
         public string action { get; set; }
+        public string kode_voucher { get; set; }
     }
 }

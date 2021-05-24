@@ -1,0 +1,81 @@
+﻿<Window x:Class="BreadTok.WindowKaryawan"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xml:lang="id-ID"
+        xmlns:local="clr-namespace:BreadTok"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="WindowPesanan" Height="450" Width="800">
+    <Grid Background="#FFFAFAFA">
+        <materialDesign:ColorZone
+            Mode="PrimaryDark"
+            Padding="16"
+            CornerRadius="0"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            Panel.ZIndex="1"
+            ClipToBounds="False"
+            MouseDown="Grid_MouseDown">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="675,0,0,0" VerticalAlignment="Top" Width="77" Background="#FFF0524B" BorderBrush="{x:Null}" Foreground="White" Click="BtnBack_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#fe6584"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#fe6584"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Width="75" Height="20"
+                                CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </materialDesign:ColorZone>
+
+        <Image x:Name="imgKaryawan" HorizontalAlignment="Left" Height="209" VerticalAlignment="Top" Width="200" Margin="35,95,0,0"/>
+
+        <Label Content="Detail Karyawan" HorizontalAlignment="Center" Margin="281,92,338,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24" Width="181"/>
+
+        <Label Content="Kode Karyawan :" HorizontalAlignment="Center" Margin="281,134,389,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblKode" Content="" HorizontalAlignment="Center" Margin="414,134,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Nama Karyawan :" HorizontalAlignment="Center" Margin="281,164,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="128"/>
+        <Label x:Name="lblNama" Content="" HorizontalAlignment="Center" Margin="414,164,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Username Karyawan :" HorizontalAlignment="Center" Margin="281,194,389,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblUsername" Content="" HorizontalAlignment="Center" Margin="414,194,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblSatuan" Content="" HorizontalAlignment="Center" Margin="607,188,131,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="62"/>
+
+        <Label Content="Password Karyawan :" HorizontalAlignment="Center" Margin="281,224,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblPassword" Content="" HorizontalAlignment="Center" Margin="414,224,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Email :" HorizontalAlignment="Center" Margin="281,254,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblEmail" Content="" HorizontalAlignment="Center" Margin="414,254,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+        <Label Content="Jenis Kelamin :" HorizontalAlignment="Center" Margin="281,308,389,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblJabatan" Content="" HorizontalAlignment="Center" Margin="414,282,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Alamat :" HorizontalAlignment="Center" Margin="281,389,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="No. Telp :" HorizontalAlignment="Center" Margin="281,362,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="Tanggal Lahir :" HorizontalAlignment="Center" Margin="281,335,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="Jabatan :" HorizontalAlignment="Center" Margin="281,281,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblJK" Content="" HorizontalAlignment="Center" Margin="414,308,184,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblTglLahir" Content="" HorizontalAlignment="Center" Margin="414,335,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblTelp" Content="" HorizontalAlignment="Center" Margin="414,362,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblAlamat" Content="" HorizontalAlignment="Center" Margin="414,389,184,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+
+    </Grid>
+</Window>
