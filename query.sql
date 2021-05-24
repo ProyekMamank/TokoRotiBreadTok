@@ -60,6 +60,7 @@ BEGIN
 
 		if flag = 1 then
 			:new.ID := ID;
+			:new.STATUS := 1;
 		end if;
 	end if;
 END;
