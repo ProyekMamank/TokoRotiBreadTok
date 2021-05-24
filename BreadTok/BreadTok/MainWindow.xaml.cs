@@ -505,7 +505,7 @@ namespace BreadTok
         // DAFTAR PESANAN
         private void loadDaftarPesanan()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, P.FK_KARYAWAN, P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, H.FK_KARYAWAN, P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
@@ -598,7 +598,7 @@ namespace BreadTok
         {
             object ID = ((Button)sender).CommandParameter;
 
-            WindowPesanan wp = new WindowPesanan(ID.ToString());
+            WindowPesanan wp = new WindowPesanan(ID.ToString(), loggedUserID);
             toggleOverlay();
             wp.ShowDialog();
 

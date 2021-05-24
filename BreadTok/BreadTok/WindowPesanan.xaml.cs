@@ -24,18 +24,20 @@ namespace BreadTok
     {
         string nomor_nota;
         List<DTrans> dtranses;
-        public WindowPesanan(string nomor_nota)
+        string id_karyawan;
+        public WindowPesanan(string nomor_nota, string id_karyawan)
         {
             InitializeComponent();
             this.nomor_nota = nomor_nota;
             lblNomorNota.Content = this.nomor_nota;
+            this.id_karyawan = id_karyawan;
 
             loadHeaderTrans();
         }
 
         private void loadHeaderTrans()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, NVL(P.FK_KARYAWAN, ''), P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, NVL(H.FK_KARYAWAN, ''), P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
@@ -63,6 +65,7 @@ namespace BreadTok
                 lblPelanggan.Content = reader.GetValue(5).ToString();
                 lblMetodePembayaran.Content = reader.GetValue(5).ToString();
                 lblStatus.Content = reader.GetValue(6).ToString();
+                lblKodeVoucher.Content = "-";
 
                 lblHargaTotal.Content = Convert.ToInt32(reader.GetValue(2).ToString()).ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
             }
@@ -79,13 +82,13 @@ namespace BreadTok
             {
                 btnKonfirmasi.Visibility = Visibility.Hidden;
                 btnBatalkan.Visibility = Visibility.Visible;
-                btnBatalkan.Margin = new Thickness(300, 392, 0, 0);
+                btnBatalkan.Margin = new Thickness(300, 420, 0, 0);
             }
             else if (lblStatus.Content.Equals("Request Bayar"))
             {
                 btnKonfirmasi.Visibility = Visibility.Visible;
                 btnBatalkan.Visibility = Visibility.Visible;
-                btnBatalkan.Margin = new Thickness(425, 392, 0, 0);
+                btnBatalkan.Margin = new Thickness(425, 420, 0, 0);
             }
             else if (lblStatus.Content.Equals("Sudah Bayar") || lblStatus.Content.Equals("Dibatalkan"))
             {
@@ -134,9 +137,10 @@ namespace BreadTok
         {
             if (MessageHandler.confirmYesNo("Apakah anda ingin membatalkan pesanan ini?"))
             {
-                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1 WHERE NOMOR_NOTA = :2 ", App.conn);
+                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1, FK_KARYAWAN = :2 WHERE NOMOR_NOTA = :3 ", App.conn);
                 cmd.Parameters.Add(":1", 3);
-                cmd.Parameters.Add(":2", lblNomorNota.Content);
+                cmd.Parameters.Add(":2", id_karyawan);
+                cmd.Parameters.Add(":3", lblNomorNota.Content);
                 cmd.ExecuteNonQuery();
 
                 MessageHandler.messageSuccess("Cancel Transaksi");
@@ -148,9 +152,10 @@ namespace BreadTok
         {
             if (MessageHandler.confirmYesNo("Apakah anda ingin konfirmasi pesanan ini?"))
             {
-                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1 WHERE NOMOR_NOTA = :2 ", App.conn);
+                OracleCommand cmd = new OracleCommand("UPDATE H_TRANS SET STATUS = :1, FK_KARYAWAN = :2 WHERE NOMOR_NOTA = :3 ", App.conn);
                 cmd.Parameters.Add(":1", 2);
-                cmd.Parameters.Add(":2", lblNomorNota.Content);
+                cmd.Parameters.Add(":2", id_karyawan);
+                cmd.Parameters.Add(":3", lblNomorNota.Content);
                 cmd.ExecuteNonQuery();
 
                 MessageHandler.messageSuccess("Konfirmasi Pembayaran Transaksi");

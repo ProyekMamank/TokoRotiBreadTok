@@ -216,7 +216,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid x:Name="grid_DaftarPesanan">
-                    <Label Content="Daftar Pesanan" HorizontalAlignment="Center" Margin="334,15,358,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24"/>
+                    <Label Content="Daftar Pesanan" HorizontalAlignment="Center" Margin="326,23,340,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="24" Width="174" RenderTransformOrigin="0.46,0.541"/>
 
                     <Label Content="Keyword :" HorizontalAlignment="Center" Margin="10,65,781,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="14"/>
 
@@ -311,17 +311,6 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto" >
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Spade" FontSize="15" Height="20" Width="auto"/>
-                        <TextBlock Text="Reports" Margin="10 0 0 0" FontSize="15"/>
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid x:Name="grid_Report">
-
-                </Grid>
-            </TabItem>
             <TabItem x:Name="tabPengadaanBahan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -490,7 +479,7 @@
                         materialDesign:HintAssist.Hint="Jumlah Bahan"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                         VerticalAlignment="Center" Text="50" Margin="607,383,158,131" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
-                    
+
                     <Button x:Name="bChefTambahBahan"
                                 Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                 ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"

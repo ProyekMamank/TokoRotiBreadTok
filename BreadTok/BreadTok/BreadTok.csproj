@@ -82,6 +82,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
+    <Compile Include="Karyawan.cs" />
+    <Compile Include="Supplier.cs" />
     <Compile Include="reportPenjualan.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
