@@ -23,6 +23,7 @@ namespace BreadTok
     public partial class WindowPesanan : Window
     {
         string nomor_nota;
+        string id_karyawan;
         List<DTrans> dtranses;
         string id_karyawan;
         public WindowPesanan(string nomor_nota, string id_karyawan)
@@ -61,8 +62,8 @@ namespace BreadTok
                     OracleCommand cmd2 = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + reader.GetValue(3).ToString() + "'", App.conn);
                     lblPegawai.Content = cmd2.ExecuteScalar().ToString();
                 }
-
-                lblPelanggan.Content = reader.GetValue(5).ToString();
+                
+                lblPelanggan.Content = reader.GetValue(4).ToString();
                 lblMetodePembayaran.Content = reader.GetValue(5).ToString();
                 lblStatus.Content = reader.GetValue(6).ToString();
                 lblKodeVoucher.Content = "-";
@@ -82,7 +83,7 @@ namespace BreadTok
             {
                 btnKonfirmasi.Visibility = Visibility.Hidden;
                 btnBatalkan.Visibility = Visibility.Visible;
-                btnBatalkan.Margin = new Thickness(300, 420, 0, 0);
+                btnBatalkan.Margin = new Thickness(300, 428, 0, 0);
             }
             else if (lblStatus.Content.Equals("Request Bayar"))
             {

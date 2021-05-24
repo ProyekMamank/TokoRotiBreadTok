@@ -15,15 +15,15 @@ namespace BreadTok
         public DataTable loadData()
         {
             dt = new DataTable();
-            dt.Columns.Add("MERK");
-            dt.Columns.Add("JENIS BAHAN");
-            dt.Columns.Add("STOCK");
-            dt.Columns.Add("HARGA");
-            dt.Columns.Add("SUPPLIER");
-            dt.Columns.Add("ACTION");
+            dt.Columns.Add("Merk");
+            dt.Columns.Add("Jenis Bahan");
+            dt.Columns.Add("Stok");
+            dt.Columns.Add("Harga");
+            dt.Columns.Add("Detail");
+            dt.Columns.Add("Update");
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from bahan";
+            cmd.CommandText = "select * from bahan where status > 0";
             cmd.Connection = App.conn;
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -39,9 +39,9 @@ namespace BreadTok
                 dr[2] = reader.GetValue(3).ToString() + " " + reader.GetValue(5).ToString();
 
                 dr[3] = Convert.ToInt32(reader.GetValue(4));
+                
 
-
-                dr[4] = reader.GetValue(0).ToString();
+                dr[4] = reader.GetValue(0).ToString()
                 dt.Rows.Add(dr);
             }
             reader.Close();
@@ -91,7 +91,6 @@ namespace BreadTok
             cmd.ExecuteNonQuery();
             int harga;
             cmd = new OracleCommand($"INSERT INTO H_BELI_BAHAN VALUES('',SYSDATE,", App.conn);
-        }
-
+        
     }
 }

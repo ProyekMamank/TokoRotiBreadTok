@@ -15,5 +15,6 @@ namespace BreadTok
         public string id_pelanggan { get; set; }
         public string metode_pembayaran { get; set; }
         public string status { get; set; }
+        public string kode_voucher { get; set; }
     }
 }

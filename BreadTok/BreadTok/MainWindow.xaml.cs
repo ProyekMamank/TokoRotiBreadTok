@@ -36,7 +36,10 @@ namespace BreadTok
         private DataRow itemDataSupport;
         private int selectedIdBahan;
         private int selectedIdKaryawan;
+        private int selectedIdRoti;
         string loggedUserID;
+        List<Roti> rotis;
+        List<Resep> reseps;
         private int idhresep;
         private string koderoti;
         public MainWindow(string id)
@@ -53,8 +56,21 @@ namespace BreadTok
             chefRoti = new DataTable();
             chefResep = new DataTable();
             loggedUserID = id;
+
+            if (Convert.ToInt32(loggedUserID) > 0)
+            {
+                OracleCommand cmd = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + loggedUserID + "'", App.conn);
+                lbWelcome.Text = "Selamat Datang, " + cmd.ExecuteScalar().ToString() + "!";
+            }
+            else
+            {
+                lbWelcome.Text = "Selamat Datang, Admin!";
+            }
+
             loadDataBahan();
             loadDataKaryawan();
+            loadDataRoti();
+            loadDataResep();
             loadDaftarPesanan();
             initPengadaanBahan();
             initChef();
@@ -599,7 +615,11 @@ namespace BreadTok
             object ID = ((Button)sender).CommandParameter;
 
             WindowPesanan wp = new WindowPesanan(ID.ToString(), loggedUserID);
-            toggleOverlay();
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            //toggleOverlay();
             wp.ShowDialog();
 
             loadDaftarPesanan();
@@ -634,6 +654,59 @@ namespace BreadTok
             dgKaryawan.ItemsSource = k.loadData().DefaultView;
         }
 
+        private void loadDataRoti()
+        {
+            rotis = new List<Roti>();
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = App.conn;
+            cmd.CommandText = "select * from roti where status > 0";
+            OracleDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                rotis.Add(new Roti()
+                {
+                    id_roti = reader.GetValue(0).ToString(),
+                    kode_roti = reader.GetValue(1).ToString(),
+                    nama_roti = reader.GetValue(2).ToString(),
+                    deskripsi_roti = reader.GetValue(3).ToString(),
+                    harga_roti = Convert.ToInt32(reader.GetValue(4).ToString()),
+                    stok_roti = Convert.ToInt32(reader.GetValue(5).ToString()),
+                    status_roti = reader.GetValue(6).ToString(),
+                    fk_jenisroti = reader.GetValue(7).ToString(),
+                    fk_resep = reader.GetValue(8).ToString()
+                });
+            }
+            reader.Close();
+
+            dgRoti.ItemsSource = rotis;
+        }
+
+        private void loadDataResep()
+        {
+            reseps = new List<Resep>();
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = App.conn;
+            cmd.CommandText = "select * from h_resep";
+            OracleDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                cmd = new OracleCommand();
+                cmd.CommandText = $"select count(*) from d_resep where id_h_resep='{reader.GetValue(0).ToString()}'";
+                cmd.Connection = App.conn;
+                reseps.Add(new Resep()
+                {
+                    id_resep = reader.GetValue(0).ToString(),
+                    nama_resep = reader.GetValue(1).ToString(),
+                    jumlah_bahan = Convert.ToInt32(cmd.ExecuteScalar().ToString()),
+                });
+            }
+            reader.Close();
+
+            dgResep.ItemsSource = reseps;
+        }
+
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             panelMasterBahan.Visibility = Visibility.Hidden;
@@ -643,8 +716,8 @@ namespace BreadTok
             btnInsert.Visibility = Visibility.Hidden;
             btnBack.Visibility = Visibility.Visible;
             loadCbJenisBahan("insert");
-            loadCbSupplier("insert");
-            loadPlaceHolder(imgInsert);
+            //loadCbSupplier("insert");
+            loadImage(imgInsertbahan, "\\Resources\\ImagePlaceholder.png");
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -655,11 +728,12 @@ namespace BreadTok
             btnDelete.Visibility = Visibility.Visible;
             btnInsert.Visibility = Visibility.Visible;
             btnBack.Visibility = Visibility.Hidden;
+            selectedIdBahan = -1;
         }
 
         private void dgBahan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "ACTION")
+            if (e.PropertyName == "Update")
             {
                 DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
                 DataTemplate buttonTemplate = new DataTemplate();
@@ -667,12 +741,55 @@ namespace BreadTok
                 buttonTemplate.VisualTree = buttonFactory;
                 //add handler or you can add binding to command if you want to handle click
                 buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnUpdate_Click));
-                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("ACTION"));
-                buttonFactory.SetValue(Button.ContentProperty, "UPDATE");
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Update"));
+                buttonFactory.SetValue(Button.ContentProperty, "Update");
                 buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.Green));
                 buttonColumn.CellTemplate = buttonTemplate;
                 e.Column = buttonColumn;
             }
+            else if(e.PropertyName == "Detail")
+            {
+                DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
+                DataTemplate buttonTemplate = new DataTemplate();
+                FrameworkElementFactory buttonFactory = new FrameworkElementFactory(typeof(Button));
+                buttonTemplate.VisualTree = buttonFactory;
+                //add handler or you can add binding to command if you want to handle click
+                buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowBahan));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Detail"));
+                buttonFactory.SetValue(Button.ContentProperty, "Detail");
+                buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
+                buttonFactory.SetValue(Button.WidthProperty, 80.0);
+                buttonColumn.CellTemplate = buttonTemplate;
+                e.Column = buttonColumn;
+            }
+        }
+        
+        private void DgBahan_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgBahan.Columns[0].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[1].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[2].Width = DataGridLength.Auto;
+            dgBahan.Columns[3].Width = DataGridLength.Auto;
+            dgBahan.Columns[4].Width = DataGridLength.SizeToCells;
+            dgBahan.Columns[5].Width = DataGridLength.SizeToCells;
+        }
+
+        private void btnOpenWindowBahan(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowBahan wp = new WindowBahan(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wp.ShowDialog();
+
+            //loadDaftarPesanan();
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -684,7 +801,7 @@ namespace BreadTok
             btnBack.Visibility = Visibility.Visible;
             btnInsert.Visibility = Visibility.Hidden;
             loadCbJenisBahan("update");
-            loadCbSupplier("update");
+            //loadCbSupplier("update");
             setupUpdatePanel(Convert.ToInt32((sender as Button).CommandParameter));
             selectedIdBahan = Convert.ToInt32((sender as Button).CommandParameter);
         }
@@ -692,6 +809,7 @@ namespace BreadTok
         private void dgBahan_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectedIdBahan = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
+            Console.WriteLine(((DataGrid)sender).SelectedItem);
         }
 
 
@@ -738,48 +856,48 @@ namespace BreadTok
             
         }
 
-        private void loadCbSupplier(string state)
-        {
-            if (state == "insert")
-            {
-                cbSupplier.Items.Clear();
-                OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "select * from supplier";
-                cmd.Connection = App.conn;
-                OracleDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    cbSupplier.Items.Add(new ComboBoxItem()
-                    {
-                        Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(2)
-                    });
-                }
-                reader.Close();
-                cbSupplier.SelectedValuePath = "Name";
-                cbSupplier.SelectedIndex = 0;
-            }
-            else
-            {
-                cbSupplierUpdate.Items.Clear();
-                OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "select * from supplier";
-                cmd.Connection = App.conn;
-                OracleDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    cbSupplierUpdate.Items.Add(new ComboBoxItem()
-                    {
-                        Name = "ID" + reader.GetString(0),
-                        Content = reader.GetString(2)
-                    });
-                }
-                reader.Close();
-                cbSupplierUpdate.SelectedValuePath = "Name";
-                cbSupplierUpdate.SelectedIndex = 0;
-            }
+        //private void loadCbSupplier(string state)
+        //{
+        //    if (state == "insert")
+        //    {
+        //        cbSupplier.Items.Clear();
+        //        OracleCommand cmd = new OracleCommand();
+        //        cmd.CommandText = "select * from supplier";
+        //        cmd.Connection = App.conn;
+        //        OracleDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            cbSupplier.Items.Add(new ComboBoxItem()
+        //            {
+        //                Name = "ID" + reader.GetString(0),
+        //                Content = reader.GetString(2)
+        //            });
+        //        }
+        //        reader.Close();
+        //        cbSupplier.SelectedValuePath = "Name";
+        //        cbSupplier.SelectedIndex = 0;
+        //    }
+        //    else
+        //    {
+        //        cbSupplierUpdate.Items.Clear();
+        //        OracleCommand cmd = new OracleCommand();
+        //        cmd.CommandText = "select * from supplier";
+        //        cmd.Connection = App.conn;
+        //        OracleDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            cbSupplierUpdate.Items.Add(new ComboBoxItem()
+        //            {
+        //                Name = "ID" + reader.GetString(0),
+        //                Content = reader.GetString(2)
+        //            });
+        //        }
+        //        reader.Close();
+        //        cbSupplierUpdate.SelectedValuePath = "Name";
+        //        cbSupplierUpdate.SelectedIndex = 0;
+        //    }
             
-        }
+        //}
 
         private void loadCbJabatan()
         {
@@ -800,6 +918,27 @@ namespace BreadTok
             cbJabatan.SelectedValuePath = "Name";
             cbJabatan.SelectedIndex = 0;
         }
+
+        private void loadCbJenisRoti()
+        {
+            cbJenisRoti.Items.Clear();
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = "select * from jenis_roti";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                cbJenisRoti.Items.Add(new ComboBoxItem()
+                {
+                    Name = "ID" + reader.GetString(0),
+                    Content = reader.GetString(1)
+                });
+            }
+            reader.Close();
+            cbJenisRoti.SelectedValuePath = "Name";
+            cbJenisRoti.SelectedIndex = 0;
+        }
+
         string bahanImgSourceDir = "";
         private void BtnOpenImg_Click(object sender, RoutedEventArgs e)
         {
@@ -818,63 +957,100 @@ namespace BreadTok
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(selectedFileName);
                 bitmap.EndInit();
-                imgInsert.Source = bitmap;
+                imgInsertbahan.Source = bitmap;
             }
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-
-            if (tbMerk.Text == "" || tbQuantity.Text == "" || tbHarga.Text == "")
+            if (tbMerk.Text != "" && tbQuantity.Text != "" && tbHarga.Text != "" && bahanImgSourceDir != "")
             {
-                MessageBox.Show("ALL FIELD MUST BE FILLED FIRST!!!");
-                return;
-            }
+                if (Regex.IsMatch(tbQuantity.Text, @"^\d+$") && Regex.IsMatch(tbHarga.Text, @"^\d+$"))
+                {
+                    if (Convert.ToInt32(tbQuantity.Text) > 0)
+                    {
+                        if (Convert.ToInt32(tbHarga.Text) > 0)
+                        {
+                            string merk = tbMerk.Text.ToUpper();
+                            int qty = Convert.ToInt32(tbQuantity.Text);
+                            int harga = Convert.ToInt32(tbHarga.Text);
+                            string satuan = cbSatuan.SelectedItem.ToString();
+                            string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
+                        
+                            OracleCommand cmd = new OracleCommand();
+                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
+                            cmd.Connection = App.conn;
+                            cmd.Parameters.Add(":1", "0"); //id
+                            cmd.Parameters.Add(":2", "0"); //kode
+                            cmd.Parameters.Add(":3", merk);
+                            cmd.Parameters.Add(":4", qty);
+                            cmd.Parameters.Add(":5", harga);
+                            cmd.Parameters.Add(":6", satuan);
+                            cmd.Parameters.Add(":7", jenisBahan);
+                            cmd.Parameters.Add(":8", "0"); //pic_loc
+                            cmd.Parameters.Add(":9", "0"); //pic_loc
+                            cmd.ExecuteNonQuery();
+                        
+                            cmd = new OracleCommand();
+                            cmd.CommandText = "select picture_location from bahan group by id, picture_location having id = (select max(to_number(id)) from bahan)";
+                            cmd.Connection = App.conn;
+                            saveImage(bahanImgSourceDir, "\\Resources\\Bahan\\", cmd.ExecuteScalar().ToString());
 
-            if(!tbQuantity.Text.All(Char.IsDigit) || !tbHarga.Text.All(Char.IsDigit))
+                            MessageHandler.messageSuccess("Insert Bahan");
+
+                            resetInsertPanel();
+                            loadDataBahan();
+
+                            panelMasterBahan.Visibility = Visibility.Visible;
+                            panelInsertBahan.Visibility = Visibility.Hidden;
+                            btnInsert.Visibility = Visibility.Visible;
+                            btnDelete.Visibility = Visibility.Visible;
+                            btnBack.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            MessageHandler.mustBeBigger("Harga ", 0);
+                        }
+                    }
+                    else
+                    {
+                        MessageHandler.mustBeBigger("Harga ", 0);
+                    }
+                }
+                else
+                {
+                    MessageHandler.isNotNumber("Quantity and Price");
+                }
+            }
+            else
             {
-                MessageBox.Show("QUANTITY AND PRICE MUST BE IN NUMBER!!!");
-                return;
+                MessageHandler.requireField();
             }
-
-            // TODO : pengecekan harus diisi + harus ada foto (cek imgSourceDir != "")
-            string merk = tbMerk.Text.ToUpper();
-            int qty = Convert.ToInt32(tbQuantity.Text);
-            int harga = Convert.ToInt32(tbHarga.Text);
-            string satuan = cbSatuan.SelectedItem.ToString();
-            string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
-            string supplier = cbSupplier.SelectedValue.ToString().Substring(2);
-
-            
-
-            // TODO : TRIGGER ID + KODE + Pic_Loc
-            OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
-            cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", "0"); //id
-            cmd.Parameters.Add(":2", "0"); //kode
-            cmd.Parameters.Add(":3", merk);
-            cmd.Parameters.Add(":4", qty);
-            cmd.Parameters.Add(":5", harga);
-            cmd.Parameters.Add(":6", satuan);
-            cmd.Parameters.Add(":7", jenisBahan);
-            cmd.Parameters.Add(":8", supplier);
-            cmd.Parameters.Add(":9", "0"); //pic_loc
-            cmd.ExecuteNonQuery();
-
-            // TODO : GANTI NAMA GAMBAR
-            saveImage(bahanImgSourceDir, "Resources\\Bahan\\", "tes.jpg");
-
-            resetInsertPanel();
-            loadDataBahan();
-
-            panelMasterBahan.Visibility = Visibility.Visible;
-            panelInsertBahan.Visibility = Visibility.Hidden;
-            btnInsert.Visibility = Visibility.Visible;
-            btnDelete.Visibility = Visibility.Visible;
-            btnBack.Visibility = Visibility.Hidden;
         }
 
+        bool gantiFotoBahan = false;
+        private void BtnOpenImgBahanUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                bahanImgSourceDir = selectedFileName;
+                gantiFotoBahan = true;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgUpdateBahan.Source = bitmap;
+            }
+        }
+       
         private void setupUpdatePanel(int id)
         {
             OracleCommand cmd = new OracleCommand();
@@ -907,23 +1083,26 @@ namespace BreadTok
                     }
                     idxJenisBahan++;
                 }
-                int idxSupplier = 0;
-                foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
-                {
-                    if (cbItem.Name == "ID" + reader.GetString(7))
-                    {
-                        break;
-                    }
-                    idxSupplier++;
-                }
-                cbSupplierUpdate.SelectedIndex = idxSupplier;
+                //int idxSupplier = 0;
+                //foreach (ComboBoxItem cbItem in cbSupplierUpdate.Items)
+                //{
+                //    if (cbItem.Name == "ID" + reader.GetString(7))
+                //    {
+                //        break;
+                //    }
+                //    idxSupplier++;
+                //}
+                //cbSupplierUpdate.SelectedIndex = idxSupplier;
                 cbJenisBahanUpdate.SelectedIndex = idxJenisBahan;
 
+                bahanImgSourceDir = reader.GetString(7);
+                loadImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
             }
             reader.Close();
         }
         private void resetInsertPanel()
         {
+            bahanImgSourceDir = "";
             tbMerk.Text = "";
             tbQuantity.Text = "";
             tbHarga.Text = "";
@@ -933,6 +1112,8 @@ namespace BreadTok
         }
         private void resetUpdatePanel()
         {
+            gantiFotoBahan = false;
+            bahanImgSourceDir = "";
             tbMerkUpdate.Text = "";
             tbQuantityUpdate.Text = "";
             tbHargaUpdate.Text = "";
@@ -942,6 +1123,7 @@ namespace BreadTok
         }
         private void resetInsertKaryawanPanel()
         {
+            karyawanImgSourceDir = "";
             tbNamaKaryawan.Text = "";
             tbUsernameKaryawan.Text = "";
             tbPasswordKaryawan.Text = "";
@@ -954,37 +1136,107 @@ namespace BreadTok
             cbJabatan.SelectedIndex = 0;
             selectedIdKaryawan = -1;
         }
-
+        
         private void btnSubmitUpdate_Click(object sender, RoutedEventArgs e)
         {
-            string merk = tbMerkUpdate.Text.ToUpper();
-            int qty = Convert.ToInt32(tbQuantityUpdate.Text);
-            int harga = Convert.ToInt32(tbHargaUpdate.Text);
-            string satuan = cbSatuanUpdate.SelectedItem.ToString();
-            string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
-            string supplier = cbSupplierUpdate.SelectedValue.ToString().Substring(2);
+            if (tbMerkUpdate.Text != "" && tbQuantityUpdate.Text != "" && tbHargaUpdate.Text != "")
+            {
+                if (Regex.IsMatch(tbQuantityUpdate.Text, @"^\d+$") && Regex.IsMatch(tbHargaUpdate.Text, @"^\d+$"))
+                {
+                    if (Convert.ToInt32(tbQuantityUpdate.Text) > 0)
+                    {
+                        if (Convert.ToInt32(tbHargaUpdate.Text) > 0)
+                        {
+                            string merk = tbMerkUpdate.Text.ToUpper();
+                            int qty = Convert.ToInt32(tbQuantityUpdate.Text);
+                            int harga = Convert.ToInt32(tbHargaUpdate.Text);
+                            string satuan = cbSatuanUpdate.SelectedItem.ToString();
+                            string jenisBahan = cbJenisBahanUpdate.SelectedValue.ToString().Substring(2);
 
+
+                            OracleCommand cmd = new OracleCommand();
+                            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5 where ID={selectedIdBahan}";
+                            cmd.Connection = App.conn;
+                            cmd.Parameters.Add(":1", merk);
+                            cmd.Parameters.Add(":2", qty);
+                            cmd.Parameters.Add(":3", harga);
+                            cmd.Parameters.Add(":4", satuan);
+                            cmd.Parameters.Add(":5", jenisBahan);
+                            cmd.ExecuteNonQuery();
+
+
+                            cmd = new OracleCommand();
+                            cmd.CommandText = $"select picture_location from bahan where id = {selectedIdBahan}";
+                            cmd.Connection = App.conn;
+                            string kodeBahanUpdating = cmd.ExecuteScalar().ToString();
+                            if (gantiFotoBahan)
+                            {
+                                deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + kodeBahanUpdating);
+                                saveImage(bahanImgSourceDir, "\\Resources\\Bahan\\", kodeBahanUpdating);
+                            }
+                            else
+                            {
+                                if(bahanImgSourceDir != kodeBahanUpdating)
+                                {
+                                    var enviroment = System.Environment.CurrentDirectory;
+                                    string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Bahan\\" + bahanImgSourceDir;
+                                    saveImage(imgSrc, "\\Resources\\Bahan\\", kodeBahanUpdating);
+                                    MessageBox.Show("stop");
+                                    deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
+                                }
+                            }
+
+                            MessageHandler.messageSuccess("Update Bahan");
+
+                            resetUpdatePanel();
+                            loadDataBahan();
+
+                            panelMasterBahan.Visibility = Visibility.Visible;
+                            panelUpdateBahan.Visibility = Visibility.Hidden;
+                            btnInsert.Visibility = Visibility.Visible;
+                            btnDelete.Visibility = Visibility.Visible;
+                            btnBack.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {
+                            MessageHandler.mustBeBigger("Harga ", 0);
+                        }
+                    }
+                    else
+                    {
+                        MessageHandler.mustBeBigger("Harga ", 0);
+                    }
+                }
+                else
+                {
+                    MessageHandler.isNotNumber("Quantity and Price");
+                }
+            }
+            else
+            {
+                MessageHandler.requireField();
+            }
+        }
+        
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedIdBahan < 0)
+            {
+                MessageBox.Show("Please Pick Ingredient First");
+                return;
+            }
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = $"update bahan set merk=:1,qty_stok=:2,harga=:3,satuan=:4,jenis_bahan=:5,fk_supplier=:6 where ID={selectedIdBahan}";
+            cmd.CommandText = $"update bahan set status = 0 where ID='{selectedIdBahan}'";
             cmd.Connection = App.conn;
-            cmd.Parameters.Add(":1", merk);
-            cmd.Parameters.Add(":2", qty);
-            cmd.Parameters.Add(":3", harga);
-            cmd.Parameters.Add(":4", satuan);
-            cmd.Parameters.Add(":5", jenisBahan);
-            cmd.Parameters.Add(":6", supplier);
             cmd.ExecuteNonQuery();
 
-            resetUpdatePanel();
             loadDataBahan();
-
-            panelMasterBahan.Visibility = Visibility.Visible;
-            panelUpdateBahan.Visibility = Visibility.Hidden;
-            btnInsert.Visibility = Visibility.Visible;
-            btnDelete.Visibility = Visibility.Visible;
-            btnBack.Visibility = Visibility.Hidden;
+            selectedIdBahan = -1;
+            MessageHandler.messageSuccess("Delete Ingredients");
         }
+
 
         private void dgKaryawan_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -1030,6 +1282,8 @@ namespace BreadTok
                 cmd.Connection = App.conn;
                 cmd.ExecuteNonQuery();
                 selectedIdKaryawan = -1;
+                btnActive.IsEnabled = false;
+                btnSuspend.IsEnabled = false;
                 loadDataKaryawan();
             }
             else
@@ -1048,7 +1302,10 @@ namespace BreadTok
                 cmd.Connection = App.conn;
                 cmd.ExecuteNonQuery();
                 selectedIdKaryawan = -1;
+                btnActive.IsEnabled = false;
+                btnSuspend.IsEnabled = false;
                 loadDataKaryawan();
+
             }
             else
             {
@@ -1077,13 +1334,36 @@ namespace BreadTok
             btnBackKaryawan.Visibility = Visibility.Visible;
             selectedIdKaryawan = -1;
             loadCbJabatan();
+            loadImage(imgInsertkaryawan, "\\Resources\\ImagePlaceholder.png");
+        }
+
+        string karyawanImgSourceDir = "";
+        private void btnOpenImgKaryawan_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                karyawanImgSourceDir = selectedFileName;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgInsertkaryawan.Source = bitmap;
+            }
         }
 
         private void btnSubmitKaryawan_Click(object sender, RoutedEventArgs e)
         {
             if (dtpTanggalLahir.SelectedDate == null)
             {
-                MessageBox.Show("PLEAS FILL OUT ALL THE FIELD FIRST!!!");
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
                 return;
             }
 
@@ -1104,7 +1384,7 @@ namespace BreadTok
             DateTime tglLahir = dtpTanggalLahir.SelectedDate.Value;
             string jabatan = cbJabatan.SelectedValue.ToString().Substring(2);
 
-            if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="")
+            if (nama == "" || username == "" || password=="" || email=="" || jenisKelamin=="" || alamat=="" || noTelp=="" || karyawanImgSourceDir == "")
             {
                 MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
                 return;
@@ -1134,6 +1414,13 @@ namespace BreadTok
             cmd.Parameters.Add(":13", "0");
             cmd.ExecuteNonQuery();
 
+            cmd = new OracleCommand();
+            cmd.CommandText = "select picture_location from karyawan group by id, picture_location having id = (select max(to_number(id)) from karyawan)";
+            cmd.Connection = App.conn;
+            saveImage(karyawanImgSourceDir, "\\Resources\\Karyawan\\", cmd.ExecuteScalar().ToString());
+
+            MessageHandler.messageSuccess("Insert Karyawan");
+
             resetInsertKaryawanPanel();
             loadDataKaryawan();
 
@@ -1145,22 +1432,35 @@ namespace BreadTok
             btnInsertKaryawan.Visibility = Visibility.Visible;
         }
         
-        private void loadPlaceHolder(Image img)
+        private void deleteImage(Image img, string path)
         {
             var enviroment = System.Environment.CurrentDirectory;
-            string imgPlaceholder = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\ImagePlaceholder.png";
+            string imgDist = Directory.GetParent(enviroment).Parent.FullName + path;
+            
+            img.Source = null;
+            File.Delete(imgDist);
+        }
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(imgPlaceholder);
-            bitmap.EndInit();
-            img.Source = bitmap;
+        private void loadImage(Image img, string path)
+        {
+            var enviroment = System.Environment.CurrentDirectory;
+            string imgDist = Directory.GetParent(enviroment).Parent.FullName + path;
+
+            using (var stream = File.OpenRead(imgDist))
+            {
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = stream;
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                img.Source = bmp;
+            }
         }
 
         private void saveImage(string imgSrcDir, string imgDestDir, string filename)
         {
             var enviroment = System.Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(enviroment).Parent.FullName + "\\";
+            string projectDirectory = Directory.GetParent(enviroment).Parent.FullName;
             try
             {
                 File.Copy(imgSrcDir, projectDirectory + imgDestDir + filename, true);
@@ -1171,6 +1471,250 @@ namespace BreadTok
             }
         }
 
+        private void btnUpdateRoti_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterRoti.Visibility = Visibility.Hidden;
+            panelUpdateRoti.Visibility = Visibility.Visible;
+            btnDeleteRoti.Visibility = Visibility.Hidden;
+            btnBackRoti.Visibility = Visibility.Visible;
+            loadCbJenisRoti();
+            setupUpdatePanelRoti(Convert.ToInt32((sender as Button).CommandParameter));
+            selectedIdRoti = Convert.ToInt32((sender as Button).CommandParameter);
+        }
+
+        private void btnBackRoti_Click(object sender, RoutedEventArgs e)
+        {
+            panelMasterRoti.Visibility = Visibility.Visible;
+            panelUpdateRoti.Visibility = Visibility.Hidden;
+            btnDeleteRoti.Visibility = Visibility.Visible;
+            btnBackRoti.Visibility = Visibility.Hidden;
+            selectedIdRoti = -1;
+        }
+
+        string rotiImgSourceDir = "";
+        private void setupUpdatePanelRoti(int id)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"select * from roti where ID = {id}";
+            cmd.Connection = App.conn;
+            OracleDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                tbNamaRoti.Text = reader.GetValue(2).ToString();
+                tbDeskripsiRoti.Text = reader.GetValue(3).ToString();
+                tbHargaRoti.Text = reader.GetValue(4).ToString();
+                int idxJenisRoti = 0;
+                foreach (ComboBoxItem cbItem in cbJenisRoti.Items)
+                {
+                    if (cbItem.Name == "ID" + reader.GetString(7))
+                    {
+                        break;
+                    }
+                    idxJenisRoti++;
+                }
+                cbJenisRoti.SelectedIndex = idxJenisRoti;
+
+                rotiImgSourceDir = reader.GetString(9);
+                loadImage(imgUpdateRoti, "\\Resources\\Roti\\" + rotiImgSourceDir);
+
+            }
+            reader.Close();
+        }
+
+        private void dgRoti_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            selectedIdRoti = Convert.ToInt32((((DataGrid)sender).SelectedItem as Roti).id_roti);
+            Console.WriteLine(selectedIdRoti);
+        }
+
+        private void btnDeleteRoti_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedIdRoti < 0)
+            {
+                MessageBox.Show("Please Pick Bread First");
+                return;
+            }
+
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"update roti set status = 0 where ID='{selectedIdRoti}'";
+            cmd.Connection = App.conn;
+            cmd.ExecuteNonQuery();
+
+            loadDataRoti();
+            selectedIdRoti = -1;
+            MessageHandler.messageSuccess("Delete Bread");
+        }
+
+        bool gantiFotoRoti = false;
+        private void btnOpenImgRotiUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Open Image";
+            openFileDialog.Filter = "Image Files(*.jpg,*.png,*.tiff,*.bmp,*.gif)|*.jpg;*.png;*.tiff;*.bmp;*.gif";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                rotiImgSourceDir = selectedFileName;
+                gantiFotoRoti = true;
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.EndInit();
+                imgUpdateRoti.Source = bitmap;
+            }
+        }
+
+        private void btnSubmitRoti_Click(object sender, RoutedEventArgs e)
+        {
+            string nama = tbNamaRoti.Text;
+            string deskripsi = tbDeskripsiRoti.Text;
+            string harga = tbHargaRoti.Text;
+            string jenisRoti = cbJenisRoti.SelectedValue.ToString().Substring(2);
+            OracleCommand cmd = new OracleCommand();
+            cmd.CommandText = $"select picture_location from roti where id = {selectedIdRoti}";
+            cmd.Connection = App.conn;
+            string kodeRotiLama = cmd.ExecuteScalar().ToString();
+
+            if (nama == "" || deskripsi == "" || harga == "" || jenisRoti == "")
+            {
+                MessageBox.Show("PLEASE FILL OUT ALL THE FIELD FIRST!!!");
+                return;
+            }
+
+            if (!harga.All(Char.IsDigit))
+            {
+                MessageBox.Show("HARGA MUST CONSIST ALL NUMBERS!!!");
+                return;
+            }
+
+            cmd = new OracleCommand();
+            cmd.CommandText = "update roti set kode=:1,nama=:2,deskripsi=:3,harga=:4,jenis_roti=:5 where id=:6";
+            cmd.Connection = App.conn;
+            cmd.Parameters.Add(":1", "0");
+            cmd.Parameters.Add(":2", nama);
+            cmd.Parameters.Add(":3", deskripsi);
+            cmd.Parameters.Add(":4", Convert.ToInt32(harga));
+            cmd.Parameters.Add(":5", jenisRoti);
+            cmd.Parameters.Add(":6", selectedIdRoti);
+            cmd.ExecuteNonQuery();
+
+            cmd = new OracleCommand();
+            cmd.CommandText = $"select picture_location from roti where id = {selectedIdRoti}";
+            cmd.Connection = App.conn;
+            string kodeRotiUpdating = cmd.ExecuteScalar().ToString();
+            if (gantiFotoRoti)
+            {
+                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiLama);
+                saveImage(rotiImgSourceDir, "\\Resources\\Roti\\", kodeRotiUpdating);
+            }
+            else
+            {
+                if (rotiImgSourceDir != kodeRotiUpdating)
+                {
+                    var enviroment = System.Environment.CurrentDirectory;
+                    string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Roti\\" + rotiImgSourceDir;
+                    saveImage(imgSrc, "\\Resources\\Roti\\", kodeRotiUpdating);
+                    MessageBox.Show("stop");
+                    deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + rotiImgSourceDir);
+                }
+            }
+
+            selectedIdRoti = -1;
+            loadDataRoti();
+
+            panelUpdateRoti.Visibility = Visibility.Hidden;
+            panelMasterRoti.Visibility = Visibility.Visible;
+            btnBackRoti.Visibility = Visibility.Hidden;
+            btnDeleteRoti.Visibility = Visibility.Visible;
+        }
+
+        private void btnOpenWindowDetailRoti(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowResep wr = new WindowResep(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wr.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        private void dgKaryawan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "DETAIL")
+            {
+                DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
+                DataTemplate buttonTemplate = new DataTemplate();
+                FrameworkElementFactory buttonFactory = new FrameworkElementFactory(typeof(Button));
+                buttonTemplate.VisualTree = buttonFactory;
+                //add handler or you can add binding to command if you want to handle click
+                buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowDetailKaryawan));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
+                buttonFactory.SetValue(Button.ContentProperty, "Detail");
+                buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
+                buttonFactory.SetValue(Button.WidthProperty, 80.0);
+                buttonColumn.CellTemplate = buttonTemplate;
+                e.Column = buttonColumn;
+            }
+        }
+
+        private void btnOpenWindowDetailKaryawan(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+
+            WindowKaryawan wk = new WindowKaryawan(ID.ToString());
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wk.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        private void btnBuatVoucher_Click(object sender, RoutedEventArgs e)
+        {
+            WindowInsertVoucher wiv = new WindowInsertVoucher();
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wiv.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        private void btnBagiVoucher_Click(object sender, RoutedEventArgs e)
+        {
+            WindowBagiVoucher wib = new WindowBagiVoucher();
+            overlay.Visibility = Visibility.Visible;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+            wib.ShowDialog();
+
+            overlay.Visibility = Visibility.Hidden;
+            overlay.Width = windowPesanan.ActualWidth;
+            overlay.Height = windowPesanan.ActualHeight;
+            overlay.Margin = new Thickness(0, 0, 0, 0);
+        }
+        
         //Number only input
 
         private static readonly Regex _regex = new Regex("[^0-9]+");

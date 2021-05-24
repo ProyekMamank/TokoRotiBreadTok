@@ -12,6 +12,7 @@ namespace BreadTok
     {
         public string id_roti { get; set; }
         public string nama_roti { get; set; }
+        public string kode_roti { get; set; }
         public string deskripsi_roti { get; set; }
         public int harga_roti { get; set; }
         public int stok_roti { get; set; }
