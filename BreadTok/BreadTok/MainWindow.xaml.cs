@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using Oracle.DataAccess.Client;
+using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
@@ -504,25 +505,31 @@ namespace BreadTok
         // DAFTAR PESANAN
         private void loadDaftarPesanan()
         {
-            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, K.NAMA, P.NAMA, H.METODE_PEMBAYARAN, " +
+            OracleCommand cmd = new OracleCommand("SELECT H.NOMOR_NOTA, INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD MONTH YYYY')), H.TOTAL, P.FK_KARYAWAN, P.NAMA, H.METODE_PEMBAYARAN, " +
                                                     "(CASE WHEN H.STATUS = 0 THEN 'Belum Bayar' " +
                                                     "       WHEN H.STATUS = 1 THEN 'Request Bayar' " +
                                                     "       WHEN H.STATUS = 2 THEN 'Sudah Bayar' " +
                                                     "       WHEN H.STATUS = 3 THEN 'Dibatalkan' " +
                                                     "END) AS STATUS " +
-                                                    "FROM H_TRANS H, PELANGGAN P, KARYAWAN K " +
-                                                    "WHERE H.FK_KARYAWAN = K.ID AND H.FK_PELANGGAN = P.ID " +
+                                                    "FROM H_TRANS H, PELANGGAN P " +
+                                                    "WHERE H.FK_PELANGGAN = P.ID " +
                                                     "ORDER BY H.NOMOR_NOTA", App.conn);
             OracleDataReader reader = cmd.ExecuteReader();
-
+            
             htranses = new List<HTrans>();
             while (reader.Read()){
+                string id_karyawan = "-";
+                if (reader.GetValue(3).ToString() != "")
+                {
+                    OracleCommand cmd2 = new OracleCommand("SELECT NAMA FROM KARYAWAN WHERE ID = '" + reader.GetValue(3).ToString() + "'", App.conn);
+                    id_karyawan = cmd2.ExecuteScalar().ToString();
+                }
                 htranses.Add(new HTrans()
                 {
                     nomor_nota = reader.GetValue(0).ToString(),
                     tanggal_trans = reader.GetValue(1).ToString(),
                     total = Convert.ToInt32(reader.GetValue(2).ToString()),
-                    id_karyawan = reader.GetValue(3).ToString(),
+                    id_karyawan = id_karyawan,
                     id_pelanggan = reader.GetValue(4).ToString(),
                     metode_pembayaran = reader.GetValue(5).ToString(),
                     status = reader.GetValue(6).ToString()
@@ -532,24 +539,87 @@ namespace BreadTok
 
             dtGridPesanan.ItemsSource = htranses;
 
+            cbFilter.Items.Add("Nomor Nota");
+            cbFilter.Items.Add("Tanggal");
+            cbFilter.Items.Add("Total");
+            cbFilter.Items.Add("Pelanggan");
+            cbFilter.Items.Add("Pembayaran");
+            cbFilter.Items.Add("Status");
+            cbFilter.SelectedIndex = 0;
+        }
+        
+        private void TbKeywordDafarPesanan_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterPesanan();
         }
 
+        private void CbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterPesanan();
+        }
+
+        private void FilterPesanan()
+        {
+            ICollectionView cv = CollectionViewSource.GetDefaultView(dtGridPesanan.ItemsSource);
+            string filter = tbKeywordDafarPesanan.Text;
+            if (filter == "")
+                cv.Filter = null;
+            else
+            {
+                cv.Filter = o =>
+                {
+                    HTrans p = o as HTrans;
+                    if (cbFilter.SelectedItem.Equals("Nomor Nota"))
+                        return (p.nomor_nota.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Tanggal"))
+                        return (p.tanggal_trans.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Total"))
+                        return (p.total.ToString().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Pelanggan"))
+                        return (p.id_pelanggan.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Pembayaran"))
+                        return (p.metode_pembayaran.ToUpper().Contains(filter.ToUpper()));
+                    else if (cbFilter.SelectedItem.Equals("Status"))
+                        return (p.status.ToUpper().Contains(filter.ToUpper()));
+                    return (p.nomor_nota.ToUpper().Contains(filter.ToUpper()));
+                };
+            }
+        }
+
+        private void BtnReportPesanan_Click(object sender, RoutedEventArgs e)
+        {
+            WindowTransitionReportPesanan wtrp = new WindowTransitionReportPesanan();
+            toggleOverlay();
+            wtrp.ShowDialog();
+
+            toggleOverlay();
+        }
         private void BtnDetailHTrans_Click(object sender, RoutedEventArgs e)
         {
             object ID = ((Button)sender).CommandParameter;
 
             WindowPesanan wp = new WindowPesanan(ID.ToString());
-            overlay.Visibility = Visibility.Visible;
-            overlay.Width = windowPesanan.ActualWidth;
-            overlay.Height = windowPesanan.ActualHeight;
-            overlay.Margin = new Thickness(0, 0, 0, 0);
+            toggleOverlay();
             wp.ShowDialog();
 
             loadDaftarPesanan();
-            overlay.Visibility = Visibility.Hidden;
+            toggleOverlay();
+        }
+
+        private void toggleOverlay()
+        {
             overlay.Width = windowPesanan.ActualWidth;
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
+
+            if (overlay.Visibility == Visibility.Hidden)
+            {
+                overlay.Visibility = Visibility.Visible;
+            }
+            else if (overlay.Visibility == Visibility.Visible)
+            {
+                overlay.Visibility = Visibility.Hidden;
+            }
         }
 
         private void loadDataBahan()

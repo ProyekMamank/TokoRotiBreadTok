@@ -1,0 +1,30 @@
+﻿<Window x:Class="BreadTok.WindowTransitionReportPesanan"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BreadTok"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        Title="WindowTransitionReportPesanan" Height="276" Width="401.273"
+        WindowStyle="None" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+    <Grid>
+
+        <Image MouseDown="Exit" Cursor="Hand" x:Name="image3" HorizontalAlignment="Left" Height="30" Margin="360,10,0,0" VerticalAlignment="Top" Width="31" Source="pack://siteoforigin:,,,/Resources/Close.png"/>
+
+        <Label Content="Report Pesanan" HorizontalAlignment="Left" Margin="138,30,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
+        <Label Content="Pilih Range Tanggal" HorizontalAlignment="Left" Margin="30,73,0,0" VerticalAlignment="Top" FontSize="12"/>
+
+        <DatePicker HorizontalAlignment="Left" Margin="30,102,0,0" VerticalAlignment="Top" Width="145" x:Name="dtAwal"/>
+        <Label Content="s.d." HorizontalAlignment="Left" Margin="185,102,0,0" VerticalAlignment="Top" FontSize="12"/>
+        <DatePicker HorizontalAlignment="Left" Margin="224,102,0,0" VerticalAlignment="Top" Width="145" x:Name="dtAkhir"/>
+
+        <Label Content="Pilih Status Penjualan" HorizontalAlignment="Left" Margin="30,149,0,0" VerticalAlignment="Top" FontSize="12"/>
+        <ComboBox x:Name="cbStatus" HorizontalAlignment="Left" Margin="30,178,0,0" VerticalAlignment="Top" Width="339"/>
+        
+        <Button x:Name="btnSelectReport" Content="Select" HorizontalAlignment="Left" Margin="30,224,0,0" VerticalAlignment="Top" Width="75" Click="BtnSelectReport_Click"/>
+        
+    </Grid>
+</Window>
