@@ -25,7 +25,6 @@ namespace BreadTok
         string nomor_nota;
         string id_karyawan;
         List<DTrans> dtranses;
-        string id_karyawan;
         public WindowPesanan(string nomor_nota, string id_karyawan)
         {
             InitializeComponent();

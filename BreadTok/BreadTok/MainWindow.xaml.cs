@@ -1181,7 +1181,7 @@ namespace BreadTok
                                     var enviroment = System.Environment.CurrentDirectory;
                                     string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Bahan\\" + bahanImgSourceDir;
                                     saveImage(imgSrc, "\\Resources\\Bahan\\", kodeBahanUpdating);
-                                    MessageBox.Show("stop");
+                                    
                                     deleteImage(imgUpdateBahan, "\\Resources\\Bahan\\" + bahanImgSourceDir);
                                 }
                             }
@@ -1618,7 +1618,7 @@ namespace BreadTok
                     var enviroment = System.Environment.CurrentDirectory;
                     string imgSrc = Directory.GetParent(enviroment).Parent.FullName + "\\Resources\\Roti\\" + rotiImgSourceDir;
                     saveImage(imgSrc, "\\Resources\\Roti\\", kodeRotiUpdating);
-                    MessageBox.Show("stop");
+
                     deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + rotiImgSourceDir);
                 }
             }
@@ -1651,7 +1651,7 @@ namespace BreadTok
 
         private void dgKaryawan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "DETAIL")
+            if (e.PropertyName == "Detail")
             {
                 DataGridTemplateColumn buttonColumn = new DataGridTemplateColumn();
                 DataTemplate buttonTemplate = new DataTemplate();

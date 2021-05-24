@@ -15,10 +15,10 @@ namespace BreadTok
         public DataTable loadData()
         {
             dt = new DataTable();
-            dt.Columns.Add("NAMA");
-            dt.Columns.Add("USERNAME");
-            dt.Columns.Add("STATUS");
-            dt.Columns.Add("DETAIL");
+            dt.Columns.Add("Nama");
+            dt.Columns.Add("Username");
+            dt.Columns.Add("Status");
+            dt.Columns.Add("Detail");
 
             OracleCommand cmd = new OracleCommand();
             cmd.CommandText = "select * from karyawan";
