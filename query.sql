@@ -241,6 +241,15 @@ END;
 /
 SHOW ERR;
 
+CREATE OR REPLACE PROCEDURE update_ed_voucher (
+    idcust varchar2
+)
+is
+    
+begin
+    update USER_VOUCHER set STATUS=0 where FK_PELANGGAN=idcust and EXP_DATE < sysdate;
+end;
+/
 
 CREATE OR REPLACE PROCEDURE update_ed_voucher (
     idcust varchar2
