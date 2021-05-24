@@ -100,7 +100,8 @@ namespace BreadTok
             rotis = new List<Roti>();
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = App.conn;
-            cmd.CommandText = "select ID,NAMA,DESKRIPSI,HARGA,STOK,STATUS,JENIS_ROTI,FK_RESEP from roti where status > 0";
+            cmd.CommandText = "select ID,KODE,NAMA,DESKRIPSI,HARGA,STOK,STATUS,JENIS_ROTI,FK_RESEP from roti where status > 0";
+            cmd.CommandText = "select ID,KODE,NAMA,DESKRIPSI,HARGA,STOK,STATUS,JENIS_ROTI,FK_RESEP from roti where status > 0";
             OracleDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
@@ -461,18 +462,6 @@ namespace BreadTok
         {
             if (dgHistory.Columns.Count > 0)
             {
-                //public string nomor_nota { get; set; }
-                //public string tanggal_trans { get; set; }
-                //public int total { get; set; }
-                //public string id_karyawan { get; set; }
-                //public string id_pelanggan { get; set; }
-                //public string nama_karyawan { get; set; }
-                //public string nama_pelanggan { get; set; }
-                //public string metode_pembayaran { get; set; }
-                //public string id_voucher { get; set; }
-                //public string status { get; set; }
-                //public string countRoti { get; set; }
-                //public List<DTrans> dtrans { get; set; }
                 dgHistory.Columns[0].Header = "Nomor Nota";
                 dgHistory.Columns[1].Header = "Tanggal Transaksi";
                 dgHistory.Columns[2].Header = "Total";
@@ -491,8 +480,17 @@ namespace BreadTok
                 dgHistory.Columns[3].Visibility = Visibility.Hidden;
                 dgHistory.Columns[4].Visibility = Visibility.Hidden;
                 dgHistory.Columns[6].Visibility = Visibility.Hidden;
+                dgHistory.Columns[5].Visibility = Visibility.Hidden;
+                dgHistory.Columns[7].Visibility = Visibility.Hidden;
                 dgHistory.Columns[8].Visibility = Visibility.Hidden;
                 dgHistory.Columns[11].Visibility = Visibility.Hidden;
+
+                dgHistory.Columns[0].Width = DataGridLength.SizeToCells;
+                dgHistory.Columns[1].Width = DataGridLength.Auto;
+                dgHistory.Columns[2].Width = DataGridLength.Auto;
+                dgHistory.Columns[9].Width = DataGridLength.SizeToCells;
+                dgHistory.Columns[10].Width = DataGridLength.Auto;
+                dgHistory.Columns[12].Width = DataGridLength.SizeToCells;
             }
         }
 
