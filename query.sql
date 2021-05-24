@@ -12,7 +12,6 @@ END;
 SHOW ERR;
 
 
-
 CREATE OR REPLACE TRIGGER AUTOGEN_ID_BAHAN
 BEFORE INSERT OR UPDATE ON BAHAN
 FOR EACH ROW
@@ -56,16 +55,18 @@ BEGIN
 		SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(B.KODE, 5,5))), 0)+1, 5, '0') INTO END_CODE
 		FROM BAHAN B
 		WHERE SUBSTR(B.KODE, 1, 4) = UPPER(START_CODE);
-    :NEW.KODE := START_CODE || END_CODE;
-    :NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
+		
+		:NEW.KODE := START_CODE || END_CODE;
+		:NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
 
-    if flag = 1 then
-      :new.ID := ID;
-      :new.STATUS := 1;
-    end if;
-  end if;
+		if flag = 1 then
+		  :new.ID := ID;
+		  :new.STATUS := 1;
+		end if;
+	end if;
 END;
 /
+SHOW ERR;
 
 CREATE OR REPLACE TRIGGER AUTOGEN_ID_VOUCHER
 BEFORE INSERT ON VOUCHER
@@ -80,6 +81,7 @@ BEGIN
     :new.ID := ID;
 END;
 /
+SHOW ERR;
 
 CREATE OR REPLACE TRIGGER AUTOGEN_ID_USER_VOUCHER
 BEFORE INSERT ON USER_VOUCHER
@@ -92,16 +94,9 @@ BEGIN
     from USER_VOUCHER;
     
     :new.ID := ID;
-    :NEW.KODE := START_CODE || END_CODE;
-		:NEW.PICTURE_LOCATION := START_CODE || END_CODE || '.jpg';
-
-		if flag = 1 then
-			:new.ID := ID;
-			:new.STATUS := 1;
-		end if;
-	end if;
 END;
 /
+SHOW ERR;
 
 CREATE OR REPLACE TRIGGER AUTOGEN_ID_KARYAWAN
 BEFORE INSERT ON KARYAWAN
@@ -132,6 +127,7 @@ BEGIN
     :new.ID := ID;
 END;
 /
+SHOW ERR;
 
 CREATE OR REPLACE TRIGGER UPDATE_ID_ROTI
 BEFORE UPDATE ON ROTI
@@ -165,6 +161,7 @@ BEGIN
     end if;
 END;
 /
+SHOW ERR;
 
 -- Trigger d_trans
 CREATE OR REPLACE TRIGGER D_TRANS_trigger
@@ -187,6 +184,7 @@ EXCEPTION
         raise_application_error(-20001, 'Stok tidak mencukupi!');
 END;
 /
+SHOW ERR;
 
 --Trigger h_trans
 CREATE OR REPLACE TRIGGER H_TRANS_trigger
@@ -198,6 +196,7 @@ BEGIN
     :NEW.STATUS := 0;
 END;
 /
+SHOW ERR;
 
 --Func Autogen no nota
 CREATE OR REPLACE FUNCTION NOMOR_NOTA_autogen
@@ -213,6 +212,7 @@ begin
     return newid;
 end;
 /
+SHOW ERR;
 
 
 --Trigger Pelanggan
@@ -239,6 +239,19 @@ BEGIN
     :NEW.KODE := gab || newUrutan;
 END;
 /
+SHOW ERR;
+
+
+CREATE OR REPLACE PROCEDURE update_ed_voucher (
+    idcust varchar2
+)
+is
+    
+begin
+    update USER_VOUCHER set STATUS=0 where FK_PELANGGAN=idcust and EXP_DATE < sysdate;
+end;
+/
+SHOW ERR;
 
 COMMIT;
 

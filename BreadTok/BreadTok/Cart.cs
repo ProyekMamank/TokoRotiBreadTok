@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,8 @@ namespace BreadTok
     {
         public List<Roti> rotis { get; set; }
         public List<int> jml { get; set; }
-        public int total { get; set; }
+        private int total { get; set; }
+        private int potongan { get; set; }
         DataTable dt;
         public Cart()
         {
@@ -63,9 +65,10 @@ namespace BreadTok
                 jml.RemoveAt(idx);
             }
         }
-        public DataTable loadToDatagrid()
+        public DataTable getDataTable()
         {
             dt = new DataTable();
+            dt.Columns.Add("ID");
             dt.Columns.Add("Nama Roti");
             dt.Columns.Add("Harga Roti");
             dt.Columns.Add("Qty");
@@ -78,16 +81,7 @@ namespace BreadTok
             {
                 Roti r = rotis[i];
                 DataRow dr = dt.NewRow();
-                //dr["Nama Roti"] = r.nama_roti;
-                //dr["Harga Roti"] = r.harga_roti;
-                //dr["Qty"] = jml[i];
-                //dr["Subtotal"] = jml[i] * r.harga_roti;
-                //dr["Action"] = r.id_roti;
-                //dr[0] = r.nama_roti;
-                //dr[1] = r.harga_roti;
-                //dr[2] = jml[i];
-                //dr[3] = jml[i] * r.harga_roti;
-                //dr[4] = r.id_roti;
+                dr["ID"] = r.id_roti;
                 dr["Nama Roti"] = r.nama_roti;
                 dr["Harga Roti"] = r.harga_roti;
                 dr["Qty"] = jml[i];
@@ -99,15 +93,41 @@ namespace BreadTok
 
             return dt;
         }
-        public string getTotal()
+        public string getFormattedTotal()
         {
-            return "Total : Rp " + total;
+            return getTotal().ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+        }
+        public string getFormattedGrandTotal()
+        {
+            return getGrandTotal().ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+        }
+        public string getFormattedPotongan()
+        {
+            int realPot = potongan <= 0 ? -potongan : (int)(total * (potongan / 100.0));
+            return realPot.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+        }
+        public int getCartItemCount()
+        {
+            return rotis.Count;
         }
         public void clear()
         {
             rotis.Clear();
             jml.Clear();
             total = 0;
+        }
+        public int getTotal()
+        {
+            return total;
+        }
+        public int getGrandTotal()
+        {
+            int realPot = potongan <= 0 ? -potongan : (int)(total * (potongan / 100.0));
+            return Math.Max(total - realPot,0);
+        }
+        public void setPotongan(int pot)
+        {
+            this.potongan = pot;
         }
     }
 }

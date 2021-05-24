@@ -177,7 +177,7 @@ namespace BreadTok
                                 int ada = Convert.ToInt32(cmd.ExecuteScalar());
                                 if (ada == 0)
                                 {
-                                    cmd = new OracleCommand("INSERT INTO PELANGGAN VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10)", App.conn);
+                                    cmd = new OracleCommand("INSERT INTO PELANGGAN (ID, USERNAME, PASSWORD, NAMA, JENIS_KELAMIN, ALAMAT, EMAIL, NO_TELP, TANGGAL_LAHIR, STATUS) VALUES(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10)", App.conn);
                                     cmd.Parameters.Add(":1", getIdPelanggan());
                                     cmd.Parameters.Add(":2", rTbUsername.Text);
                                     cmd.Parameters.Add(":3", rTbPassword.Password);
