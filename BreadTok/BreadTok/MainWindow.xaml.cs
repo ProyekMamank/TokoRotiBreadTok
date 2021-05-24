@@ -471,7 +471,7 @@ namespace BreadTok
                             string jenisBahan = cbJenisBahan.SelectedValue.ToString().Substring(2);
                         
                             OracleCommand cmd = new OracleCommand();
-                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8)";
+                            cmd.CommandText = "insert into bahan values(:1,:2,:3,:4,:5,:6,:7,:8,:9)";
                             cmd.Connection = App.conn;
                             cmd.Parameters.Add(":1", "0"); //id
                             cmd.Parameters.Add(":2", "0"); //kode
@@ -481,6 +481,7 @@ namespace BreadTok
                             cmd.Parameters.Add(":6", satuan);
                             cmd.Parameters.Add(":7", jenisBahan);
                             cmd.Parameters.Add(":8", "0"); //pic_loc
+                            cmd.Parameters.Add(":9", "0"); //pic_loc
                             cmd.ExecuteNonQuery();
                         
                             cmd = new OracleCommand();
