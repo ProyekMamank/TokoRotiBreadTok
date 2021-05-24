@@ -43,6 +43,21 @@ namespace BreadTok
             lbWelcome.Text = $"Selamat Datang, {nama}!";
             cart = new Cart();
             dgRoti.ColumnWidth = DataGridLength.Auto;
+
+            OracleCommand cmdED = new OracleCommand();
+            cmdED.Connection = App.conn;
+            cmdED.CommandText = "update_ed_voucher";
+            cmdED.CommandType = CommandType.StoredProcedure;
+            cmdED.Parameters.Add(new OracleParameter()
+            {
+                Direction = ParameterDirection.Input,
+                ParameterName = "idcust",
+                OracleDbType = OracleDbType.Varchar2,
+                Size = 10
+            });
+            cmdED.Parameters["idcust"].Value = loggedUserID;
+            cmdED.ExecuteNonQuery();
+
             loadRoti();
             loadCart();
             loadVoucher();
@@ -54,6 +69,7 @@ namespace BreadTok
             public string Kode { get; set; }
             public string Jenis { get; set; }
             public string Nominal { get; set; }
+            public string ExpiredDate { get; set; }
             public int realNominal { get; set; }
 
             public override string ToString()
@@ -124,7 +140,7 @@ namespace BreadTok
 
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = App.conn;
-            cmd.CommandText = "select UV.ID, V.NAMA, V.JENIS, V.POTONGAN " +
+            cmd.CommandText = "select UV.ID, V.NAMA, V.JENIS, V.POTONGAN, TO_CHAR(UV.EXP_DATE,'DD FmMonth YYYY') " +
                 "from VOUCHER V " +
                 "join USER_VOUCHER UV on V.ID = UV.FK_VOUCHER " +
                 "join PELANGGAN P on P.ID = UV.FK_PELANGGAN " +
@@ -150,6 +166,7 @@ namespace BreadTok
                     ID = reader.GetValue(0).ToString(),
                     Kode = reader.GetValue(1).ToString(),
                     Jenis = reader.GetValue(2).ToString(),
+                    ExpiredDate = reader.GetValue(4).ToString(),
                     Nominal = nom,
                     realNominal = Convert.ToInt32(realNom)
                 });
@@ -173,7 +190,7 @@ namespace BreadTok
             cmdH.CommandText =
                 @"select
                        H.NOMOR_NOTA,
-                       INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD FmMONTH YYYY')),
+                       INITCAP(TO_CHAR(H.TANGGAL_TRANS, 'DD FmMonth YYYY')),
                        H.TOTAL,
                        nvl(K.NAMA,'-'),
                        P.NAMA,
@@ -311,7 +328,8 @@ namespace BreadTok
             if (dgVoucher.Columns.Count > 0)
             {
                 dgVoucher.Columns[0].Visibility = Visibility.Hidden;
-                dgVoucher.Columns[4].Visibility = Visibility.Hidden;
+                dgVoucher.Columns[5].Visibility = Visibility.Hidden;
+                dgVoucher.Columns[4].Header = "Expired Date";
             }
         }
 
