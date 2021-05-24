@@ -39,9 +39,9 @@ namespace BreadTok
                 dr[2] = reader.GetValue(3).ToString() + " " + reader.GetValue(5).ToString();
 
                 dr[3] = Convert.ToInt32(reader.GetValue(4));
-                
 
-                dr[4] = reader.GetValue(0).ToString()
+                dr[4] = reader.GetValue(0).ToString();
+                dr[5] = reader.GetValue(0).ToString();
                 dt.Rows.Add(dr);
             }
             reader.Close();
@@ -89,8 +89,7 @@ namespace BreadTok
         {
             OracleCommand cmd = new OracleCommand($"UPDATE BAHAN SET QTY_STOK = QTY_STOK + {value} WHERE ID = {id}", App.conn);
             cmd.ExecuteNonQuery();
-            int harga;
             cmd = new OracleCommand($"INSERT INTO H_BELI_BAHAN VALUES('',SYSDATE,", App.conn);
-        
+        }
     }
 }
