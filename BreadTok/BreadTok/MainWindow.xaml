@@ -70,9 +70,9 @@
 
         </materialDesign:ColorZone>
 
-        <TabControl Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+        <TabControl x:Name="tabControl" Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
                     materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Column="0" Margin="0,0.4,0,0" Grid.Row="1">
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterBahan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Carrot" FontSize="15" Height="20" Width="auto"/>
@@ -87,45 +87,55 @@
                     <Canvas x:Name="panelInsertBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729"  Visibility="Hidden">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Insert Bahan"/>
                         <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbMerk" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236" TabIndex="3"/>
+                        
                         <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <TextBox x:Name="tbQuantity" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56"/>
-                        <TextBox x:Name="tbMerk" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
-                        <ComboBox x:Name="cbJenisBahan" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
-                        <Image x:Name="imgInsertbahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
-                        <Button x:Name="btnOpenImg" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImg_Click" RenderTransformOrigin="0.624,2.088"/>
-                        <Button x:Name="btnSubmit" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmit_Click"/>
-                        <ComboBox x:Name="cbSatuan" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0">
+                        <TextBox x:Name="tbQuantity" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56" TabIndex="4"/>
+                        <ComboBox x:Name="cbSatuan" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0" TabIndex="5">
                             <System:String>GRAM</System:String>
                             <System:String>mL</System:String>
                             <System:String>BUTIR</System:String>
                         </ComboBox>
+
                         <Label Content="HARGA :" Canvas.Left="54" Canvas.Top="180" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <TextBox x:Name="tbHarga" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236"/>
+                        <TextBox x:Name="tbHarga" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236" TabIndex="6"/>
+
+                        <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <ComboBox x:Name="cbJenisBahan" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29" TabIndex="7"/>
+                        
+                        <Image x:Name="imgInsertbahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
+                        <Button x:Name="btnOpenImg" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImg_Click" RenderTransformOrigin="0.624,2.088" TabIndex="8"/>
+
+                        <Button x:Name="btnSubmit" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmit_Click" TabIndex="9"/>
                     </Canvas>
                     <Canvas x:Name="panelUpdateBahan" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729" Visibility="Hidden">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Update Bahan"/>
                         <Label Content="MERK :" Canvas.Left="64" Canvas.Top="72" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbMerkUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236" TabIndex="10"/>
+
                         <Label Content="QUANTITY :" Canvas.Left="32" Canvas.Top="123" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <TextBox x:Name="tbQuantityUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56"/>
-                        <TextBox x:Name="tbMerkUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="72" Width="236"/>
-                        <ComboBox x:Name="cbJenisBahanUpdate" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29"/>
-                        <Image x:Name="imgUpdateBahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
-                        <Button x:Name="btnOpenImgBahanUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImgBahanUpdate_Click" RenderTransformOrigin="0.624,2.088"/>
-                        <Button x:Name="btnSubmitUpdate" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmitUpdate_Click"/>
-                        <ComboBox x:Name="cbSatuanUpdate" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0">
+                        <TextBox x:Name="tbQuantityUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="123" Width="56" TabIndex="11"/>
+                        <ComboBox x:Name="cbSatuanUpdate" Canvas.Left="206" Canvas.Top="127" Width="57" SelectedIndex="0" TabIndex="12">
                             <System:String>GRAM</System:String>
                             <System:String>mL</System:String>
                             <System:String>BUTIR</System:String>
                         </ComboBox>
+
                         <Label Content="HARGA :" Canvas.Left="54" Canvas.Top="180" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <TextBox x:Name="tbHargaUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236"/>
+                        <TextBox x:Name="tbHargaUpdate" Height="29" TextWrapping="Wrap" Canvas.Left="145" Canvas.Top="180" Width="236" TabIndex="13"/>
+
+                        <Label Content="JENIS BAHAN :" Canvas.Left="11" Canvas.Top="240" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <ComboBox x:Name="cbJenisBahanUpdate" Canvas.Left="145" Canvas.Top="240" Width="236" Height="29" TabIndex="14"/>
+                        
+                        <Image x:Name="imgUpdateBahan" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
+                        <Button x:Name="btnOpenImgBahanUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="BtnOpenImgBahanUpdate_Click" RenderTransformOrigin="0.624,2.088" TabIndex="15"/>
+
+                        <Button x:Name="btnSubmitUpdate" Content="Submit" Canvas.Left="145" Canvas.Top="378" Width="105" Height="40" Background="#FF3AB74D" BorderBrush="#FF3AB752" Click="btnSubmitUpdate_Click" TabIndex="16"/>
                     </Canvas>
 
-                    <Button x:Name="btnInsert" Content="INSERT&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="91" Height="62" Click="btnInsert_Click" FontSize="12"/>
-                    <Button x:Name="btnDelete" Content="DELETE&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,184,0,0" VerticalAlignment="Top" Width="91" Height="57" FontSize="12" Click="BtnDelete_Click"/>
-                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden"/>
+                    <Button x:Name="btnInsert" Content="INSERT&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,85,0,0" VerticalAlignment="Top" Width="91" Height="62" Click="btnInsert_Click" FontSize="12" TabIndex="17"/>
+                    <Button x:Name="btnDelete" Content="DELETE&#xa;BAHAN" HorizontalAlignment="Left" Margin="744,184,0,0" VerticalAlignment="Top" Width="91" Height="57" FontSize="12" Click="BtnDelete_Click" TabIndex="18"/>
+                    <Button x:Name="btnBack" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btnBack_Click" Visibility="Hidden" TabIndex="19"/>
 
                 </Grid>
             </TabItem>
@@ -174,6 +184,7 @@
                     </Canvas>
                 </Grid>
             </TabItem>
+            
             <TabItem x:Name="tabMasterRoti" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -229,16 +240,21 @@
                     <Canvas x:Name="panelUpdateRoti" HorizontalAlignment="Left" Height="514" Margin="10,10,0,0" VerticalAlignment="Top" Width="729" Visibility="Hidden">
                         <Label FontWeight="Bold" FontSize="14" Margin="0,5" Content="Update Roti"/>
                         <Label Content="NAMA :" Canvas.Left="75" Canvas.Top="35" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbNamaRoti" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="35" Width="276" TabIndex="25"/>
+                        
                         <Label Content="DESKRIPSI :" Canvas.Left="50" Canvas.Top="79" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbDeskripsiRoti" Height="112" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="79" Width="276" BorderThickness="1" TabIndex="26"/>
+                        
                         <Label Content="HARGA :" Canvas.Left="69" Canvas.Top="206" FontWeight="Bold" FontSize="14" Height="29"/>
+                        <TextBox x:Name="tbHargaRoti" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="206" Width="276" TabIndex="27"/>
+
                         <Label Content="JENIS ROTI :" Canvas.Left="45" Canvas.Top="253" FontWeight="Bold" FontSize="14" Height="29"/>
-                        <TextBox x:Name="tbNamaRoti" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="35" Width="276"/>
-                        <TextBox x:Name="tbDeskripsiRoti" Height="112" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="79" Width="276" BorderThickness="1"/>
-                        <TextBox x:Name="tbHargaRoti" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="206" Width="276"/>
-                        <ComboBox x:Name="cbJenisRoti" Canvas.Left="140" Canvas.Top="257" Width="176"/>
+                        <ComboBox x:Name="cbJenisRoti" Canvas.Left="140" Canvas.Top="257" Width="176" TabIndex="28"/>
+                        
                         <Image x:Name="imgUpdateRoti" HorizontalAlignment="Left" Height="193" VerticalAlignment="Top" Width="281" Canvas.Left="424" Canvas.Top="72"/>
-                        <Button x:Name="btnOpenImgRotiUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" RenderTransformOrigin="0.624,2.088" Click="btnOpenImgRotiUpdate_Click"/>
-                        <Button x:Name="btnSubmitRoti" Content="Submit" Canvas.Left="140" Canvas.Top="309" Width="107" Height="36" Background="#FF1EBD20" BorderBrush="#FF27C328" Click="btnSubmitRoti_Click"/>
+                        <Button x:Name="btnOpenImgRotiUpdate" Content="Open Image" Canvas.Left="424" Canvas.Top="270" Width="114" Height="31" Background="#FF3AB74D" BorderBrush="#FF3AB752" RenderTransformOrigin="0.624,2.088" Click="btnOpenImgRotiUpdate_Click" TabIndex="29"/>
+                        
+                        <Button x:Name="btnSubmitRoti" Content="Submit" Canvas.Left="140" Canvas.Top="309" Width="107" Height="36" Background="#FF1EBD20" BorderBrush="#FF27C328" Click="btnSubmitRoti_Click" TabIndex="30"/>
                     </Canvas>
                     <Button x:Name="btnDeleteRoti" Content="Delete" HorizontalAlignment="Left" Margin="744,76,0,0" VerticalAlignment="Top" Width="91" Height="62" FontSize="12" Click="btnDeleteRoti_Click"/>
                     <Button x:Name="btnBackRoti" Content="BACK TO MASTER" HorizontalAlignment="Left" Margin="688,502,0,0" VerticalAlignment="Top" Width="147" Height="38" Visibility="Hidden" Click="btnBackRoti_Click"/>
@@ -289,7 +305,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabMasterVoucher" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="TicketPercent" FontSize="15" Height="20" Width="auto"/>
@@ -302,7 +318,7 @@
                     <Button x:Name="btnBagiVoucher" Content="Bagi Voucher" HorizontalAlignment="Left" Margin="500,187,0,0" VerticalAlignment="Top" Width="200" Height="98" Click="btnBagiVoucher_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
+            <TabItem x:Name="tabDaftarPesanan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Cash" FontSize="15" Height="20" Width="auto"/>

@@ -68,7 +68,7 @@ namespace BreadTok
                     tbUsername.Text = "";
                     tbPassword.Password = "";
 
-                    MainWindow mw = new MainWindow("0");
+                    MainWindow mw = new MainWindow("0", "ADMIN");
                     this.Hide();
                     mw.ShowDialog();
                     this.ShowDialog();
@@ -91,7 +91,11 @@ namespace BreadTok
                             tbUsername.Text = "";
                             tbPassword.Password = "";
 
-                            MainWindow mw = new MainWindow(idUser);
+                            OracleCommand cmdJabatan = new OracleCommand("select j.nama_jabatan from jabatan j, karyawan k where j.id = k.fk_jabatan and k.id = :1", App.conn);
+                            cmdJabatan.Parameters.Add(":1", idUser);
+                            string jabatanUser = cmdJabatan.ExecuteScalar().ToString();
+
+                            MainWindow mw = new MainWindow(idUser, jabatanUser);
                             this.Hide();
                             mw.ShowDialog();
                             this.ShowDialog();

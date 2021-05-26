@@ -23,15 +23,15 @@
             <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label" Content="Login to your account" HorizontalAlignment="Left" Margin="69,61,0,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="19"/>
 
             <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy" Content="Username" HorizontalAlignment="Left" Margin="69,114.873,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
-            <TextBox x:Name="tbUsername" HorizontalAlignment="Left" Height="25" Margin="75,144.216,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans"/>
+            <TextBox x:Name="tbUsername" HorizontalAlignment="Left" Height="25" Margin="75,144.216,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans" TabIndex="1"/>
             <Image x:Name="image1_Copy" HorizontalAlignment="Left" Height="20" Margin="374,206.559,0,0" VerticalAlignment="Top" Width="24" Source="pack://siteoforigin:,,,/Resources/Lock.png"/>
 
             <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy1" Content="Password" HorizontalAlignment="Left" Margin="69,177.216,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans"/>
-            <PasswordBox x:Name="tbPassword" HorizontalAlignment="Left" Height="25" Margin="75,206.559,0,0"   VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans" RenderTransformOrigin="0.502,0.711"/>
+            <PasswordBox x:Name="tbPassword" HorizontalAlignment="Left" Height="25" Margin="75,206.559,0,0"   VerticalAlignment="Top" Width="323" BorderBrush="#7F000000" FontFamily="Open Sans" RenderTransformOrigin="0.502,0.711" TabIndex="2"/>
 
             <Image x:Name="image1" HorizontalAlignment="Left" Height="20" Margin="374,144.216,0,0" VerticalAlignment="Top" Width="24" Source="pack://siteoforigin:,,,/Resources/Username.png"/>
 
-            <Button x:Name="btnLogin" Content="Log In" HorizontalAlignment="Left" Margin="75,305,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="BtnLogin_Click">
+            <Button x:Name="btnLogin" Content="Log In" HorizontalAlignment="Left" Margin="75,305,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="BtnLogin_Click" TabIndex="5">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <LinearGradientBrush.RelativeTransform>
@@ -47,7 +47,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button x:Name="btnRegis" Content="Register" HorizontalAlignment="Left" Margin="75,346,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnRegis_Click" />
+            <Button x:Name="btnRegis" Content="Register" HorizontalAlignment="Left" Margin="75,346,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnRegis_Click" TabIndex="6" />
 
             <Image MouseDown="Exit" Cursor="Hand" x:Name="image2" HorizontalAlignment="Left" Height="30" Margin="422.5,10,0,0" VerticalAlignment="Top" Width="31" Source="pack://siteoforigin:,,,/Resources/Close.png"/>
             <Label RenderOptions.ClearTypeHint="Enabled" x:Name="label_Copy2" Content="Log in as" HorizontalAlignment="Left" Margin="69,237,0,0" VerticalAlignment="Top" Foreground="#7F000000" FontFamily="Open Sans" Width="62"/>
@@ -55,12 +55,12 @@
                 IsChecked="True"
                 Content="Karyawan"
                 Margin="315,237,65.6,158.6" 
-                x:Name="rbKaryawan" />
+                x:Name="rbKaryawan" TabIndex="4" />
             <RadioButton
                 IsChecked="True"
                 Content="Pelanggan"
                 Margin="185,237,180.6,158.6" 
-                x:Name="rbPelanggan" />
+                x:Name="rbPelanggan" TabIndex="3" />
         </Grid>
 
         <Grid Margin="270,0,0,0" x:Name="GridRegis" Visibility="Visible" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
@@ -72,52 +72,52 @@
                              materialDesign:HintAssist.Hint="Username"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
-                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625"/>
+                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="12"/>
                     <PasswordBox x:Name="rTbPassword"
                                   materialDesign:HintAssist.Hint="Password"
                                   materialDesign:HintAssist.Foreground="Green"
                                   materialDesign:TextFieldAssist.UnderlineBrush="#7F000000"
                                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" 
-                                  Width="323" Height="40"/>
+                                  Width="323" Height="40" TabIndex="13"/>
                     <PasswordBox x:Name="rTbConfirmPassword"
                                   materialDesign:HintAssist.Hint="Confirm Password"
                                   materialDesign:HintAssist.Foreground="Green"
                                   materialDesign:TextFieldAssist.UnderlineBrush="#7F000000"
                                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" 
-                                  Width="323" Height="40"/>
+                                  Width="323" Height="40" TabIndex="14"/>
                     <TextBox x:Name="rTbNama"
                              materialDesign:HintAssist.Hint="Nama Lengkap"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
-                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625"/>
+                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="15"/>
                     <Grid>
-                        <RadioButton x:Name="rRbLaki" Content="Man" Width="160" Height="40" Margin="69,0,235,0" Foreground="#7F000000"/>
-                        <RadioButton x:Name="rRbPerempuan" Content="Woman" Width="161" Height="40" Margin="229,0,74,0" Foreground="#7F000000"/>
+                        <RadioButton x:Name="rRbLaki" Content="Man" Width="160" Height="40" Margin="69,0,235,0" Foreground="#7F000000" TabIndex="16"/>
+                        <RadioButton x:Name="rRbPerempuan" Content="Woman" Width="161" Height="40" Margin="229,0,74,0" Foreground="#7F000000" TabIndex="17"/>
                     </Grid>
                     <TextBox x:Name="rTbAlamat"
                              materialDesign:HintAssist.Hint="Alamat"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
-                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625"/>
+                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="18"/>
                     <TextBox x:Name="rTbEmail"
                              materialDesign:HintAssist.Hint="Email"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
-                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625"/>
+                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="19"/>
                     <TextBox x:Name="rTbNoTelp"
                              materialDesign:HintAssist.Hint="Phone Number"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
-                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625"/>
+                             Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="20"/>
                     <DatePicker x:Name="rTglLahir"
                                 Width="323"
                                 materialDesign:HintAssist.Hint="Date of Birth"
-                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" TabIndex="21"/>
                 </StackPanel>
             </ScrollViewer>
 
 
-            <Button x:Name="btnRegis2" Content="Register" HorizontalAlignment="Left" Margin="75,329,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="Regis_MouseDown2">
+            <Button x:Name="btnRegis2" Content="Register" HorizontalAlignment="Left" Margin="75,329,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Click="Regis_MouseDown2" TabIndex="22">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <LinearGradientBrush.RelativeTransform>
@@ -133,7 +133,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <Button x:Name="btnLogin2" Content="Log In" HorizontalAlignment="Left" Margin="75,370,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnLogin2_Click"/>
+            <Button x:Name="btnLogin2" Content="Log In" HorizontalAlignment="Left" Margin="75,370,0,0" VerticalAlignment="Top" Width="323" BorderBrush="{x:Null}" FontSize="12" FontFamily="Open Sans" Height="36" Background="White" Foreground="Black" Click="BtnLogin2_Click" TabIndex="23"/>
 
             <Image MouseDown="Exit" Cursor="Hand" x:Name="image3" HorizontalAlignment="Left" Height="30" Margin="422.5,10,0,0" VerticalAlignment="Top" Width="31" Source="pack://siteoforigin:,,,/Resources/Close.png"/>
         </Grid>
