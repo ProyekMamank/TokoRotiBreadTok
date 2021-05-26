@@ -53,7 +53,6 @@ namespace BreadTok
                 lblKode.Content = reader.GetValue(1).ToString();
                 lblNama.Content = reader.GetValue(4).ToString();
                 lblUsername.Content = reader.GetValue(2).ToString();
-                lblPassword.Content = reader.GetValue(3).ToString();
                 lblEmail.Content = reader.GetValue(7).ToString();
 
                 string jabatan = "";
@@ -73,7 +72,7 @@ namespace BreadTok
                 }
                 lblJK.Content = jk;
 
-                lblTglLahir.Content = reader.GetValue(9).ToString();
+                lblTglLahir.Content = ((DateTime)reader.GetValue(9)).ToString("dd MMMM yyyy");
                 lblTelp.Content = reader.GetValue(8).ToString();
                 lblAlamat.Content = reader.GetValue(6).ToString();
                 loadImage(imgKaryawan, "\\Resources\\Karyawan\\" + reader.GetValue(12).ToString());

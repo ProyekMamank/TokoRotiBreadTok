@@ -1178,7 +1178,7 @@ namespace BreadTok
             karyawanImgSourceDir = "";
             tbNamaKaryawan.Text = "";
             tbUsernameKaryawan.Text = "";
-            tbPasswordKaryawan.Text = "";
+            tbPasswordKaryawan.Password = "";
             tbEmailKaryawan.Text = "";
             tbAlamatKaryawan.Text = "";
             tbNoTelpKaryawan.Text = "";
@@ -1421,7 +1421,7 @@ namespace BreadTok
 
             string nama = tbNamaKaryawan.Text;
             string username = tbUsernameKaryawan.Text;
-            string password = tbPasswordKaryawan.Text;
+            string password = tbPasswordKaryawan.Password;
             string email = tbEmailKaryawan.Text;
             string jenisKelamin = "";
             if(rbLakiKaryawan.IsChecked == true)
@@ -1711,7 +1711,7 @@ namespace BreadTok
                 buttonTemplate.VisualTree = buttonFactory;
                 //add handler or you can add binding to command if you want to handle click
                 buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowDetailKaryawan));
-                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Detail"));
                 buttonFactory.SetValue(Button.ContentProperty, "Detail");
                 buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
                 buttonFactory.SetValue(Button.WidthProperty, 80.0);
