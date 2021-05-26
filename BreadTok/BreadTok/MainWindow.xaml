@@ -269,9 +269,9 @@
                         <Label Content="JABATAN :" Canvas.Left="56" Canvas.Top="393" FontWeight="Bold" FontSize="14" Height="29"/>
                         <TextBox x:Name="tbNamaKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="35" Width="276"/>
                         <TextBox x:Name="tbUsernameKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="79" Width="276"/>
-                        <TextBox x:Name="tbPasswordKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="124" Width="276"/>
+                        <PasswordBox x:Name="tbPasswordKaryawan" Height="29" Canvas.Left="140" Canvas.Top="124" Width="276" PasswordChar="*"/>
                         <TextBox x:Name="tbEmailKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="171" Width="276"/>
-                        <TextBox x:Name="tbAlamatKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="141" Canvas.Top="257" Width="276"/>
+                        <TextBox x:Name="tbAlamatKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="257" Width="276"/>
                         <TextBox x:Name="tbNoTelpKaryawan" Height="29" TextWrapping="Wrap" Canvas.Left="140" Canvas.Top="306" Width="276"/>
                         <RadioButton x:Name="rbLakiKaryawan" Content="Laki - Laki" Canvas.Left="140" Canvas.Top="218"/>
                         <RadioButton x:Name="rbPerempuanKaryawan" Content="Perempuan" Canvas.Left="235" Canvas.Top="218"/>
