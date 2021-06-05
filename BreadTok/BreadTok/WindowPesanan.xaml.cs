@@ -88,7 +88,7 @@ namespace BreadTok
             {
                 btnKonfirmasi.Visibility = Visibility.Visible;
                 btnBatalkan.Visibility = Visibility.Visible;
-                btnBatalkan.Margin = new Thickness(425, 420, 0, 0);
+                btnBatalkan.Margin = new Thickness(425, 428, 0, 0);
             }
             else if (lblStatus.Content.Equals("Sudah Bayar") || lblStatus.Content.Equals("Dibatalkan"))
             {

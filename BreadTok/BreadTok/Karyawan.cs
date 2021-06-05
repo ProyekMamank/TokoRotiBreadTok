@@ -21,7 +21,7 @@ namespace BreadTok
             dt.Columns.Add("Detail");
 
             OracleCommand cmd = new OracleCommand();
-            cmd.CommandText = "select * from karyawan";
+            cmd.CommandText = "select * from karyawan where id != 0";
             cmd.Connection = App.conn;
             OracleDataReader reader = cmd.ExecuteReader();
             while (reader.Read())

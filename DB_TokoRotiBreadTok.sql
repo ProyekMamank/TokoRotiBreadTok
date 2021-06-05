@@ -337,6 +337,7 @@ INSERT INTO JABATAN VALUES(2, 'MANAGER');
 INSERT INTO JABATAN VALUES(3, 'CHEF');
 
 -- KARYAWAN
+INSERT INTO KARYAWAN VALUES(0, 'ADMN00001', 'Admin', 'Admin', 'Admin', 'L', 'Jalan Admin', 'admin@gmail.com', 0888888888, TO_DATE('01/01/1000', 'dd/mm/yyyy'), 1, 1, 'ADMN0001.jpg');
 INSERT INTO KARYAWAN VALUES(1, 'BURA00001', 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'BURA00001.jpg');
 INSERT INTO KARYAWAN VALUES(2, 'SEAD00001', 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'SEAD00001.jpg');
 INSERT INTO KARYAWAN VALUES(3, 'YADA00001', 'YaekoD', 'YaekoD', 'Yaeko Dario', 'P', 'Jalan Ngagel Jaya No. 26', 'yaekodario@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 1, 'YADA00001.jpg');
