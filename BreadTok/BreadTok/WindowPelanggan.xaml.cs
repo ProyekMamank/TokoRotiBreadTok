@@ -462,36 +462,40 @@ namespace BreadTok
         {
             if (dgHistory.Columns.Count > 0)
             {
-                dgHistory.Columns[0].Header = "Nomor Nota";
-                dgHistory.Columns[1].Header = "Tanggal Transaksi";
-                dgHistory.Columns[2].Header = "Total";
-                dgHistory.Columns[3].Header = "ID Karyawan";
-                dgHistory.Columns[4].Header = "ID Pelanggan";
-                dgHistory.Columns[5].Header = "Nama Karyawan";
-                dgHistory.Columns[6].Header = "Nama Pelanggan";
-                dgHistory.Columns[7].Header = "Metode";
-                dgHistory.Columns[8].Header = "Kode Voucher";
-                dgHistory.Columns[9].Header = "Status";
-                dgHistory.Columns[10].Header = "Jumlah Roti";
-                dgHistory.Columns[11].Header = "DTRANS";
-                dgHistory.Columns[12].Header = "Action";
-
-
-                dgHistory.Columns[3].Visibility = Visibility.Hidden;
-                dgHistory.Columns[4].Visibility = Visibility.Hidden;
-                dgHistory.Columns[6].Visibility = Visibility.Hidden;
-                dgHistory.Columns[5].Visibility = Visibility.Hidden;
-                dgHistory.Columns[7].Visibility = Visibility.Hidden;
-                dgHistory.Columns[8].Visibility = Visibility.Hidden;
-                dgHistory.Columns[11].Visibility = Visibility.Hidden;
-
-                dgHistory.Columns[0].Width = DataGridLength.SizeToCells;
-                dgHistory.Columns[1].Width = DataGridLength.Auto;
-                dgHistory.Columns[2].Width = DataGridLength.Auto;
-                dgHistory.Columns[9].Width = DataGridLength.SizeToCells;
-                dgHistory.Columns[10].Width = DataGridLength.Auto;
-                dgHistory.Columns[12].Width = DataGridLength.SizeToCells;
+                changeDgHistoryHeader();
             }
+        }
+        private void changeDgHistoryHeader()
+        {
+            dgHistory.Columns[0].Header = "Nomor Nota";
+            dgHistory.Columns[1].Header = "Tanggal Transaksi";
+            dgHistory.Columns[2].Header = "Total";
+            dgHistory.Columns[3].Header = "ID Karyawan";
+            dgHistory.Columns[4].Header = "ID Pelanggan";
+            dgHistory.Columns[5].Header = "Nama Karyawan";
+            dgHistory.Columns[6].Header = "Nama Pelanggan";
+            dgHistory.Columns[7].Header = "Metode";
+            dgHistory.Columns[8].Header = "Kode Voucher";
+            dgHistory.Columns[9].Header = "Status";
+            dgHistory.Columns[10].Header = "Jumlah Roti";
+            dgHistory.Columns[11].Header = "DTRANS";
+            dgHistory.Columns[12].Header = "Action";
+
+
+            dgHistory.Columns[3].Visibility = Visibility.Hidden;
+            dgHistory.Columns[4].Visibility = Visibility.Hidden;
+            dgHistory.Columns[6].Visibility = Visibility.Hidden;
+            dgHistory.Columns[5].Visibility = Visibility.Hidden;
+            dgHistory.Columns[7].Visibility = Visibility.Hidden;
+            dgHistory.Columns[8].Visibility = Visibility.Hidden;
+            dgHistory.Columns[11].Visibility = Visibility.Hidden;
+
+            dgHistory.Columns[0].Width = DataGridLength.SizeToCells;
+            dgHistory.Columns[1].Width = DataGridLength.Auto;
+            dgHistory.Columns[2].Width = DataGridLength.Auto;
+            dgHistory.Columns[9].Width = DataGridLength.SizeToCells;
+            dgHistory.Columns[10].Width = DataGridLength.Auto;
+            dgHistory.Columns[12].Width = DataGridLength.SizeToCells;
         }
 
         private void dgHistory_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -525,6 +529,8 @@ namespace BreadTok
             WindowDetailHistory dh = new WindowDetailHistory(selHT);
             overlayOn();
             dh.ShowDialog();
+            loadHistory();
+            changeDgHistoryHeader();
             overlayOff();
         }
     }
