@@ -139,5 +139,15 @@ namespace BreadTok
             cbVoucher.SelectedIndex = 0;
             loadDataListCustomer();
         }
+
+        private void DgListCustomer_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgListCustomer.Columns[0].Width = DataGridLength.SizeToHeader;
+        }
+
+        private void DgListAddedCustomer_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgListAddedCustomer.Columns[0].Width = DataGridLength.SizeToHeader;
+        }
     }
 }

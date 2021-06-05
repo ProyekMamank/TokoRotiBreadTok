@@ -58,7 +58,7 @@
                               ColumnWidth="*" Canvas.Left="10" Canvas.Top="31" Margin="41,216,469,9.6" MouseDoubleClick="dgListCustomer_MouseDoubleClick">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID Customer" Binding="{Binding id_customer}"
+                <DataGridTextColumn Header="ID" Binding="{Binding id_customer}"
                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
                 <DataGridTextColumn Header="Nama Customer" Binding="{Binding nama_customer}"
@@ -75,7 +75,7 @@
                               ColumnWidth="*" Canvas.Left="10" Canvas.Top="31" Margin="363,216,147,9.6" MouseDoubleClick="dgListAddedCustomer_MouseDoubleClick">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID Customer" Binding="{Binding id_customer}"
+                <DataGridTextColumn Header="ID" Binding="{Binding id_customer}"
                                 ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                                 EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
                 <DataGridTextColumn Header="Nama Customer" Binding="{Binding nama_customer}"
