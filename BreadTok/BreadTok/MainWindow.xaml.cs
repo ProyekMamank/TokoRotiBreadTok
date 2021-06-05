@@ -778,6 +778,7 @@ namespace BreadTok
             btnInsert.Visibility = Visibility.Visible;
             btnBack.Visibility = Visibility.Hidden;
             selectedIdBahan = -1;
+            textSelectedBahan.Text = "-";
         }
 
         private void dgBahan_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -861,8 +862,9 @@ namespace BreadTok
         private void dgBahan_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectedIdBahan = Convert.ToInt32((((DataGrid)sender).SelectedItem as DataRowView)[5]);
-            Console.WriteLine(((DataGrid)sender).SelectedItem);
-        }
+            Console.WriteLine((((DataGrid)sender).SelectedItem as DataRowView)[0]);
+            textSelectedBahan.Text = ((((DataGrid)sender).SelectedItem as DataRowView)[0]).ToString();
+    }
 
 
         private void loadCbJenisBahan(string state)
@@ -1161,6 +1163,7 @@ namespace BreadTok
             tbQuantity.Text = "";
             cbSatuan.SelectedIndex = 0;
             selectedIdBahan = -1;
+            textSelectedBahan.Text = "-";
         }
         private void resetUpdatePanel()
         {
@@ -1172,6 +1175,7 @@ namespace BreadTok
             tbQuantityUpdate.Text = "";
             cbSatuanUpdate.SelectedIndex = 0;
             selectedIdBahan = -1;
+            textSelectedBahan.Text = "-";
         }
         private void resetInsertKaryawanPanel()
         {
@@ -1286,6 +1290,7 @@ namespace BreadTok
 
             loadDataBahan();
             selectedIdBahan = -1;
+            textSelectedBahan.Text = "-";
             MessageHandler.messageSuccess("Delete Ingredients");
         }
 
@@ -1541,6 +1546,7 @@ namespace BreadTok
             btnDeleteRoti.Visibility = Visibility.Visible;
             btnBackRoti.Visibility = Visibility.Hidden;
             selectedIdRoti = -1;
+            textSelectedRoti.Text = "-";
         }
 
         string rotiImgSourceDir = "";
@@ -1576,7 +1582,8 @@ namespace BreadTok
         private void dgRoti_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectedIdRoti = Convert.ToInt32((((DataGrid)sender).SelectedItem as Roti).id_roti);
-            Console.WriteLine(selectedIdRoti);
+            Console.WriteLine((((DataGrid)sender).SelectedItem as Roti).nama_roti);
+            textSelectedRoti.Text = (((DataGrid)sender).SelectedItem as Roti).nama_roti;
         }
 
         private void btnDeleteRoti_Click(object sender, RoutedEventArgs e)
@@ -1594,6 +1601,7 @@ namespace BreadTok
 
             loadDataRoti();
             selectedIdRoti = -1;
+            textSelectedRoti.Text = "-";
             MessageHandler.messageSuccess("Delete Bread");
         }
 
@@ -1660,7 +1668,7 @@ namespace BreadTok
             string kodeRotiUpdating = cmd.ExecuteScalar().ToString();
             if (gantiFotoRoti)
             {
-                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiLama);
+                deleteImage(imgUpdateRoti, "\\Resources\\Roti\\" + kodeRotiUpdating);
                 saveImage(rotiImgSourceDir, "\\Resources\\Roti\\", kodeRotiUpdating);
             }
             else
@@ -1676,6 +1684,7 @@ namespace BreadTok
             }
 
             selectedIdRoti = -1;
+            textSelectedRoti.Text = "-";
             loadDataRoti();
 
             panelUpdateRoti.Visibility = Visibility.Hidden;

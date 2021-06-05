@@ -83,7 +83,7 @@ namespace BreadTok
                 listCustomer.Add(new customer
                 {
                     id_customer = reader.GetValue(0).ToString(),
-                    nama_customer = reader.GetValue(2).ToString()
+                    nama_customer = reader.GetValue(4).ToString()
                 });
             }
             reader.Close();
@@ -119,13 +119,14 @@ namespace BreadTok
             foreach(customer c in listAddedCustomer)
             {
                 OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "insert into user_voucher values(:1,:2,:3,:4)";
+                cmd.CommandText = "insert into user_voucher values(:1,:2,:3,:4,:5)";
                 cmd.Connection = App.conn;
 
                 cmd.Parameters.Add(":1", "0");
                 cmd.Parameters.Add(":2", c.id_customer);
                 cmd.Parameters.Add(":3", cbVoucher.SelectedValue.ToString().Substring(2));
-                cmd.Parameters.Add(":4", 1);
+                cmd.Parameters.Add(":4", System.DateTime.Now.AddMonths(6));
+                cmd.Parameters.Add(":5", 1);
 
                 cmd.ExecuteNonQuery();
             }

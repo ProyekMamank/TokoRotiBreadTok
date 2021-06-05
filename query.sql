@@ -4,7 +4,7 @@ IS
     HASIL PELANGGAN.ID%TYPE;
 BEGIN
 
-    SELECT MAX(ID) + 1 INTO HASIL FROM PELANGGAN;
+    SELECT to_char(max(to_number(ID))+1) INTO HASIL FROM PELANGGAN;
 
     RETURN HASIL;
 END;
@@ -220,26 +220,26 @@ CREATE OR REPLACE TRIGGER PELANGGAN_trigger_bef_ins
 BEFORE insert on PELANGGAN
 for each row
 DECLARE
-    a varchar2(2);
-    b varchar2(2);
+    a varchar2(20);
     gab varchar2(4);
     newUrutan varchar2(5);
 BEGIN
---     length(replace(:NEW.NAMA,' ',''))
-    if (length(:NEW.NAMA) - length(replace(:NEW.NAMA,' ','')) > 0) then
-        a := substr(:NEW.NAMA,1,2);
-        b := substr(:NEW.NAMA,instr(:NEW.NAMA,' ')+1,2);
-    else
-        a := substr(:NEW.NAMA,1,2);
-        b := substr(:NEW.NAMA,3,2);
-    end if;
-    gab := upper(a || b);
-    select lpad(nvl(max(to_number(substr(KODE,-4,4))),0)+1,5,'0') into newUrutan from PELANGGAN where KODE like gab || '%';
---     select lpad(nvl(max(to_number(substr(KODE,-4,4))),0)+1,5,'0') from PELANGGAN where KODE like 'RATR' || '%';
+	IF INSTR(:NEW.NAMA, ' ') > 0 THEN
+        a := SUBSTR(:NEW.NAMA, 1, 2) || SUBSTR(:NEW.NAMA, INSTR(:NEW.NAMA, ' ') + 1, 2);
+    ELSE
+        a := SUBSTR(RPAD(:NEW.NAMA, 4, 'A'), 1, 4);
+    END IF;
+    gab := upper(a);
+    select lpad(nvl(max(to_number(substr(KODE,-4,4))),0)+1,5,'0') into newUrutan 
+	from PELANGGAN 
+	WHERE SUBSTR(KODE, 1, 4) = gab;
+
     :NEW.KODE := gab || newUrutan;
+	:NEW.PICTURE_LOCATION := UPPER(gab || newUrutan) ||  '.jpg';
 END;
 /
 SHOW ERR;
+
 
 CREATE OR REPLACE PROCEDURE update_ed_voucher (
     idcust varchar2

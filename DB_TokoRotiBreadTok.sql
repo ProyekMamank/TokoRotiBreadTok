@@ -337,16 +337,15 @@ INSERT INTO JABATAN VALUES(2, 'MANAGER');
 INSERT INTO JABATAN VALUES(3, 'CHEF');
 
 -- KARYAWAN
-INSERT INTO KARYAWAN VALUES(1, 'BURA00001', 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(2, 'SEAD00001', 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(3, 'YADA00001', 'YaekoD', 'YaekoD', 'Yaeko Dario', 'P', 'Jalan Ngagel Jaya No. 26', 'yaekodario@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 1, 'a');
-INSERT INTO KARYAWAN VALUES(4, 'MEPU00001', 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Penamparan No. 15', 'melianapurnama@gmail.com', 0838555682, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 0, 2, 'a');
-INSERT INTO KARYAWAN VALUES(5, 'MIED00001', 'MihaelaE', 'MihaelaE', 'Mihaela Edvige', 'L', 'Jalan Kipas Dewa No. 6', 'mihaelaedvige@gmail.com', 0897555472, TO_DATE('12/08/1984', 'dd/mm/yyyy'), 1, 2, 'a');
-INSERT INTO KARYAWAN VALUES(6, 'EMBR00001', 'EmiliB', 'EmiliB', 'Emili Brendan', 'P', 'Jalan Kursi Terbang No. 12', 'emilibrendan@gmail.com', 0875433694, TO_DATE('28/06/1990', 'dd/mm/yyyy'), 1, 2, 'a');
-INSERT INTO KARYAWAN VALUES(7, 'KAPA00001', 'KassandrosP', 'KassandrosP', 'Kassandros Paraskeve', 'L', 'Jalan Ikan Koi No. 67', 'kassandros@gmail.com', 08713772929 , TO_DATE('30/07/1992', 'dd/mm/yyyy'), 1, 3, 'a');
-INSERT INTO KARYAWAN VALUES(8, 'FANI00001', 'FabianN', 'FabianN', 'Fabian Nicodemo', 'L', 'Jalan Ikan Mas No. 64', 'fabianico@gmail.com', 08743533798 , TO_DATE('16/11/1988', 'dd/mm/yyyy'), 1, 3, 'a');
-INSERT INTO KARYAWAN VALUES(9, 'ALAR00001', 'AliceA', 'AliceA', 'Alice Artur', 'P', 'Jalan Ikan Badut No. 91', 'aliceeee@gmail.com', 08721197429 , TO_DATE('04/11/1989', 'dd/mm/yyyy'), 1, 3, 'a');
-INSERT INTO KARYAWAN VALUES(10, 'AAAA00001', 'a', 'a', 'Test Dummy', 'P', 'Jalan Jalan Kuy No. 91', 'email@gmail.com', 08123456789 , TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 2, 'a');
+INSERT INTO KARYAWAN VALUES(1, 'BURA00001', 'BudiR', 'BudiR', 'Budi Raharja', 'L', 'Jalan Mendoan No. 4', 'budiraharja@gmail.com', 082114670146, TO_DATE('03/08/1986', 'dd/mm/yyyy'), 1, 1, 'BURA00001.jpg');
+INSERT INTO KARYAWAN VALUES(2, 'SEAD00001', 'SetyoA', 'SetyoA', 'Setyo Adi', 'L', 'Jalan Pavilion No. 21', 'setyoadi@gmail.com', 082241246613, TO_DATE('13/06/1987', 'dd/mm/yyyy'), 1, 1, 'SEAD00001.jpg');
+INSERT INTO KARYAWAN VALUES(3, 'YADA00001', 'YaekoD', 'YaekoD', 'Yaeko Dario', 'P', 'Jalan Ngagel Jaya No. 26', 'yaekodario@gmail.com', 081257224666, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 1, 1, 'YADA00001.jpg');
+INSERT INTO KARYAWAN VALUES(4, 'MEPU00001', 'MelianaP', 'MelianaP', 'Meliana Purnama', 'P', 'Jalan Penamparan No. 15', 'melianapurnama@gmail.com', 0838555682, TO_DATE('01/06/1990', 'dd/mm/yyyy'), 0, 2, 'MEPU00001.jpg');
+INSERT INTO KARYAWAN VALUES(5, 'MIED00001', 'MihaelaE', 'MihaelaE', 'Mihaela Edvige', 'L', 'Jalan Kipas Dewa No. 6', 'mihaelaedvige@gmail.com', 0897555472, TO_DATE('12/08/1984', 'dd/mm/yyyy'), 1, 2, 'MIED00001.jpg');
+INSERT INTO KARYAWAN VALUES(6, 'EMBR00001', 'EmiliB', 'EmiliB', 'Emili Brendan', 'P', 'Jalan Kursi Terbang No. 12', 'emilibrendan@gmail.com', 0875433694, TO_DATE('28/06/1990', 'dd/mm/yyyy'), 1, 2, 'EMBR00001.jpg');
+INSERT INTO KARYAWAN VALUES(7, 'KAPA00001', 'KassandrosP', 'KassandrosP', 'Kassandros Paraskeve', 'L', 'Jalan Ikan Koi No. 67', 'kassandros@gmail.com', 08713772929 , TO_DATE('30/07/1992', 'dd/mm/yyyy'), 1, 3, 'KAPA00001.jpg');
+INSERT INTO KARYAWAN VALUES(8, 'FANI00001', 'FabianN', 'FabianN', 'Fabian Nicodemo', 'L', 'Jalan Ikan Mas No. 64', 'fabianico@gmail.com', 08743533798 , TO_DATE('16/11/1988', 'dd/mm/yyyy'), 1, 3, 'FANI00001.jpg');
+INSERT INTO KARYAWAN VALUES(9, 'ALAR00001', 'AliceA', 'AliceA', 'Alice Artur', 'P', 'Jalan Ikan Badut No. 91', 'aliceeee@gmail.com', 08721197429 , TO_DATE('04/11/1989', 'dd/mm/yyyy'), 1, 3, 'ALAR00001.jpg');
 
 -- PELANGGAN
 INSERT INTO PELANGGAN VALUES(1, 'RATR00001', 'RaymondT', 'RaymondT', 'Raymond Tranatung', 'L', 'Jalan Penampungan No. 6', 'raymondt@gmail.com', 08345671222, TO_DATE('13/06/2001', 'dd/mm/yyyy'), 1, 'a');
@@ -358,7 +357,6 @@ INSERT INTO PELANGGAN VALUES(6, 'AIVI00001', 'AikaterineV', 'AikaterineV', 'Aika
 INSERT INTO PELANGGAN VALUES(7, 'GLVL00001', 'GlendaV', 'GlendaV', 'Glenda Vlad', 'L', 'Jalan Roti Bakar No. 34a', 'glendav@gmail.com', 0812675723, TO_DATE('17/09/1996', 'dd/mm/yyyy'), 1, 'a');
 INSERT INTO PELANGGAN VALUES(8, 'THPA00001', 'ThorsteinP', 'ThorsteinP', 'Thorstein Parminder', 'P', 'Jalan Perjalanan No. 45', 'thorstein@gmail.com', 0838555838, TO_DATE('05/05/2003', 'dd/mm/yyyy'), 1, 'a');
 INSERT INTO PELANGGAN VALUES(9, 'UMVA00001', 'UmarV', 'UmarV', 'Umar Valentin', 'L', 'Jalan Perjalanan No. 46', 'umarr@gmail.com', 08385123167, TO_DATE('09/09/1999', 'dd/mm/yyyy'), 1, 'a');
-INSERT INTO PELANGGAN VALUES(10, 'AAAA00001', 'a', 'a', 'Test Dummy', 'L', 'Jalan Jalan', 'email@gmail.com', 08123456789, TO_DATE('01/01/2001', 'dd/mm/yyyy'), 1, 'a');
 
 -- VOURCHER
 INSERT INTO VOUCHER VALUES(1, 'HEMATDULUBOS', 'POTONGAN', 30000);
