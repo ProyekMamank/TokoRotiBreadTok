@@ -60,22 +60,19 @@
         <Label x:Name="lblUsername" Content="" HorizontalAlignment="Center" Margin="414,194,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
         <Label x:Name="lblSatuan" Content="" HorizontalAlignment="Center" Margin="607,188,131,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="62"/>
 
-        <Label Content="Password Karyawan :" HorizontalAlignment="Center" Margin="281,224,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblPassword" Content="" HorizontalAlignment="Center" Margin="414,224,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Email :" HorizontalAlignment="Center" Margin="280,222,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblEmail" Content="" HorizontalAlignment="Center" Margin="413,222,187,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
-        <Label Content="Email :" HorizontalAlignment="Center" Margin="281,254,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblEmail" Content="" HorizontalAlignment="Center" Margin="414,254,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-
-        <Label Content="Jenis Kelamin :" HorizontalAlignment="Center" Margin="281,308,389,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblJabatan" Content="" HorizontalAlignment="Center" Margin="414,282,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-        <Label Content="Alamat :" HorizontalAlignment="Center" Margin="281,389,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label Content="No. Telp :" HorizontalAlignment="Center" Margin="281,362,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label Content="Tanggal Lahir :" HorizontalAlignment="Center" Margin="281,335,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label Content="Jabatan :" HorizontalAlignment="Center" Margin="281,281,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
-        <Label x:Name="lblJK" Content="" HorizontalAlignment="Center" Margin="414,308,184,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-        <Label x:Name="lblTglLahir" Content="" HorizontalAlignment="Center" Margin="414,335,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-        <Label x:Name="lblTelp" Content="" HorizontalAlignment="Center" Margin="414,362,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
-        <Label x:Name="lblAlamat" Content="" HorizontalAlignment="Center" Margin="414,389,184,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Jenis Kelamin :" HorizontalAlignment="Center" Margin="280,276,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblJabatan" Content="" HorizontalAlignment="Center" Margin="413,250,187,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label Content="Alamat :" HorizontalAlignment="Center" Margin="280,357,390,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="No. Telp :" HorizontalAlignment="Center" Margin="279,330,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="Tanggal Lahir :" HorizontalAlignment="Center" Margin="279,303,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label Content="Jabatan :" HorizontalAlignment="Center" Margin="279,249,391,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="130"/>
+        <Label x:Name="lblJK" Content="" HorizontalAlignment="Center" Margin="414,276,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblTglLahir" Content="" HorizontalAlignment="Center" Margin="413,303,187,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblTelp" Content="" HorizontalAlignment="Center" Margin="413,330,187,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
+        <Label x:Name="lblAlamat" Content="" HorizontalAlignment="Center" Margin="414,357,186,0" VerticalAlignment="Top" Foreground="#DD000000" FontFamily="Open Sans" FontSize="12" Width="200"/>
 
     </Grid>
 </Window>

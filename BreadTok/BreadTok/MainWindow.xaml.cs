@@ -42,7 +42,7 @@ namespace BreadTok
         List<Resep> reseps;
         private int idhresep;
         private string koderoti;
-        public MainWindow(string id)
+        public MainWindow(string id, string jabatan)
         {
             InitializeComponent();
             b = new bahan();
@@ -74,6 +74,55 @@ namespace BreadTok
             loadDaftarPesanan();
             initPengadaanBahan();
             initChef();
+
+            if (jabatan == "KARYAWAN")
+            {
+                tabMasterBahan.Visibility = Visibility.Collapsed;
+                tabMasterResep.Visibility = Visibility.Collapsed;
+                tabMasterRoti.Visibility = Visibility.Collapsed;
+                tabMasterKaryawan.Visibility = Visibility.Collapsed;
+                tabMasterVoucher.Visibility = Visibility.Collapsed;
+                tabDaftarPesanan.Visibility = Visibility.Visible;
+                tabPengadaanBahan.Visibility = Visibility.Visible;
+                tabChef.Visibility = Visibility.Collapsed;
+                tabDaftarPesanan.IsSelected = true;
+            }
+            else if (jabatan == "MANAGER")
+            {
+                tabMasterBahan.Visibility = Visibility.Collapsed;
+                tabMasterResep.Visibility = Visibility.Collapsed;
+                tabMasterRoti.Visibility = Visibility.Collapsed;
+                tabMasterKaryawan.Visibility = Visibility.Visible;
+                tabMasterVoucher.Visibility = Visibility.Visible;
+                tabDaftarPesanan.Visibility = Visibility.Visible;
+                tabPengadaanBahan.Visibility = Visibility.Collapsed;
+                tabChef.Visibility = Visibility.Collapsed;
+                tabMasterKaryawan.IsSelected = true;
+            }
+            else if (jabatan == "CHEF")
+            {
+                tabMasterBahan.Visibility = Visibility.Collapsed;
+                tabMasterResep.Visibility = Visibility.Collapsed;
+                tabMasterRoti.Visibility = Visibility.Hidden;
+                tabMasterKaryawan.Visibility = Visibility.Collapsed;
+                tabMasterVoucher.Visibility = Visibility.Collapsed;
+                tabDaftarPesanan.Visibility = Visibility.Collapsed;
+                tabPengadaanBahan.Visibility = Visibility.Visible;
+                tabChef.Visibility = Visibility.Visible;
+                tabPengadaanBahan.IsSelected = true;
+            }
+            else if (jabatan == "ADMIN")
+            {
+                tabMasterBahan.Visibility = Visibility.Visible;
+                tabMasterResep.Visibility = Visibility.Visible;
+                tabMasterRoti.Visibility = Visibility.Visible;
+                tabMasterKaryawan.Visibility = Visibility.Visible;
+                tabMasterVoucher.Visibility = Visibility.Visible;
+                tabDaftarPesanan.Visibility = Visibility.Visible;
+                tabPengadaanBahan.Visibility = Visibility.Visible;
+                tabChef.Visibility = Visibility.Visible;
+                tabMasterBahan.IsSelected = true;
+            }
         }
 
         List<HTrans> htranses = new List<HTrans>();
@@ -766,12 +815,15 @@ namespace BreadTok
         
         private void DgBahan_Loaded(object sender, RoutedEventArgs e)
         {
-            dgBahan.Columns[0].Width = DataGridLength.SizeToCells;
-            dgBahan.Columns[1].Width = DataGridLength.SizeToCells;
-            dgBahan.Columns[2].Width = DataGridLength.Auto;
-            dgBahan.Columns[3].Width = DataGridLength.Auto;
-            dgBahan.Columns[4].Width = DataGridLength.SizeToCells;
-            dgBahan.Columns[5].Width = DataGridLength.SizeToCells;
+            if (dgBahan.Columns.Count > 0)
+            {
+                dgBahan.Columns[0].Width = DataGridLength.SizeToCells;
+                dgBahan.Columns[1].Width = DataGridLength.SizeToCells;
+                dgBahan.Columns[2].Width = DataGridLength.Auto;
+                dgBahan.Columns[3].Width = DataGridLength.Auto;
+                dgBahan.Columns[4].Width = DataGridLength.SizeToCells;
+                dgBahan.Columns[5].Width = DataGridLength.SizeToCells;
+            }
         }
 
         private void btnOpenWindowBahan(object sender, RoutedEventArgs e)
@@ -1126,7 +1178,7 @@ namespace BreadTok
             karyawanImgSourceDir = "";
             tbNamaKaryawan.Text = "";
             tbUsernameKaryawan.Text = "";
-            tbPasswordKaryawan.Text = "";
+            tbPasswordKaryawan.Password = "";
             tbEmailKaryawan.Text = "";
             tbAlamatKaryawan.Text = "";
             tbNoTelpKaryawan.Text = "";
@@ -1369,7 +1421,7 @@ namespace BreadTok
 
             string nama = tbNamaKaryawan.Text;
             string username = tbUsernameKaryawan.Text;
-            string password = tbPasswordKaryawan.Text;
+            string password = tbPasswordKaryawan.Password;
             string email = tbEmailKaryawan.Text;
             string jenisKelamin = "";
             if(rbLakiKaryawan.IsChecked == true)
@@ -1659,7 +1711,7 @@ namespace BreadTok
                 buttonTemplate.VisualTree = buttonFactory;
                 //add handler or you can add binding to command if you want to handle click
                 buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnOpenWindowDetailKaryawan));
-                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("DETAIL"));
+                buttonFactory.SetBinding(Button.CommandParameterProperty, new Binding("Detail"));
                 buttonFactory.SetValue(Button.ContentProperty, "Detail");
                 buttonFactory.SetValue(Button.BackgroundProperty, new SolidColorBrush(Colors.CadetBlue));
                 buttonFactory.SetValue(Button.WidthProperty, 80.0);
