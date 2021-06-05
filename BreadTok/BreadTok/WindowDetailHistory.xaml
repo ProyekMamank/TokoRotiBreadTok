@@ -81,5 +81,14 @@
             Margin="0,439,34,17"
             Content="Cetak Struk"
             x:Name="btOrder" Click="btOrder_Click"/>
+
+        <Button
+            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+            ToolTip="Resource name: MaterialDesignRaisedAccentButton"
+            HorizontalAlignment="Right"
+            materialDesign:ButtonAssist.CornerRadius="15"
+            Margin="0,439,166,17"
+            Content="Konfirmasi Pembayaran"
+            x:Name="btReqbayar" Click="btReqbayar_Click"/>
     </Grid>
 </Window>

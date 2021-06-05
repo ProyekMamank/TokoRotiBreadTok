@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oracle.DataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace BreadTok
         }
         private void init()
         {
+            if (ht.status.ToLower() != "belum bayar") hideBtnReqBayar();
             lbNomorNota.Content = ht.nomor_nota;
             lbTanggalTrans.Content = ht.tanggal_trans;
             lbKodeVoucher.Content = ht.id_voucher;
@@ -62,22 +64,20 @@ namespace BreadTok
         {
             if (dgDetailHistory.Columns.Count > 0)
             {
-                //public string nomor_nota { get; set; }
-                //public string id_roti { get; set; }
-                //public string nama_roti { get; set; }
-                //public int quantity { get; set; }
-                //public int harga { get; set; }
-                //public int subtotal { get; set; }
-                dgDetailHistory.Columns[0].Header = "Nomor Nota";
-                dgDetailHistory.Columns[1].Header = "ID Roti";
-                dgDetailHistory.Columns[2].Header = "Nama Roti";
-                dgDetailHistory.Columns[3].Header = "Quantity";
-                dgDetailHistory.Columns[4].Header = "Harga";
-                dgDetailHistory.Columns[5].Header = "Subtotal";
-
-                dgDetailHistory.Columns[0].Visibility = Visibility.Hidden;
-                dgDetailHistory.Columns[1].Visibility = Visibility.Hidden;
+                changeHeader();
             }
+        }
+        private void changeHeader()
+        {
+            dgDetailHistory.Columns[0].Header = "Nomor Nota";
+            dgDetailHistory.Columns[1].Header = "ID Roti";
+            dgDetailHistory.Columns[2].Header = "Nama Roti";
+            dgDetailHistory.Columns[3].Header = "Quantity";
+            dgDetailHistory.Columns[4].Header = "Harga";
+            dgDetailHistory.Columns[5].Header = "Subtotal";
+
+            dgDetailHistory.Columns[0].Visibility = Visibility.Hidden;
+            dgDetailHistory.Columns[1].Visibility = Visibility.Hidden;
         }
 
         private void btOrder_Click(object sender, RoutedEventArgs e)
@@ -85,6 +85,25 @@ namespace BreadTok
             // Cetak struk
             WindowCetakStruk cs = new WindowCetakStruk(ht.nomor_nota, this);
             cs.ShowDialog();
+        }
+
+        private void btReqbayar_Click(object sender, RoutedEventArgs e)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = App.conn;
+            cmd.CommandText = "update h_trans set status=1 where nomor_nota=:nonota";
+            cmd.Parameters.Add(":nonota", ht.nomor_nota);
+            cmd.ExecuteNonQuery();
+
+            ht.status = "Request Bayar";
+            init();
+            changeHeader();
+            hideBtnReqBayar();
+            MessageBox.Show("Berhasil Konfirmasi Pembayaran! Silahkan tunggu pegawai kami untuk mengkonfirmasi ulang.","Success",MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void hideBtnReqBayar()
+        {
+            btReqbayar.Visibility = Visibility.Hidden;
         }
     }
 }
