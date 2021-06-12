@@ -34,7 +34,7 @@ namespace BreadTok
         private Roti r;
         private DataTable cartBahan, pengadaanBahan, pengadaanSupplier, chefRoti, chefResep;
         private DataRow itemDataSupport;
-        private int selectedIdBahan;
+        private int selectedIdBahan,selectedItemBahan;
         private int selectedIdKaryawan;
         private int selectedIdRoti;
         string loggedUserID;
@@ -56,6 +56,7 @@ namespace BreadTok
             chefRoti = new DataTable();
             chefResep = new DataTable();
             loggedUserID = id;
+            selectedItemBahan = -1;
 
             if (Convert.ToInt32(loggedUserID) > 0)
             {
@@ -231,10 +232,10 @@ namespace BreadTok
                 lbSubtotalBeliBahan.Text = CurrencyConverter.ToRupiah(harga * jumlah);
             }
         }
-        private void dgCartBahan_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if(dgCartBahan.SelectedIndex >= 0)
-            {
+
+        private void DgCartBahan_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            if (dgCartBahan.SelectedIndex >= 0) {
+                selectedItemBahan = dgCartBahan.SelectedIndex;
                 DataRowView selectedCartItem = dgCartBahan.SelectedItem as DataRowView;
                 bHapusCartBahan.IsEnabled = true;
                 itemDataSupport = b.getOneRecordData("B.SATUAN AS SATUAN, B.HARGA AS HARGA, B.QTY_STOK AS STOK, B.ID AS ID", $"WHERE B.KODE = '{selectedCartItem.Row.ItemArray[0]}'");
@@ -244,15 +245,14 @@ namespace BreadTok
                 lbDetailBahanStokSekarang.Text = itemDataSupport[2].ToString();
                 lbDetailBahanKodeBahan.Text = selectedCartItem.Row.ItemArray[0].ToString();
                 lbDetailBahanHargaSatuan.Text = CurrencyConverter.ToRupiah(Convert.ToInt32(itemDataSupport[1].ToString()));
-                tbDetailBahanQuantity.Text = jumlah.Substring(0,jumlah.IndexOf(' '));
+                tbDetailBahanQuantity.Text = jumlah.Substring(0, jumlah.IndexOf(' '));
                 lbDetailBahanSuffix.Text = itemDataSupport[0].ToString();
                 tbDetailBahanQuantity.IsEnabled = true;
                 bPengadaanUpdate.IsEnabled = true;
                 bHapusCartBahan.IsEnabled = true;
                 lbDetailBahanNamaBahan.Text = selectedCartItem.Row.ItemArray[1].ToString();
             }
-            else
-            {
+            else {
                 resetPengadaanDetailBahan();
             }
         }
@@ -277,7 +277,7 @@ namespace BreadTok
 
         private void bPengadaanUpdate_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView selectedCartItem = dgCartBahan.SelectedItem as DataRowView;
+            DataRowView selectedCartItem = dgCartBahan.Items[selectedItemBahan] as DataRowView;
             for (int i = 0; i < cartBahan.Rows.Count; i++)
             {
                 if (cartBahan.Rows[i]["KODE"].ToString().Equals(selectedCartItem.Row.ItemArray[0].ToString()))
@@ -353,14 +353,13 @@ namespace BreadTok
 
         //CHEF
 
-        private void initChef()
-        {
+        private void initChef() {
             dgChefRoti.ItemsSource = null;
             chefRoti = new DataTable();
             chefRoti = r.fillDataTable("R.KODE AS KODE, R.NAMA AS NAMA, R.DESKRIPSI AS DESKRIPSI, JR.NAMA_JENIS AS JENIS, R.HARGA AS HARGA, R.STOK AS STOK", "WHERE R.STATUS = 1", chefRoti);
             dgChefRoti.ItemsSource = chefRoti.DefaultView;
             cbChefJenisRoti.ItemsSource = null;
-            
+
             cbChefJenisRoti.ItemsSource = r.fillDataJenisRoti("ID, NAMA_JENIS", "", new DataTable()).DefaultView;
             cbChefJenisRoti.DisplayMemberPath = "NAMA_JENIS";
             cbChefJenisRoti.SelectedValuePath = "ID";
@@ -369,8 +368,7 @@ namespace BreadTok
             cbChefBahan.DisplayMemberPath = "NAMA";
             cbChefBahan.SelectedValuePath = "ID";
         }
-        private void dgChefRoti_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
+        private void dgChefRoti_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             resetChefDetailRoti(false);
             bChefOptionInsert.IsChecked = false;
             DataRowView selectedChefRoti = dgChefRoti.SelectedItem as DataRowView;
@@ -379,73 +377,65 @@ namespace BreadTok
             tbChefNamaRoti.Text = selectedChefRoti.Row.ItemArray[1].ToString();
             tbChefDeskripsiRoti.Text = selectedChefRoti.Row.ItemArray[2].ToString();
             cmd = new OracleCommand($"SELECT FK_RESEP FROM ROTI WHERE KODE = '{selectedChefRoti.Row.ItemArray[0].ToString()}'", App.conn);
-            chefResep = r.fillResep("B.MERK || ' - ' || JB.NAMA_JENIS AS NAMA, D.QTY AS STOK", $"WHERE D.ID_H_RESEP = '{cmd.ExecuteScalar().ToString()}'", new DataTable());
+            chefResep = r.fillResep("B.KODE AS KODE, B.MERK || ' - ' || JB.NAMA_JENIS AS NAMA, D.QTY AS Quantity", $"WHERE D.ID_H_RESEP = '{cmd.ExecuteScalar().ToString()}'", new DataTable());
             dgChefResep.ItemsSource = null;
             dgChefResep.ItemsSource = chefResep.DefaultView;
             bChefTambahStokRoti.IsEnabled = true;
             koderoti = selectedChefRoti.Row.ItemArray[0].ToString();
+            tbChefQuantityStok.IsEnabled = true;
         }
-        private void bChefTambahStokRoti_Click(object sender, RoutedEventArgs e)
-        {
-
-            OracleTransaction trans;
-            trans = App.conn.BeginTransaction();
-            try
-            {
-                DataRowView selectedChefRoti = dgChefRoti.SelectedItem as DataRowView;
-                OracleCommand idHresep = new OracleCommand($"SELECT FK_RESEP FROM ROTI WHERE KODE = '{koderoti}'", App.conn);
-
-                for (int i = 0; i < chefResep.Rows.Count; i++)
-                {
-                    OracleCommand stokbahan = new OracleCommand($"SELECT QTY_STOK FROM BAHAN WHERE ID = '{idHresep.ExecuteScalar().ToString()}'",App.conn);
-                    int stok = Convert.ToInt32(stokbahan.ExecuteScalar().ToString());
-                    int qtyresep = Convert.ToInt32(chefResep.Rows[i][1].ToString());
-                    if (stok < qtyresep)
-                    {
-                        throw new InvalidOperationException("Stok bahan tidak cukup");
+        private void bChefTambahStokRoti_Click(object sender, RoutedEventArgs e) {
+            if (tbChefQuantityStok.Text == "" || Convert.ToInt32(tbChefQuantityStok.Text) <= 0) {
+                MessageBox.Show("Quantity stok tidak benar");
+            }
+            else {
+                OracleTransaction trans;
+                trans = App.conn.BeginTransaction();
+                try {
+                    DataRowView selectedChefRoti = dgChefRoti.SelectedItem as DataRowView;
+                    OracleCommand idHresep = new OracleCommand($"SELECT FK_RESEP FROM ROTI WHERE KODE = '{koderoti}'", App.conn);
+                    for (int i = 0; i < chefResep.Rows.Count; i++) {
+                        OracleCommand stokbahan = new OracleCommand($"SELECT QTY_STOK FROM BAHAN WHERE KODE = '{chefResep.Rows[i][0].ToString()}'", App.conn);
+                        int stok = Convert.ToInt32(stokbahan.ExecuteScalar().ToString());
+                        int qtyresep = Convert.ToInt32(chefResep.Rows[i][2].ToString()) * Convert.ToInt32(tbChefQuantityStok.Text);
+                        if (stok < qtyresep) {
+                            throw new InvalidOperationException("Stok bahan tidak cukup");
+                        }
+                        else {
+                            string namabahan = chefResep.Rows[i][1].ToString();
+                            OracleCommand idbahan = new OracleCommand($"SELECT ID FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
+                            OracleCommand cmd = new OracleCommand($"UPDATE BAHAN SET QTY_STOK = QTY_STOK-{qtyresep} WHERE ID = '{idbahan.ExecuteScalar().ToString()}'", App.conn);
+                            cmd.ExecuteNonQuery();
+                        }
                     }
-                    else
-                    {
-                        string namabahan = chefResep.Rows[i][0].ToString();
-                        OracleCommand idbahan = new OracleCommand($"SELECT ID FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
-                        OracleCommand cmd = new OracleCommand($"UPDATE BAHAN SET QTY_STOK = QTY_STOK-1 WHERE ID = '{idbahan.ExecuteScalar().ToString()}'", App.conn);
-                        cmd.ExecuteNonQuery();
-                    }
+                    OracleCommand cmd2 = new OracleCommand($"UPDATE ROTI SET STOK = STOK+{tbChefQuantityStok.Text} WHERE KODE = '{koderoti}'", App.conn);
+                    cmd2.ExecuteNonQuery();
+                    trans.Commit();
+                    MessageBox.Show("Stok Roti berhasil ditambahkan");
+                    chefRoti = new DataTable();
+                    var index = dgChefRoti.SelectedValue;
+                    initChef();
+                    dgChefRoti.SelectedValue = index;
                 }
-                OracleCommand cmd2 = new OracleCommand($"UPDATE ROTI SET STOK = STOK+1 WHERE KODE = '{koderoti}'", App.conn);
-                cmd2.ExecuteNonQuery();
-                trans.Commit();
-                MessageBox.Show("Stok Roti berhasil ditambahkan");
-                chefRoti = new DataTable();
-                var index = dgChefRoti.SelectedValue;
-                initChef();
-                dgChefRoti.SelectedValue = index;
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show(ex.Message);
-                trans.Rollback();
+                catch (InvalidOperationException ex) {
+                    MessageBox.Show(ex.Message);
+                    trans.Rollback();
+                }
             }
         }
 
-        private void bChefTambahBahan_Click(object sender, RoutedEventArgs e)
-        {
-            if(cbChefBahan.SelectedIndex == -1 || tbChefBahanQuantity.Text == "0" || tbChefBahanQuantity.Text == "")
-            {
+        private void bChefTambahBahan_Click(object sender, RoutedEventArgs e) {
+            if (cbChefBahan.SelectedIndex == -1 || Convert.ToInt32(tbChefBahanQuantity.Text) <= 0 || tbChefBahanQuantity.Text == "") {
                 MessageBox.Show("Input tidak lengkap");
             }
-            else
-            {
+            else {
                 int adaresep = -1;
-                for (int i = 0; i < chefResep.Rows.Count; i++)
-                {
-                    if (chefResep.Rows[i][0].ToString().Equals(cbChefBahan.Text))
-                    {
+                for (int i = 0; i < chefResep.Rows.Count; i++) {
+                    if (chefResep.Rows[i][0].ToString().Equals(cbChefBahan.Text)) {
                         adaresep = i;
                     }
                 }
-                if(adaresep == -1)
-                {
+                if (adaresep == -1) {
                     chefResep = b.fillDataTable($"B.MERK || ' - ' || JB.NAMA_JENIS AS NAMA, {tbChefBahanQuantity.Text} AS STOK", $"WHERE B.ID = '{cbChefBahan.SelectedValue}'", chefResep);
                 }
                 else {
@@ -456,29 +446,22 @@ namespace BreadTok
                 dgChefResep.ItemsSource = chefResep.DefaultView;
                 cbChefBahan.SelectedIndex = -1;
                 tbChefBahanQuantity.Text = "0";
-                
-
             }
         }
 
-        private void bChefTambahRoti_Click(object sender, RoutedEventArgs e)
-        {
-            if (tbChefDeskripsiRoti.Text == "" || tbChefNamaRoti.Text == "" || cbChefJenisRoti.SelectedIndex == -1 || chefResep.Rows.Count == 0)
-            {
+        private void bChefTambahRoti_Click(object sender, RoutedEventArgs e) {
+            if (tbChefDeskripsiRoti.Text == "" || tbChefNamaRoti.Text == "" || cbChefJenisRoti.SelectedIndex == -1 || chefResep.Rows.Count == 0) {
                 MessageBox.Show("Input tidak lengkap");
             }
-            else
-            {
+            else {
                 OracleTransaction trans;
                 trans = App.conn.BeginTransaction();
-                try
-                {
+                try {
                     DataRowView selectedChefRoti = dgChefRoti.SelectedItem as DataRowView;
                     OracleCommand cmd = new OracleCommand($"INSERT INTO H_RESEP VALUES('{idhresep}', 'RESEP {tbChefNamaRoti.Text}')", App.conn);
                     cmd.ExecuteNonQuery();
                     int harga = 0;
-                    for (int i = 0; i < chefResep.Rows.Count; i++)
-                    {
+                    for (int i = 0; i < chefResep.Rows.Count; i++) {
                         string namabahan = chefResep.Rows[i][0].ToString();
                         OracleCommand idbahan = new OracleCommand($"SELECT ID FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
                         OracleCommand hargabahan = new OracleCommand($"SELECT HARGA FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
@@ -490,17 +473,15 @@ namespace BreadTok
                     OracleCommand idRoti = new OracleCommand("SELECT COUNT(*)+1 FROM ROTI", App.conn);
                     string namaroti = tbChefNamaRoti.Text;
                     string kode = "";
-                    if(namaroti.IndexOf(' ') >= 0)
-                    {
-                        kode = namaroti.Substring(0, 2)+namaroti.Substring(namaroti.IndexOf(' ')+1,2);
+                    if (namaroti.IndexOf(' ') >= 0) {
+                        kode = namaroti.Substring(0, 2) + namaroti.Substring(namaroti.IndexOf(' ') + 1, 2);
                     }
-                    else
-                    {
+                    else {
                         kode = namaroti.Substring(0, 4);
                     }
                     OracleCommand nourut = new OracleCommand($"SELECT LPAD(COUNT(*)+1,5,'0') FROM ROTI WHERE KODE LIKE '{kode}%'", App.conn);
 
-                    OracleCommand cmd2 = new OracleCommand($"INSERT INTO ROTI VALUES('{idRoti.ExecuteScalar().ToString()}', '{kode+ nourut.ExecuteScalar().ToString()}', '{tbChefNamaRoti.Text}', '{tbChefDeskripsiRoti.Text}', {harga}, 0, 1, '{cbChefJenisRoti.SelectedValue}', '{idhresep}', '{tbChefNamaRoti.Text}.jpg')", App.conn);
+                    OracleCommand cmd2 = new OracleCommand($"INSERT INTO ROTI VALUES('{idRoti.ExecuteScalar().ToString()}', '{kode + nourut.ExecuteScalar().ToString()}', '{tbChefNamaRoti.Text}', '{tbChefDeskripsiRoti.Text}', {harga}, 0, 1, '{cbChefJenisRoti.SelectedValue}', '{idhresep}', '{tbChefNamaRoti.Text}.jpg')", App.conn);
                     cmd2.ExecuteNonQuery();
                     trans.Commit();
                     MessageBox.Show("Roti berhasil ditambahkan");
@@ -509,8 +490,7 @@ namespace BreadTok
                     bChefOptionInsert.IsChecked = false;
 
                 }
-                catch (InvalidOperationException ex)
-                {
+                catch (InvalidOperationException ex) {
                     MessageBox.Show(ex.Message);
                     trans.Rollback();
                 }
@@ -523,7 +503,7 @@ namespace BreadTok
             cbChefBahan.IsEnabled = aktif;
             cbChefJenisRoti.IsEnabled = aktif;
             bChefTambahBahan.IsEnabled = aktif;
-            bChefTambahStokRoti.IsEnabled = !aktif;
+            bChefTambahStokRoti.IsEnabled = false;
             bChefTambahRoti.IsEnabled = aktif;
             lbChefHint.Opacity = aktif ? 1 : 0;
             chefResep = new DataTable();
@@ -534,37 +514,32 @@ namespace BreadTok
             cbChefJenisRoti.SelectedIndex = -1;
             cbChefBahan.SelectedIndex = -1;
             tbChefBahanQuantity.Text = "0";
-
+            tbChefQuantityStok.IsEnabled = false;
+            tbChefQuantityStok.Text = "0";
         }
-        private void bChefOptionInsert_Click(object sender, RoutedEventArgs e)
-        {
-            if (bChefOptionInsert.IsChecked.Value)
-            {
+        private void bChefOptionInsert_Click(object sender, RoutedEventArgs e) {
+            if (bChefOptionInsert.IsChecked.Value) {
                 resetChefDetailRoti(true);
                 OracleCommand idHresep = new OracleCommand("SELECT COUNT(*)+1 FROM H_RESEP", App.conn);
                 idhresep = Convert.ToInt32(idHresep.ExecuteScalar().ToString());
                 chefResep = new DataTable();
             }
-            else
-            {
+            else {
                 resetChefDetailRoti(false);
             }
         }
 
-        private void dgChefResep_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (bChefOptionInsert.IsChecked.Value)
-            {
+        private void dgChefResep_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            if (bChefOptionInsert.IsChecked.Value) {
                 DataRowView selectedResep = dgChefResep.SelectedItem as DataRowView;
-                for (int i = 0; i < chefResep.Rows.Count; i++)
-                {
-                    if (chefResep.Rows[i][0].ToString().Equals(selectedResep.Row.ItemArray[0].ToString()))
-                    {
+                for (int i = 0; i < chefResep.Rows.Count; i++) {
+                    if (chefResep.Rows[i][0].ToString().Equals(selectedResep.Row.ItemArray[0].ToString())) {
                         chefResep.Rows.RemoveAt(i);
                     }
                 }
             }
         }
+       
         //[END] JEFF
 
         // DAFTAR PESANAN
@@ -1775,7 +1750,16 @@ namespace BreadTok
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
         }
-        
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            //if (tabPengadaanBahan.IsSelected) initPengadaanBahan();
+            //else if (tabChef.IsSelected) initChef();
+            if (e.Source is TabControl) {
+                initPengadaanBahan();
+                initChef();
+            }
+        }
+
         //Number only input
 
         private static readonly Regex _regex = new Regex("[^0-9]+");

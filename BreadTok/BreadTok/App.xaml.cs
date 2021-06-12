@@ -27,7 +27,7 @@ namespace BreadTok
                 conn.Open();
                 return true;
             }
-            catch (Exception ex)
+            catch (OracleException ex)
             {
                 MessageBox.Show(ex.Message);
                 return false;

@@ -71,7 +71,7 @@
         </materialDesign:ColorZone>
 
         <TabControl x:Name="tabControl" Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
-                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Column="0" Margin="0,0.4,0,0" Grid.Row="1">
+                    materialDesign:ColorZoneAssist.Mode="PrimaryMid" Grid.Column="0" Margin="0,0.4,0,0" Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
             <TabItem x:Name="tabMasterBahan" Style="{StaticResource MaterialDesignNavigationRailTabItem}" Width="Auto">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -447,7 +447,7 @@
                         CanUserAddRows="False"
                         SelectionUnit="FullRow"
                         IsReadOnly="True"
-                        SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="28,309,322,10" MouseDown="dgCartBahan_MouseDown" />
+                        SelectionMode="Extended" CanUserResizeColumns="False" CanUserDeleteRows="False" Margin="28,309,322,10" MouseDoubleClick="DgCartBahan_MouseDoubleClick" />
                     <GroupBox
                         Header="Detail Bahan"
                         Margin="541,272,24,87">
@@ -554,11 +554,11 @@
                     <TextBox x:Name="tbChefNamaRoti"
                               materialDesign:HintAssist.Hint="Nama Roti"
                               Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                              VerticalAlignment="Center" Canvas.Top="138" Text="CROISSANT" Margin="369,334,259,180" IsEnabled="False" />
+                              VerticalAlignment="Center" Canvas.Top="138" Text="CROISSANT" Margin="369,336,259,178" IsEnabled="False" />
                     <ComboBox x:Name="cbChefJenisRoti"
                       materialDesign:HintAssist.Hint="Tipe Roti"
                       materialDesign:HintAssist.HintOpacity=".56"
-                      IsEditable="True" Margin="368,442,263,83" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                      IsEditable="True" Margin="368,442,263,84" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
                         <ComboBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -570,15 +570,15 @@
                     </ComboBox>
                     <CheckBox
                         x:Name="bChefOptionInsert"
-                        Content="Buat Roti Baru" Margin="369,299,318,223" Click="bChefOptionInsert_Click" />
+                        Content="Buat Roti Baru" Margin="0,299,374,223" Click="bChefOptionInsert_Click" HorizontalContentAlignment="Right" HorizontalAlignment="Right" />
                     <TextBox x:Name="tbChefDeskripsiRoti"
                         materialDesign:HintAssist.Hint="Deskripsi Roti"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        VerticalAlignment="Center" Text="CROISSANT" Margin="369,383,259,131" IsEnabled="False" />
+                        VerticalAlignment="Center" Text="CROISSANT" Margin="369,384,259,130" IsEnabled="False" />
                     <ComboBox x:Name="cbChefBahan"
                         materialDesign:HintAssist.Hint="Bahan Roti"
                         materialDesign:HintAssist.HintOpacity=".56"
-                        IsEditable="True" Margin="607,346,24,179" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                        IsEditable="True" Margin="607,348,24,178" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
                         <ComboBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -591,12 +591,12 @@
                     <TextBox x:Name="tbChefBahanQuantity"
                         materialDesign:HintAssist.Hint="Jumlah Bahan"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        VerticalAlignment="Center" Text="50" Margin="607,383,158,131" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
+                        VerticalAlignment="Center" Text="50" Margin="607,384,24,130" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
 
                     <Button x:Name="bChefTambahBahan"
                                 Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                 ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
-                                Content="TAMBAH KE RESEP" IsEnabled="False" Canvas.Left="173" Canvas.Top="143" Margin="607,436,24,82" Click="bChefTambahBahan_Click" />
+                                Content="TAMBAH RESEP" IsEnabled="False" Canvas.Left="173" Canvas.Top="143" Margin="607,436,24,82" Click="bChefTambahBahan_Click" />
                     <Button x:Name="bChefTambahRoti"
                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
@@ -604,10 +604,14 @@
                     <Button x:Name="bChefTambahStokRoti"
                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
-                        Content="TAMBAH STOK ROTI" IsEnabled="False" Margin="369,480,262,38" Click="bChefTambahStokRoti_Click" />
+                        Content="TAMBAH STOK ROTI" IsEnabled="False" Margin="450,480,262,38" Click="bChefTambahStokRoti_Click" />
                     <TextBlock x:Name="lbChefHint"
                         Style="{StaticResource MaterialDesignCaptionTextBlock}"
                         Text="*Double Click to remove item" Margin="155,301,510,227" FontStyle="Italic" TextAlignment="Right" Opacity="0" />
+                    <TextBox x:Name="tbChefQuantityStok"
+                        materialDesign:HintAssist.Hint="Stok Roti"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Center" Text="50" Margin="369,476,404,38" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
                 </Grid>
             </TabItem>
         </TabControl>

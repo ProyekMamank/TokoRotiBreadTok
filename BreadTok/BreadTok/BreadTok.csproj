@@ -18,7 +18,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -83,6 +83,12 @@
     </ApplicationDefinition>
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="Karyawan.cs" />
+    <Compile Include="ReportBahan.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportBahan.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Resep.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="WindowBagiVoucher.xaml.cs">
@@ -122,6 +128,9 @@
     <Compile Include="Roti.cs" />
     <Compile Include="WindowPelanggan.xaml.cs">
       <DependentUpon>WindowPelanggan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowReportBahan.xaml.cs">
+      <DependentUpon>WindowReportBahan.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowReportPesanan.xaml.cs">
       <DependentUpon>WindowReportPesanan.xaml</DependentUpon>
@@ -193,6 +202,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowReportBahan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WindowResep.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -224,6 +237,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportBahan.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReportBahan.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportTransStruk.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
