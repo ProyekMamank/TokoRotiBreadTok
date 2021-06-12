@@ -29,21 +29,23 @@ namespace BreadTok
 
         private void BtnSubmit(object sender, RoutedEventArgs e)
         {
-            if (dtS.Text != "" && username.Text != "" && password.Text != "") {
+            if (dtS.Text != "" && username.Text != "" && password.Text != "")
+            {
                 App.source = dtS.Text;
                 App.username = username.Text;
                 App.password = password.Text;
                 
-                if (App.openConn()) {
+                if (App.openConn())
+                {
                     LoginRegis lg = new LoginRegis();
                     this.Hide();
                     lg.ShowDialog();
                     this.Close();
                 }
             }
-            else {
+            else
+            {
                 MessageHandler.requireField();
-                MessageBox.Show("Test");
             }
         }
 
