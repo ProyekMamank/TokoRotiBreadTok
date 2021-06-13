@@ -22,16 +22,16 @@ namespace BreadTok
         public WindowReportBahan()
         {
             InitializeComponent();
-
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(dpTanggal.Text);
             ReportBahan rpt = new ReportBahan();
             rpt.SetParameterValue("tanggal_awal", dpTanggal.Text);
             rpt.SetParameterValue("tanggal_akhir", dpTanggalAkhir.Text);
             Report.ViewerCore.ReportSource = rpt;
         }
+
+        
     }
 }

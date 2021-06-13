@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:BreadTok"
         xmlns:Viewer="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer" x:Class="BreadTok.WindowReportBahan"
         mc:Ignorable="d"
-        Title="WindowReportBahan" Height="450" Width="800">
+        Title="WindowReportBahan" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
 
-        <Viewer:CrystalReportsViewer x:Name="Report" HorizontalAlignment="Left" Height="258" Margin="10,112,0,0" VerticalAlignment="Top" Width="772"/>
+        <Viewer:CrystalReportsViewer x:Name="Report" Margin="10,112,10,49"/>
         <DatePicker x:Name="dpTanggal" HorizontalAlignment="Left" Margin="53,40,0,0" VerticalAlignment="Top" Width="167"/>
         <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="441,33,0,0" VerticalAlignment="Top" Width="79" Click="btnSubmit_Click"/>
         <DatePicker x:Name="dpTanggalAkhir" HorizontalAlignment="Left" Margin="247,40,0,0" VerticalAlignment="Top" Width="167"/>

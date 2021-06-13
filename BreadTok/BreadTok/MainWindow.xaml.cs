@@ -349,6 +349,10 @@ namespace BreadTok
             
         }
 
+        private void BReportPembelian_Click(object sender, RoutedEventArgs e) {
+            WindowReportBahan rb = new WindowReportBahan();
+            rb.ShowDialog();
+        }
         //[END] PENGADAAN BAHAN
 
         //CHEF
@@ -1750,6 +1754,8 @@ namespace BreadTok
             overlay.Height = windowPesanan.ActualHeight;
             overlay.Margin = new Thickness(0, 0, 0, 0);
         }
+
+        
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             //if (tabPengadaanBahan.IsSelected) initPengadaanBahan();

@@ -442,7 +442,11 @@
                         />
                     <TextBlock
                       Style="{StaticResource MaterialDesignCaptionTextBlock}"
-                      Text="*Double Click to add item to Cart" Margin="641,10,24,518" FontStyle="Italic" TextAlignment="Right" />
+                      Text="*Double Click to add item to Cart" Margin="407,10,258,518" FontStyle="Italic" TextAlignment="Right" />
+                    <Button x:Name="bReportPembelian"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                        Content="Report Pembelian Bahan" Margin="609,6,24,512" Click="BReportPembelian_Click" />
                     <DataGrid x:Name="dgCartBahan"
                         CanUserAddRows="False"
                         SelectionUnit="FullRow"
@@ -614,6 +618,7 @@
                         VerticalAlignment="Center" Text="50" Margin="369,476,404,38" IsEnabled="False" PreviewTextInput="NumberValidationTextBox" />
                 </Grid>
             </TabItem>
+
         </TabControl>
     </Grid>
 </Window>
