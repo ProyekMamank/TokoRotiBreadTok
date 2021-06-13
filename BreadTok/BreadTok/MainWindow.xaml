@@ -428,7 +428,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="PackageVariant" FontSize="15" Height="20" Width="auto"/>
-                        <TextBlock Text="Pengadaan Bahan" Margin="10 0 0 0" FontSize="15"/>
+                        <TextBlock Text="Pembelian Bahan" Margin="10 0 0 0" FontSize="15"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
@@ -503,7 +503,7 @@
                         Content="CLEAR" Margin="430,270,322,248" IsEnabled="False" Click="bClearCartBahan_Click" />
                     <TextBlock
                         Style="{StaticResource MaterialDesignButtonTextBlock}"
-                        Text="PENGADAAN BAHAN" Margin="25,12,647,516" FontWeight="Bold" FontSize="14" 
+                        Text="PEMBELIAN BAHAN" Margin="25,12,647,516" FontWeight="Bold" FontSize="14" 
                         />
                     <TextBlock
                         Style="{StaticResource MaterialDesignButtonTextBlock}"
@@ -532,7 +532,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ChefHat" FontSize="15" Height="20" Width="auto"/>
-                        <TextBlock Text="Chef" Margin="10 0 0 0" FontSize="15"/>
+                        <TextBlock Text="Resep Makanan" Margin="10 0 0 0" FontSize="15"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>

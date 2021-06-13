@@ -27,6 +27,7 @@ namespace BreadTok
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             ReportBahan rpt = new ReportBahan();
+            rpt.SetDatabaseLogon(App.username, App.password, App.source, "");
             rpt.SetParameterValue("tanggal_awal", dpTanggal.Text);
             rpt.SetParameterValue("tanggal_akhir", dpTanggalAkhir.Text);
             Report.ViewerCore.ReportSource = rpt;
