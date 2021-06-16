@@ -83,22 +83,33 @@ namespace BreadTok
                         int ada = Convert.ToInt32(cmd.ExecuteScalar());
                         if (ada != 0)
                         {
-                            OracleCommand cmdID = new OracleCommand("SELECT ID FROM KARYAWAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
-                            cmdID.Parameters.Add(":1", tbUsername.Text);
-                            cmdID.Parameters.Add(":2", tbPassword.Password);
-                            string idUser = cmdID.ExecuteScalar().ToString();
+                            OracleCommand cmdSuspend = new OracleCommand("SELECT STATUS FROM KARYAWAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                            cmdSuspend.Parameters.Add(":1", tbUsername.Text);
+                            cmdSuspend.Parameters.Add(":2", tbPassword.Password);
+                            int status = Convert.ToInt32(cmdSuspend.ExecuteScalar());
 
-                            tbUsername.Text = "";
-                            tbPassword.Password = "";
+                            if (status == 1)
+                            {
+                                OracleCommand cmdID = new OracleCommand("SELECT ID FROM KARYAWAN WHERE USERNAME = :1 AND PASSWORD = :2", App.conn);
+                                cmdID.Parameters.Add(":1", tbUsername.Text);
+                                cmdID.Parameters.Add(":2", tbPassword.Password);
+                                string idUser = cmdID.ExecuteScalar().ToString();
+                                tbUsername.Text = "";
+                                tbPassword.Password = "";
 
-                            OracleCommand cmdJabatan = new OracleCommand("select j.nama_jabatan from jabatan j, karyawan k where j.id = k.fk_jabatan and k.id = :1", App.conn);
-                            cmdJabatan.Parameters.Add(":1", idUser);
-                            string jabatanUser = cmdJabatan.ExecuteScalar().ToString();
+                                OracleCommand cmdJabatan = new OracleCommand("select j.nama_jabatan from jabatan j, karyawan k where j.id = k.fk_jabatan and k.id = :1", App.conn);
+                                cmdJabatan.Parameters.Add(":1", idUser);
+                                string jabatanUser = cmdJabatan.ExecuteScalar().ToString();
 
-                            MainWindow mw = new MainWindow(idUser, jabatanUser);
-                            this.Hide();
-                            mw.ShowDialog();
-                            this.ShowDialog();
+                                MainWindow mw = new MainWindow(idUser, jabatanUser);
+                                this.Hide();
+                                mw.ShowDialog();
+                                this.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Account Suspended!");
+                            }
                         }
                         else
                         {

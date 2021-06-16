@@ -86,7 +86,7 @@
                                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" 
                                   Width="323" Height="40" TabIndex="14"/>
                     <TextBox x:Name="rTbNama"
-                             materialDesign:HintAssist.Hint="Nama Lengkap"
+                             materialDesign:HintAssist.Hint="Full Name"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
                              Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="15"/>
@@ -95,7 +95,7 @@
                         <RadioButton x:Name="rRbPerempuan" Content="Woman" Width="161" Height="40" Margin="229,0,74,0" Foreground="#7F000000" TabIndex="17"/>
                     </Grid>
                     <TextBox x:Name="rTbAlamat"
-                             materialDesign:HintAssist.Hint="Alamat"
+                             materialDesign:HintAssist.Hint="Address"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              VerticalAlignment="Center"
                              Width="323" Height="40" RenderTransformOrigin="0.136,0.625" TabIndex="18"/>
