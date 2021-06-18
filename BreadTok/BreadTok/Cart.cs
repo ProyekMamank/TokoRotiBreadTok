@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oracle.DataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -15,14 +16,23 @@ namespace BreadTok
         public List<int> jml { get; set; }
         private int total { get; set; }
         private int potongan { get; set; }
-        DataTable dt;
+        DataTable dtDisp, dtReal;
+        OracleDataAdapter da;
+        OracleCommandBuilder builder;
         public Cart()
         {
             rotis = new List<Roti>();
             jml = new List<int>();
             total = 0;
+            loadDTrans();
         }
-
+        private void loadDTrans()
+        {
+            dtReal = new DataTable();
+            da = new OracleDataAdapter("select * from d_trans where 1=2", App.conn);
+            builder = new OracleCommandBuilder(da);
+            da.Fill(dtReal);
+        }
         public void addToCart(Roti r, int qty)
         {
             int idx = -1;
@@ -67,20 +77,20 @@ namespace BreadTok
         }
         public DataTable getDataTable()
         {
-            dt = new DataTable();
-            dt.Columns.Add("ID");
-            dt.Columns.Add("Nama Roti");
-            dt.Columns.Add("Harga Roti");
-            dt.Columns.Add("Qty");
-            dt.Columns.Add("Subtotal");
-            dt.Columns.Add("Action");
+            dtDisp = new DataTable();
+            dtDisp.Columns.Add("ID");
+            dtDisp.Columns.Add("Nama Roti");
+            dtDisp.Columns.Add("Harga Roti");
+            dtDisp.Columns.Add("Qty");
+            dtDisp.Columns.Add("Subtotal");
+            dtDisp.Columns.Add("Action");
 
             // TODO : Tidak tampil di datagrid
 
             for (int i = 0; i < rotis.Count; i++)
             {
                 Roti r = rotis[i];
-                DataRow dr = dt.NewRow();
+                DataRow dr = dtDisp.NewRow();
                 dr["ID"] = r.id_roti;
                 dr["Nama Roti"] = r.nama_roti;
                 dr["Harga Roti"] = r.harga_roti;
@@ -88,10 +98,10 @@ namespace BreadTok
                 dr["Subtotal"] = jml[i] * r.harga_roti;
                 dr["Action"] = r.id_roti;
 
-                dt.Rows.Add(dr);
+                dtDisp.Rows.Add(dr);
             }
 
-            return dt;
+            return dtDisp;
         }
         public string getFormattedTotal()
         {
@@ -128,6 +138,23 @@ namespace BreadTok
         public void setPotongan(int pot)
         {
             this.potongan = pot;
+        }
+        public void makeTransaction(string nonota)
+        {
+            for (int i = 0; i < rotis.Count; i++)
+            {
+                Roti r = rotis[i];
+                int currJml = jml[i];
+                DataRow dr = dtReal.NewRow();
+                dr[0] = nonota;
+                dr[1] = r.id_roti;
+                dr[2] = currJml;
+                dr[3] = r.harga_roti;
+                dr[4] = r.harga_roti * currJml;
+
+                dtReal.Rows.Add(dr);
+            }
+            da.Update(dtReal);
         }
     }
 }

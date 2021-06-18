@@ -381,18 +381,7 @@ namespace BreadTok
                         cmdH.ExecuteNonQuery();
 
                         // D_TRANS
-                        foreach (DataRow dr in cart.getDataTable().Rows)
-                        {
-                            OracleCommand cmdD = new OracleCommand();
-                            cmdD.Connection = App.conn;
-                            cmdD.CommandText = "insert into D_TRANS (NOMOR_NOTA,FK_ROTI, QUANTITY, SUBTOTAL) " +
-                                "values (:nonota, :roti, :qty, :sbt)";
-                            cmdD.Parameters.Add(":nonota", nonota);
-                            cmdD.Parameters.Add(":roti", dr["ID"]);
-                            cmdD.Parameters.Add(":qty", dr["Qty"]);
-                            cmdD.Parameters.Add(":sbt", dr["Subtotal"]);
-                            cmdD.ExecuteNonQuery();
-                        }
+                        cart.makeTransaction(nonota);
 
                         if (cbVoucher.SelectedValue != null)
                         {
