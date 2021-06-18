@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
+using System.Windows.Automation.Peers;
 
 namespace BreadTok
 {
@@ -276,6 +277,11 @@ namespace BreadTok
                     break;
                 }
             }
+            updateCartBahanGrandTotal();
+            if (cartBahan.Rows.Count == 0) {
+                cartBahan = new DataTable();
+                resetPengadaanDetailBahan();
+            }
         }
 
         private void bPengadaanUpdate_Click(object sender, RoutedEventArgs e)
@@ -283,14 +289,18 @@ namespace BreadTok
             DataRowView selectedCartItem = dgCartBahan.Items[selectedItemBahan] as DataRowView;
             for (int i = 0; i < cartBahan.Rows.Count; i++)
             {
-                if (cartBahan.Rows[i]["KODE"].ToString().Equals(selectedCartItem.Row.ItemArray[0].ToString()))
-                {
-                    cartBahan.Rows[i]["SUBTOTAL"] = CurrencyConverter.ToAngka(lbSubtotalBeliBahan.Text) + "";
+                if (cartBahan.Rows[i]["KODE"].ToString().Equals(selectedCartItem.Row.ItemArray[0].ToString())) {
+                    string harga = itemDataSupport[1].ToString();
+                    string subtotal = Convert.ToInt32(harga) * Convert.ToInt32(tbDetailBahanQuantity.Text) + "";
+                    cartBahan.Rows[i]["SUBTOTAL"] = subtotal;
                     string jumlah = cartBahan.Rows[i]["JUMLAH"].ToString();
                     cartBahan.Rows[i]["JUMLAH"] = tbDetailBahanQuantity.Text+" "+ itemDataSupport[0].ToString();
-                    dgCartBahan.SelectedIndex = -1;
-                    updateCartBahanGrandTotal();
-                    resetPengadaanDetailBahan();
+                    if (tbDetailBahanQuantity.Text == "0") bHapusCartBahan.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                    else {
+                        dgCartBahan.SelectedIndex = -1;
+                        updateCartBahanGrandTotal();
+                        resetPengadaanDetailBahan();
+                    }
                     break;
                 }
             }
@@ -450,19 +460,29 @@ namespace BreadTok
                     chefResep = b.fillDataTable($"B.MERK || ' - ' || JB.NAMA_JENIS AS NAMA, {tbChefBahanQuantity.Text} || ' ' || B.SATUAN AS STOK", $"WHERE B.ID = '{cbChefBahan.SelectedValue}'", chefResep);
                 }
                 else {
-                    chefResep.Rows[adaresep][1] = Convert.ToInt32(chefResep.Rows[adaresep][1]) + Convert.ToInt32(tbChefBahanQuantity.Text);
+                    int quantity = Convert.ToInt32(tbChefBahanQuantity.Text);
+                    string stok = chefResep.Rows[adaresep]["STOK"].ToString();//5 GRAM
+                    string satuan = stok.Substring(stok.IndexOf(' ') + 1, stok.Length - (stok.IndexOf(' ') + 1));
+                    int qBefore = Convert.ToInt32(stok.Substring(0,stok.IndexOf(' ')));
+                    chefResep.Rows[adaresep]["STOK"] = (qBefore+quantity) + " " + satuan;
                 }
                 //MessageBox.Show(adaresep + " " + cbChefBahan.Text);
                 dgChefResep.ItemsSource = null;
                 dgChefResep.ItemsSource = chefResep.DefaultView;
                 cbChefBahan.SelectedIndex = -1;
-                tbChefBahanQuantity.Text = "0";
+                tbChefBahanQuantity.Text = "1";
             }
         }
 
         private void bChefTambahRoti_Click(object sender, RoutedEventArgs e) {
-            if (tbChefDeskripsiRoti.Text == "" || tbChefNamaRoti.Text == "" || cbChefJenisRoti.SelectedIndex == -1 || chefResep.Rows.Count == 0) {
-                MessageBox.Show("Input tidak lengkap");
+            if (tbChefDeskripsiRoti.Text == "" || tbChefNamaRoti.Text.Length < 4 || cbChefJenisRoti.SelectedIndex == -1 || chefResep.Rows.Count == 0) {
+                string message = "Input tidak lengkap : ";
+                if (tbChefDeskripsiRoti.Text == "") message += "\nDeskripsi masih kosong";
+                if (tbChefNamaRoti.Text.Length < 4) message += "\n Nama roti minimal 4 karakter";
+                if (cbChefJenisRoti.SelectedIndex == -1) message += "\n Belum memilih jenis roti";
+                if (chefResep.Rows.Count == 0) message += "\n Belum menambahkan resep";
+                MessageBox.Show(message);
+
             }
             else {
                 OracleTransaction trans;
@@ -476,9 +496,9 @@ namespace BreadTok
                         string namabahan = chefResep.Rows[i][0].ToString();
                         OracleCommand idbahan = new OracleCommand($"SELECT ID FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
                         OracleCommand hargabahan = new OracleCommand($"SELECT HARGA FROM BAHAN WHERE MERK = '{namabahan.Substring(0, namabahan.IndexOf('-') - 1)}'", App.conn);
-                        harga += Convert.ToInt32(hargabahan.ExecuteScalar().ToString());
                         string qty = chefResep.Rows[i][1].ToString();
                         qty = qty.Substring(0, qty.IndexOf(' '));
+                        harga += Convert.ToInt32(hargabahan.ExecuteScalar().ToString()) * Convert.ToInt32(qty);
                         cmd = new OracleCommand($"INSERT INTO D_RESEP VALUES('{idhresep}', '{idbahan.ExecuteScalar().ToString()}',{qty})", App.conn);
                         cmd.ExecuteNonQuery();
                     }
@@ -527,9 +547,9 @@ namespace BreadTok
             tbChefDeskripsiRoti.Text = "-";
             cbChefJenisRoti.SelectedIndex = -1;
             cbChefBahan.SelectedIndex = -1;
-            tbChefBahanQuantity.Text = "0";
+            tbChefBahanQuantity.Text = "1";
             tbChefQuantityStok.IsEnabled = false;
-            tbChefQuantityStok.Text = "0";
+            tbChefQuantityStok.Text = "1";
         }
         private void bChefOptionInsert_Click(object sender, RoutedEventArgs e) {
             if (bChefOptionInsert.IsChecked.Value) {
@@ -546,9 +566,11 @@ namespace BreadTok
         private void dgChefResep_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             if (bChefOptionInsert.IsChecked.Value) {
                 DataRowView selectedResep = dgChefResep.SelectedItem as DataRowView;
+                //MessageBox.Show(chefResep.Rows.Count + " - chef");
                 for (int i = 0; i < chefResep.Rows.Count; i++) {
                     if (chefResep.Rows[i][0].ToString().Equals(selectedResep.Row.ItemArray[0].ToString())) {
                         chefResep.Rows.RemoveAt(i);
+                        break;
                     }
                 }
             }
